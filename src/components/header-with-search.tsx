@@ -35,7 +35,7 @@ export function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full my-4 backdrop-blur-lg",
-        "bg-background/95 supports-[backdrop-filter]:bg-background/80"
+        "bg-background/35 supports-[backdrop-filter]:bg-background/80"
       )}
     >
       <nav className="mx-auto flex h-14 w-full max-w-7xl items-center md:justify-start justify-between px-4">
@@ -80,6 +80,7 @@ export function Header() {
             >
               <MenuIcon className="size-4" />
             </Button>
+            
             <SheetContent
               showClose={false}
               side="left"
