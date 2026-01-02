@@ -1,6 +1,13 @@
 import React from "react";
 import { Grid2x2PlusIcon, MenuIcon, SearchIcon, Sparkle } from "lucide-react";
-import { Sheet, SheetContent, SheetFooter } from "@/components/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
@@ -27,17 +34,16 @@ export function Header() {
   return (
     <header
       className={cn(
-        // TODO: replace this top-1/4 to top-0
-        "sticky  z-50 w-full my-4 backdrop-blur-lg",
+        "sticky top-0 z-50 w-full my-4 backdrop-blur-lg",
         "bg-background/95 supports-[backdrop-filter]:bg-background/80"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-start  px-4">
+      <nav className="mx-auto flex h-14 w-full max-w-7xl items-center md:justify-start justify-between px-4">
         <div className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
           <Grid2x2PlusIcon className="size-6" />
           <p className="font-mono text-lg font-bold">NewslyUSA</p>
         </div>
-        <div className="flex w-full items-center justify-between gap-2">
+        <div className="flex md:w-full items-center justify-between gap-2">
           <div className="hidden items-center  gap-1 lg:flex">
             {links.map((link) => (
               <a
@@ -45,7 +51,8 @@ export function Header() {
                 className={buttonVariants({ variant: "ghost" })}
                 href={link.href}
               >
-                {link.label} <Sparkle size={10} className="ml-1 fill-background"/>
+                {link.label}{" "}
+                <Sparkle size={10} className="ml-1 fill-background" />
               </a>
             ))}
             {/* <Button variant="outline">Sign In</Button>
@@ -74,11 +81,16 @@ export function Header() {
               <MenuIcon className="size-4" />
             </Button>
             <SheetContent
-              className="bg-background/95 supports-[backdrop-filter]:bg-background/80 gap-0 backdrop-blur-lg"
               showClose={false}
               side="left"
             >
-              <div className="grid gap-y-2 overflow-y-auto px-4 pt-12 pb-5">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+                <SheetDescription>
+                  A list of links to navigate the site.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-y-2 overflow-y-auto px-4 pb-5">
                 {links.map((link) => (
                   <a
                     key={link.label}
@@ -88,7 +100,8 @@ export function Header() {
                     })}
                     href={link.href}
                   >
-					  {link.label} <Sparkle size={10} className="ml-1 fill-background"/>
+                    {link.label}{" "}
+                    <Sparkle size={10} className="ml-1 fill-background" />
                   </a>
                 ))}
               </div>

@@ -33,9 +33,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <section className="border min-h-screen mx-auto max-w-7xl">
-
-          </section>
+          
           {children}
         </ThemeProvider>
       </body>
