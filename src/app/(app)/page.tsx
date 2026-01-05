@@ -12,15 +12,15 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <div className="flex min-h-screen  w-full  flex-col items-center justify-between py-4 lg:px-16 bg-white dark:bg-black sm:items-start">
-        <section className="lg:flex block w-full min-h-screen mx-auto max-w-full">
+    <main className="min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <section className="flex min-h-screen  w-full  flex-col items-center justify-between py-4 lg:px-6 bg-white dark:bg-black sm:items-start">
+        <div className="xl:flex block w-full min-h-screen mx-auto max-w-full">
           {/* latest news  */}
-          <div className="basis-3/1 py-12">
+          <div className="basis-3/4 py-8 md:py-12">
             <p className="pl-2 p-1 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
               Best of the week
             </p>
-            <div className="m-1 my-14">
+            <div className="m-1 my-4">
               <div className="flex text-sm items-center p-2 ">
                 <span className="text-primary">General News</span>{" "}
                 <Dot className="text-secondary" size={24} />
@@ -54,36 +54,40 @@ export default function Home() {
             <NewsCarousel />
           </div>
           {/* headlines news */}
-          <div className="basis-2/2 rounded-4xl my-4">
+          <div className="basis-1/4 lg:basis-1/3 rounded-4xl mx-4 my-4">
             <div className="flex justify-between px-3 text-sm space-y-2 ">
               <span>Recommended</span>
               <span className="flex ">
                 View all <ChevronRight className="text-primary" size={20} />
               </span>
             </div>
-            <div className="flex md:flex-col">
-              <div className="flex justify-center m-2 md:m-0">
+            <div className="sm:flex xl:block rounded-2xl bg-secondary/10">
+              <div className="flex justify-center ">
                 <Image
                   src={
                     "https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   }
-                  height={300}
-                  width={600}
+                  height={100}
+                  width={400}
                   className="rounded-4xl p-2"
                   alt="you"
                 />
               </div>
-              <div className=" p-2">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="border-b h-24 flex justify-between">
+              <div className=" md:p-2">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="border-l-2 border-border bg-linear-to-r/decreasing from-background/15 to-transperant m-2  py-2 flex justify-between sm:"
+                  >
                     <div>
-                      <div className="text-xs text-primary flex justify-start items-center px-2">
-                        <span>Politics</span>
+                      <div className="text-xs text-accent  flex justify-start items-center px-2">
+                        <span className="">Politics</span>
                         <Dot className="text-secondary" size={24} />
                         <span>3 hours ago</span>
                       </div>
-                      <h4 className="text-sm sm:text-md  text-priamry  px-2">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit nam eius doloribus?
+                      <h4 className="text-sm sm:text-md  text-priamry font-semibold px-2">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Sit nam eius doloribus?
                       </h4>
                     </div>
                     <Image
@@ -92,7 +96,7 @@ export default function Home() {
                       }
                       height={60}
                       width={100}
-                      className="rounded-xl p-2"
+                      className="rounded-3xl p-2"
                       alt="you"
                     />
                   </div>
@@ -100,8 +104,19 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+      <section className="flex min-h-screen  w-full  flex-col items-center justify-between py-4 lg:px-6 bg-white dark:bg-black sm:items-start">
+        <div className="">
+          <p className="pl-2 p-1 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+            Categories
+          </p>
+        </div>
+        <h2 className="p-2 text-4xl max-w-2xl">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero
+          eius saepe.
+        </h2>
+      </section>
     </main>
   );
 }

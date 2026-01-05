@@ -18,15 +18,23 @@ export function Header() {
 
   const links = [
     {
-      label: "Features",
+      label: "All",
       href: "#",
     },
     {
-      label: "Pricing",
+      label: "News",
       href: "#",
     },
     {
-      label: "About",
+      label: "Exclusives",
+      href: "#",
+    },
+    {
+      label: "Guides",
+      href: "#",
+    },
+    {
+      label: "Headlines",
       href: "#",
     },
   ];

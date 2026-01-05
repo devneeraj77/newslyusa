@@ -32,6 +32,21 @@ const newsItems = [
     time: "6 hours ago",
     title: "Bitcoin Whales Accumulate as Market Sentiment Turns Bullish",
   },
+  {
+    category: "Blockchain News",
+    time: "6 hours ago",
+    title: "Bitcoin Whales Accumulate as Market Sentiment Turns Bullish",
+  },
+  {
+    category: "Blockchain News",
+    time: "6 hours ago",
+    title: "Bitcoin Whales Accumulate as Market Sentiment Turns Bullish",
+  },
+  {
+    category: "Blockchain News",
+    time: "6 hours ago",
+    title: "Bitcoin Whales Accumulate as Market Sentiment Turns Bullish",
+  },
 ];
 
 export default function NewsCarousel() {
@@ -81,7 +96,7 @@ export default function NewsCarousel() {
   }, [api]);
 
   return (
-    <section className="relative w-full">
+    <div className="relative w-full pt-14">
       <Carousel
         setApi={setApi}
         opts={{
@@ -101,9 +116,9 @@ export default function NewsCarousel() {
                 lg:basis-1/3
               "
             >
-              <div className="w-10 mx-4 h-1 bg-muted rounded">
+              <div className="w-10 mx-4 h-1 bg-muted rounded ">
                 <div
-                  className="h-1 bg-primary rounded"
+                  className="h-1 bg-primary rounded "
                   style={{
                     width: `${
                       index === current ? progress : index < current ? 100 : 0
@@ -117,7 +132,6 @@ export default function NewsCarousel() {
                 <div className="mb-1 text-xs text-muted-foreground">
                   {item.category} · {item.time}
                 </div>
-
                 {/* Headline */}
                 <h3 className="line-clamp-3 text-sm font-semibold leading-snug text-foreground pb-4">
                   {item.title}
@@ -127,6 +141,6 @@ export default function NewsCarousel() {
           ))}
         </CarouselContent>
       </Carousel>
-    </section>
+    </div>
   );
 }
