@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <section className="flex min-h-screen  w-full  flex-col items-center justify-between py-4 lg:px-6 bg-white dark:bg-black sm:items-start">
-        <div className="xl:flex block w-full min-h-screen mx-auto max-w-full">
+        <div className="xl:flex block w-full min-h-screen mx-auto max-w-7xl">
           {/* latest news  */}
           <div className="basis-3/4 py-8 md:py-12">
             <p className="pl-2 p-1 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
@@ -37,7 +37,7 @@ export default function Home() {
               <a href="/">
                 <SplitText
                   text="Read Article!"
-                  className=" p-2 my-4 px-3  bg-secondary/20 rounded-full text-center"
+                  className=" p-2 my-4 px-3 bg-secondary/20 rounded-full text-center"
                   delay={100}
                   duration={0.6}
                   ease="power3.out"
@@ -61,7 +61,7 @@ export default function Home() {
                 View all <ChevronRight className="text-primary" size={20} />
               </span>
             </div>
-            <div className="sm:flex xl:block rounded-2xl bg-secondary/10">
+            <div className="sm:flex xl:block rounded-2xl shadow-accent/30 shadow bg-secondary/20">
               <div className="flex justify-center ">
                 <Image
                   src={
@@ -75,12 +75,9 @@ export default function Home() {
               </div>
               <div className=" md:p-2">
                 {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="border-l-2 border-border bg-linear-to-r/decreasing from-background/15 to-transperant m-2  py-2 flex justify-between sm:"
-                  >
+                  <div key={i} className="m-2  py-2 flex justify-between sm:">
                     <div>
-                      <div className="text-xs text-accent  flex justify-start items-center px-2">
+                      <div className="text-xs text-accent flex justify-start items-center px-2">
                         <span className="">Politics</span>
                         <Dot className="text-secondary" size={24} />
                         <span>3 hours ago</span>
@@ -106,16 +103,22 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="flex min-h-screen  w-full  flex-col items-center justify-between py-4 lg:px-6 bg-white dark:bg-black sm:items-start">
-        <div className="">
-          <p className="pl-2 p-1 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+      <section className="">
+        <div className=" flex flex-col gap-4 lg:flex-row min-h-screen mx-auto max-w-7xl flex-col items-center justify-between  bg-white dark:bg-black sm:items-start">
+          <div className="basis-2/3">
+          <p className="pl-2 p-2 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
             Categories
           </p>
+          <h2 className="p-2 text-4xl max-w-2xl">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero
+            eius saepe.
+          </h2>
+          <div className="">
+            <div className="shadow-accent/30 shadow h-80 w-full bg-secondary/20 rounded-2xl "></div>
+          </div>
         </div>
-        <h2 className="p-2 text-4xl max-w-2xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero
-          eius saepe.
-        </h2>
+        <div className=" shadow-accent/30 shadow h-130 w-100 bg-secondary/20 rounded-2xl "></div>
+        </div>
       </section>
     </main>
   );

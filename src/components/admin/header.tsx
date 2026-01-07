@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "../darkModebtn";
+import { SignIn } from "../sign-in";
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
@@ -64,6 +65,7 @@ export function Header() {
               </Button>
             </SearchModal>
             <ModeToggle />
+            <SignIn/>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
             <Button
@@ -95,6 +97,7 @@ export function Header() {
               </div>
               <SheetFooter>
                 <Button variant="outline">Sign In</Button>
+                <SignIn/>
                 <Button>Get Started</Button>
               </SheetFooter>
             </SheetContent>
