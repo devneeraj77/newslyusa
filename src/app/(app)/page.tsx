@@ -114,10 +114,10 @@ export default function Home() {
             eius saepe.
           </h2>
           <div className="">
-            <div className="shadow-accent/30 shadow h-80 w-full bg-secondary/20 rounded-2xl "></div>
+            <div className="shadow-accent/30 shadow h-80 m-2 md:w-full bg-secondary/20 rounded-2xl "></div>
           </div>
         </div>
-        <div className=" shadow-accent/30 shadow h-130 w-100 bg-secondary/20 rounded-2xl "></div>
+        <div className=" shadow-accent/30 shadow h-130 md:w-100 bg-secondary/20 rounded-2xl "></div>
         </div>
       </section>
     </main>

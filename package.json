@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "prisma:generate": "prisma generate --schema=prisma/schema-mongodb.prisma"
+    "prisma:generate": "prisma generate --schema=prisma/schema-mongodb.prisma",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.1",
@@ -27,7 +28,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "dotenv": "^17.2.3",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "gsap": "^3.14.2",
@@ -49,6 +49,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^17.2.3",
     "prisma": "6.19",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",

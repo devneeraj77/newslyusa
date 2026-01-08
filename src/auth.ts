@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import type { Provider } from "next-auth/providers"
+import db from "@/lib/db"
  
 const providers: Provider[] = [
   Credentials({
@@ -10,14 +11,30 @@ const providers: Provider[] = [
       password: { label: "Password", type: "password" },
     },
     authorize: async (credentials) => {
-      if (!credentials?.password || credentials.password !== "password") {
+      if (!credentials?.email || !credentials?.password) {
         return null
       }
+
+      const user = await db.admin.findUnique({
+        where: {
+          email: credentials.email as string,
+        },
+      })
+
+      if (!user) {
+        return null
+      }
+
+      // TODO: Replace plain text password comparison with bcrypt in production
+      if (user.password !== credentials.password) {
+        return null
+      }
+
       return {
-        id: "test",
-        name: "Test User",
-        email: "test@example.com",
-        image: "https://github.com/shadcn.png",
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: null,
       }
     },
   }),
