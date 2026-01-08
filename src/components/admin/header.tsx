@@ -65,7 +65,7 @@ export function Header() {
               </Button>
             </SearchModal>
             <ModeToggle />
-            <SignIn/>
+            {/* <SignIn/> */}
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
             <Button
@@ -97,7 +97,7 @@ export function Header() {
               </div>
               <SheetFooter>
                 <Button variant="outline">Sign In</Button>
-                <SignIn/>
+                {/* <SignIn/> */}
                 <Button>Get Started</Button>
               </SheetFooter>
             </SheetContent>

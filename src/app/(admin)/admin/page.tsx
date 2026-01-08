@@ -1,7 +1,8 @@
 import { auth, signOut } from "@/auth";
 import { ModeToggle } from "@/components/darkModebtn";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -16,7 +17,7 @@ export default async function Home() {
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center py-32 px-16 bg-white dark:bg-black sm:items-start">
         <div className="flex flex-col gap-6 w-full">
           <div className="flex items-center justify-between w-full">
-             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+             <h1 className="text-3xl font-bold">Admin Profile</h1>
              <ModeToggle />
           </div>
           
@@ -45,6 +46,18 @@ export default async function Home() {
                 </p>
                 <p className="text-xs text-zinc-400 mt-1">ID: {session.user?.id}</p>
               </div>
+            </div>
+          </div>
+
+          <div className="p-6 border rounded-lg shadow-sm bg-card text-card-foreground">
+            <h2 className="text-xl font-semibold mb-4">Internal Links</h2>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+                Dashboard
+              </Link>
+              <Link href="/" className={buttonVariants({ variant: "outline" })}>
+                Website Home
+              </Link>
             </div>
           </div>
 
