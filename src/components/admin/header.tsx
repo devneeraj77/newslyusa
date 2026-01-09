@@ -1,14 +1,42 @@
 import React from "react";
-import { Grid2x2PlusIcon, MenuIcon, SearchIcon, Sparkle } from "lucide-react";
-import { Sheet, SheetContent, SheetFooter } from "@/components/sheet";
+import { SessionProvider, useSession } from "next-auth/react";
+import {
+  Grid2x2PlusIcon,
+  MenuIcon,
+  SearchIcon,
+  Sparkle,
+  PanelLeftIcon,
+  User,
+  ChevronsUpDown,
+  LogOut,
+} from "lucide-react";
+// import { Sheet, SheetContent, SheetFooter } from "@/components/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { IconLayoutSidebarFilled } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "../darkModebtn";
-import { SignIn } from "../sign-in";
+
+import {
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "../ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import Image from "next/image";
 
 export function Header() {
-  const [open, setOpen] = React.useState(false);
+  const { data: session } = useSession();
+  const user = session?.user;
+  const { toggleSidebar } = useSidebar();
 
   const links = [
     {
@@ -29,79 +57,68 @@ export function Header() {
     <header
       className={cn(
         // TODO: replace this top-1/4 to top-0
-        "sticky  z-50 w-full border-b backdrop-blur-lg",
+        "top-0 sticky z-50 w-full border-b broder-secondary/5 backdrop-blur-lg",
         "bg-background/95 supports-[backdrop-filter]:bg-background/80"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-start  px-4">
-        <div className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
-          <Grid2x2PlusIcon className="size-6" />
-          <p className="font-mono text-sm  font-bold ">admin/NewslyUSA</p>
+      <nav className="mx-auto flex h-14 w-full max-w-7xl  items-center justify-between  px-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+            <IconLayoutSidebarFilled className="size-6" />
+          </Button>
+          <div className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
+            {/* <Grid2x2PlusIcon className="size-6" /> */}
+            <p className="font-mono text-sm  font-bold ">admin/NewslyUSA</p>
+          </div>
         </div>
-        <div className="flex w-full items-center justify-between gap-2">
-          <div className="hidden items-center  gap-1 lg:flex">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                className={buttonVariants({ variant: "ghost" })}
-                href={link.href}
-              >
-                {link.label}{" "}
-                <Sparkle size={10} className="ml-1 fill-background" />
-              </a>
-            ))}
-            {/* <Button variant="outline">Sign In</Button>
-					<Button>Get Started</Button> */}
-          </div>
-          <div className="hidden items-center  gap-1 lg:flex">
-            <SearchModal data={blogs}>
-              <Button
-                variant="outline"
-                className="relative size-9 cursor-pointer p-0 md:border xl:h-9 xl:w-60 xl:justify-between xl:px-3 xl:py-2"
-              >
-                <span className="hidden xl:inline-flex">Search...</span>
-                <span className="sr-only">Search</span>
-                <SearchIcon className="size-4" />
-              </Button>
-            </SearchModal>
-            <ModeToggle />
-            {/* <SignIn/> */}
-          </div>
-          <Sheet open={open} onOpenChange={setOpen}>
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={() => setOpen(!open)}
-              className="lg:hidden"
-            >
-              <MenuIcon className="size-4" />
-            </Button>
-            <SheetContent
-              className="bg-background/95 supports-[backdrop-filter]:bg-background/80 gap-0 backdrop-blur-lg"
-              showClose={false}
-              side="left"
-            >
-              <div className="grid gap-y-2 overflow-y-auto px-4 pt-12 pb-5">
-                {links.map((link) => (
-                  <a
-                    key={link.label}
-                    className={buttonVariants({
-                      variant: "ghost",
-                      className: "justify-start",
-                    })}
-                    href={link.href}
+        <div className="flex items-center">
+          {/* <ModeToggle /> */}
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton
+                      size="lg"
+                      className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                    >
+                      <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                        {user?.image ? (
+                          <Image
+                            src={user.image}
+                            width={200}
+                            height={200}
+                            alt={user.name || "User"}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <User className="size-4" />
+                        )}
+                      </div>
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-semibold">
+                          {user?.name}
+                        </span>
+                        <span className="truncate text-xs">{user?.email}</span>
+                      </div>
+                      <ChevronsUpDown className="ml-auto size-4" />
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                    side="bottom"
+                    align="end"
+                    sideOffset={4}
                   >
-                    {link.label} <Sparkle size={10} className="ml-1 fill-background"/>
-                  </a>
-                ))}
-              </div>
-              <SheetFooter>
-                <Button variant="outline">Sign In</Button>
-                {/* <SignIn/> */}
-                <Button>Get Started</Button>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+                    <DropdownMenuItem>
+                      <LogOut className="mr-2 size-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
         </div>
       </nav>
     </header>

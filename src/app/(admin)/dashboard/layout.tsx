@@ -3,6 +3,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Header } from "@/components/admin/header";
 
 const geistSans = Geist({
@@ -28,8 +30,13 @@ export default function DashboardLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <Header/>
-        {children}
+        <SidebarProvider>
+            <AppSidebar />
+            <main className="w-full">
+              <Header />
+              {children}
+            </main>
+          </SidebarProvider>
       </ThemeProvider>
     </div>
   );

@@ -12,21 +12,26 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "./darkModebtn";
+import Image from "next/image";
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
 
   const links = [
     {
-      label: "General",
-      href: "#",
+      label: "News",
+      href: "news",
     },
     {
       label: "Politics",
       href: "#",
     },
     {
-      label: "Tech",
+      label: "Tech & Media",
+      href: "#",
+    },
+    {
+      label: "Business",
       href: "#",
     },
     {
@@ -37,38 +42,41 @@ export function Header() {
       label: "Sports",
       href: "#",
     },
-    {
-      label: "Science",
-      href: "#",
-    },
-    {
-      label: "more",
-      href: "#",
-    },
+    // {
+    //   label: "Science",
+    //   href: "#",
+    // },
+    // {
+    //   label: "more",
+    //   href: "#",
+    // },
   ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full my-4 backdrop-blur-lg",
+        "sticky top-0 z-50 w-full my-2 backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-7xl items-center md:justify-start justify-between px-4">
+      <nav className="mx-auto flex h-14 w-full space-x-12  max-w-7xl items-center md:justify-start justify-between px-4">
         <div className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
           <Grid2x2PlusIcon className="size-6" />
           <p className="font-mono text-lg font-bold">NewslyUSA</p>
         </div>
         <div className="flex md:w-full items-center justify-between gap-2">
-          <div className="hidden items-center  gap-1 lg:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
               <a
                 key={link.label}
-                className={buttonVariants({ variant: "ghost" })}
+                className={buttonVariants({ variant: "link" })}
                 href={link.href}
               >
                 {link.label}{" "}
-                <Sparkle size={10} className="ml-1 fill-background" />
+                {/* {link.icon && (
+                  <Image src={link.icon} width={20} height={20} alt="user" />
+                )} */}
+
               </a>
             ))}
             {/* <Button variant="outline">Sign In</Button>
@@ -96,11 +104,8 @@ export function Header() {
             >
               <MenuIcon className="size-4" />
             </Button>
-            
-            <SheetContent
-              showClose={false}
-              side="left"
-            >
+
+            <SheetContent showClose={false} side="left">
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
                 <SheetDescription>
@@ -112,8 +117,8 @@ export function Header() {
                   <a
                     key={link.label}
                     className={buttonVariants({
-                      variant: "ghost",
-                      className: "justify-start",
+                      variant: "link",
+                      className: "justify-start text- gap-2",
                     })}
                     href={link.href}
                   >
