@@ -1,10 +1,15 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import db from "./db"
+import { PrismaClient } from '@/generated/prisma/client';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db),
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
 
-  providers: [],
-})
+declare global {
+  var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
+}
 
+const db = globalThis.prisma ?? prismaClientSingleton();
+
+export default db;
+
+if (process.env.NODE_ENV !== 'production') globalThis.prisma = db;

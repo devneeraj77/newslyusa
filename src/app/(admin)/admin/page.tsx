@@ -34,9 +34,14 @@ export default async function Home() {
                 />
               ) : (
                 <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-800 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-bold">
-                    {session.user?.name?.charAt(0) || "A"}
-                  </span>
+                  <Image 
+                    src={`https://ui-avatars.com/api/?name=${session.user?.name?.charAt(0) || "Unknown"}`}
+                    alt={session.user?.name?.charAt(0) || "A"}
+                    width={64}
+                    height={64}
+                    className="rounded-full"
+                    unoptimized
+                  />
                 </div>
               )}
               <div>

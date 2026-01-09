@@ -1,5 +1,8 @@
-import db from "@/lib/db";
+
+import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const start = Date.now();
