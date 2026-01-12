@@ -1,9 +1,17 @@
 "use client";
 
+
 import NewsCarousel from "@/components/news-carousel";
+import EmblaCarouselAutoplay from "@/components/carousels/embla-carousel";
 import SplitText from "@/components/SplitText";
 import { ChevronDownCircle, ChevronRight, Dot, MoveRight } from "lucide-react";
 import Image from "next/image";
+import EmblaCarousel from "@/components/carousels/EmblaCarousel";
+import { EmblaOptionsType } from 'embla-carousel'
+
+const OPTIONS: EmblaOptionsType = { loop: true }
+const SLIDE_COUNT = 5
+const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
 
 export default function Home() {
   const handleAnimationComplete = () => {
@@ -103,21 +111,41 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="">
+      <section className="border">
         <div className=" flex flex-col gap-4 lg:flex-row min-h-screen mx-auto max-w-7xl flex-col items-center justify-between  bg-white dark:bg-black sm:items-start">
-          <div className="basis-2/3">
-          <p className="pl-2 p-2 m-3 border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
-            Categories
-          </p>
-          <h2 className="p-2 text-4xl max-w-2xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero
-            eius saepe.
-          </h2>
-          <div className="">
-            <div className="shadow-accent/30 shadow h-80 m-2 md:w-full bg-secondary/20 rounded-2xl "></div>
+          <div className="w-full lg:w-2/3 p-4 ">
+             <EmblaCarouselAutoplay
+              slides={[
+                <div
+                  key="1"
+                  className="h-80 bg-red-100 dark:bg-red-900/20 rounded-xl flex items-center justify-center border border-red-200 dark:border-red-800"
+                >
+                  <h3 className="text-2xl font-bold text-red-700 dark:text-red-300">
+                    Featured Story 1
+                  </h3>
+                </div>,
+                <div
+                  key="2"
+                  className="h-80 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center border border-blue-200 dark:border-blue-800"
+                >
+                  <h3 className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                    Breaking News 2
+                  </h3>
+                </div>,
+                <div
+                  key="3"
+                  className="h-80 bg-green-100 dark:bg-green-900/20 rounded-xl flex items-center justify-center border border-green-200 dark:border-green-800"
+                >
+                  <h3 className="text-2xl font-bold text-green-700 dark:text-green-300">
+                    Update 3
+                  </h3>
+                </div>,
+              ]}
+            />
+
+            <EmblaCarousel slides={SLIDES} options={OPTIONS} />
           </div>
-        </div>
-        <div className=" shadow-accent/30 shadow h-130 md:w-100 bg-secondary/20 rounded-2xl "></div>
+          
         </div>
       </section>
     </main>
