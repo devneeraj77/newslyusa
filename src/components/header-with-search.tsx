@@ -42,29 +42,29 @@ export function Header() {
       label: "Sports",
       href: "#",
     },
-    // {
-    //   label: "Science",
-    //   href: "#",
-    // },
-    // {
-    //   label: "more",
-    //   href: "#",
-    // },
+    {
+      label: "Science",
+      href: "#",
+    },
+    {
+      label: "more",
+      href: "#",
+    },
   ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full my-2 backdrop-blur-lg",
+        "sticky top-0 z-50 w-full py-2  backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full space-x-12  max-w-7xl items-center md:justify-start justify-between px-4">
-        <div className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
+      <nav className="mx-auto flex h-14 w-full space-x-12 px-2 items-center justify-between md:px-2 lg:px-6 xl:px-8">
+        <div className="hover:bg-accent flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
           <Grid2x2PlusIcon className="size-6" />
           <p className="font-mono text-lg font-bold">NewslyUSA</p>
         </div>
-        <div className="flex md:w-full items-center justify-between gap-2">
+        <div className="flex lg:w-full items-center justify-between gap-2">
           <div className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
               <a
@@ -76,13 +76,12 @@ export function Header() {
                 {/* {link.icon && (
                   <Image src={link.icon} width={20} height={20} alt="user" />
                 )} */}
-
               </a>
             ))}
             {/* <Button variant="outline">Sign In</Button>
 					<Button>Get Started</Button> */}
           </div>
-          <div className="hidden items-center  gap-1 lg:flex">
+          <div className="flex gap-2">
             <SearchModal data={blogs}>
               <Button
                 variant="outline"
@@ -93,7 +92,9 @@ export function Header() {
                 <SearchIcon className="size-4" />
               </Button>
             </SearchModal>
-            <ModeToggle />
+            <div className="hidden items-center  gap-1 lg:flex">
+              <ModeToggle />
+            </div>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
             <Button
@@ -130,6 +131,10 @@ export function Header() {
               <SheetFooter>
                 <Button variant="outline">Sign In</Button>
                 <Button>Get Started</Button>
+                <div className="flex w-full items-center justify-between pt-4">
+                  <span className="text-sm font-medium">Theme</span>
+                  <ModeToggle />
+                </div>
               </SheetFooter>
             </SheetContent>
           </Sheet>

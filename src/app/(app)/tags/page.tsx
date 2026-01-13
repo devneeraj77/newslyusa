@@ -34,7 +34,7 @@ export default async function TagsPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-12">
+    <main className="container min-h-screen mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8">Tags</h1>
       <div className="flex flex-wrap gap-4">
         {tags.map((tag) => (

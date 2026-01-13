@@ -49,7 +49,7 @@ const newsItems = [
   },
 ];
 
-export default function NewsCarousel() {
+export default function NewsHeadlines() {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
@@ -96,7 +96,7 @@ export default function NewsCarousel() {
   }, [api]);
 
   return (
-    <div className="relative w-full pt-14">
+    <div className="relative w-full pt-8">
       <Carousel
         setApi={setApi}
         opts={{

@@ -5,8 +5,6 @@ import Autoplay from 'embla-carousel-autoplay'
 import { NextButton, PrevButton, usePrevNextButtons } from './EmblaCarouselArrowButtons'
 import { useAutoplay } from './EmblaCarouselAutoPlay'
 import { useAutoplayProgress } from './EmblCarouselAutoPlayProgress'
-import './embla.css'
-
 
 type PropType = {
   slides: number[]
@@ -33,12 +31,12 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const { showAutoplayProgress } = useAutoplayProgress(emblaApi, progressNode)
 
   return (
-    <div className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+    <div className="max-w-4xl mx-auto">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex touch-pan-y touch-pinch-zoom -ml-4">
           {slides.map((index) => (
-            <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">
+            <div className="flex-[0_0_80%] min-w-0 pl-4" key={index}>
+              <div className="shadow-[inset_0_0_0_0.2rem_var(--border)] rounded-[1.8rem] text-[4rem] font-semibold flex items-center justify-center h-[19rem] select-none dark:text-white">
                 <span>{index + 1}</span>
               </div>
             </div>
@@ -46,8 +44,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         </div>
       </div>
 
-      <div className="embla__controls">
-        <div className="embla__buttons">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-5 mt-7">
+        <div className="grid grid-cols-2 gap-2.5 items-center">
           <PrevButton
             onClick={() => onAutoplayButtonClick(onPrevButtonClick)}
             disabled={prevBtnDisabled}
@@ -59,14 +57,26 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         </div>
 
         <div
-          className={`embla__progress`.concat(
-            showAutoplayProgress ? '' : ' embla__progress--hidden'
-          )}
+          className={`rounded-[1.8rem] bg-secondary relative h-[0.6rem] overflow-hidden justify-self-center self-center w-52 max-w-full ${
+            showAutoplayProgress ? '' : 'opacity-0 transition-opacity duration-300 ease-in-out'
+          }`}
         >
-          <div className="embla__progress__bar" ref={progressNode} />
+          <div
+            className="bg-primary absolute w-full top-0 bottom-0 -left-full"
+            style={{
+              animationName: 'embla-progress',
+              animationTimingFunction: 'linear',
+              animationFillMode: 'forwards'
+            }}
+            ref={progressNode}
+          />
         </div>
 
-        <button className="embla__play" onClick={toggleAutoplay} type="button">
+        <button
+          className="rounded-full bg-transparent border-zinc-700 hover:bg-zinc-800 text-accent px-8 border hover:text-white"
+          onClick={toggleAutoplay}
+          type="button"
+        >
           {autoplayIsPlaying ? 'Stop' : 'Start'}
         </button>
       </div>

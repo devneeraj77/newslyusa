@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Autoplay from "embla-carousel-autoplay"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface EmblaCarouselAutoplayProps {
-  slides: React.ReactNode[]
-  className?: string
-  itemClassName?: string
-  autoplayDelay?: number
-  loop?: boolean
+  slides: React.ReactNode[];
+  className?: string;
+  itemClassName?: string;
+  autoplayDelay?: number;
+  loop?: boolean;
 }
 
 export default function EmblaCarouselAutoplay({
@@ -28,83 +28,88 @@ export default function EmblaCarouselAutoplay({
   autoplayDelay = 4000,
   loop = true,
 }: EmblaCarouselAutoplayProps) {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [isPlaying, setIsPlaying] = React.useState(true)
-  const progressBarRef = React.useRef<HTMLDivElement>(null)
-  const rafId = React.useRef(0)
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [isPlaying, setIsPlaying] = React.useState(true);
+  const progressBarRef = React.useRef<HTMLDivElement>(null);
+  const rafId = React.useRef(0);
 
   const plugin = React.useRef(
     Autoplay({ delay: autoplayDelay, stopOnInteraction: false })
-  )
+  );
 
   const onAutoplayButtonClick = React.useCallback(
     (callback: () => void) => {
-      const autoplay = api?.plugins()?.autoplay
-      if (!autoplay) return
+      const autoplay = api?.plugins()?.autoplay;
+      if (!autoplay) return;
 
       const resetOrStop =
         autoplay.options.stopOnInteraction === false
           ? autoplay.reset
-          : autoplay.stop
+          : autoplay.stop;
 
-      resetOrStop()
-      callback()
+      resetOrStop();
+      callback();
     },
     [api]
-  )
+  );
 
   React.useEffect(() => {
-    const autoplay = api?.plugins()?.autoplay
-    if (!autoplay) return
+    const autoplay = api?.plugins()?.autoplay;
+    if (!autoplay) return;
 
     const animate = () => {
-      if (!progressBarRef.current) return
-      const timeUntilNext = autoplay.timeUntilNext()
-      
-      if (timeUntilNext === null) return
+      if (!progressBarRef.current) return;
+      const timeUntilNext = autoplay.timeUntilNext();
 
-      const progress = 1 - timeUntilNext / autoplayDelay
-      progressBarRef.current.style.width = `${progress * 100}%`
+      if (timeUntilNext === null) return;
+
+      const progress = 1 - timeUntilNext / autoplayDelay;
+      progressBarRef.current.style.width = `${progress * 100}%`;
 
       if (autoplay.isPlaying()) {
-        rafId.current = requestAnimationFrame(animate)
+        rafId.current = requestAnimationFrame(animate);
       }
-    }
+    };
 
     api
-      .on('autoplay:timerset', () => {
-        cancelAnimationFrame(rafId.current)
-        rafId.current = requestAnimationFrame(animate)
+      .on("autoplay:timerset", () => {
+        cancelAnimationFrame(rafId.current);
+        rafId.current = requestAnimationFrame(animate);
       })
-      .on('autoplay:timerstopped', () => {
-        cancelAnimationFrame(rafId.current)
-        if (progressBarRef.current) progressBarRef.current.style.width = '0%'
+      .on("autoplay:timerstopped", () => {
+        cancelAnimationFrame(rafId.current);
+        if (progressBarRef.current) progressBarRef.current.style.width = "0%";
       })
-      .on('select', () => {
-         // Reset progress on manual slide change if needed, though timerset handles next cycle
-         if (progressBarRef.current) progressBarRef.current.style.width = '0%'
-      })
+      .on("select", () => {
+        // Reset progress on manual slide change if needed, though timerset handles next cycle
+        if (progressBarRef.current) progressBarRef.current.style.width = "0%";
+      });
 
     return () => {
-      cancelAnimationFrame(rafId.current)
-    }
-  }, [api, autoplayDelay])
+      cancelAnimationFrame(rafId.current);
+    };
+  }, [api, autoplayDelay]);
 
   const toggleAutoplay = () => {
-    const autoplay = plugin.current
-    if (!autoplay) return
+    const autoplay = plugin.current;
+    if (!autoplay) return;
 
     if (autoplay.isPlaying()) {
-      autoplay.stop()
-      setIsPlaying(false)
+      autoplay.stop();
+      setIsPlaying(false);
     } else {
-      autoplay.play()
-      setIsPlaying(true)
+      autoplay.play();
+      setIsPlaying(true);
     }
-  }
+  };
 
   return (
-    <div className={cn("w-full text-accent p-8 flex flex-col gap-6", className)}>
+    <div
+      className={cn(
+        "w-full text-accent h-96 mb-24 lg:px-3 flex flex-col gap-6",
+        className
+      )}
+    >
       <Carousel
         setApi={setApi}
         plugins={[plugin.current]}
@@ -116,11 +121,14 @@ export default function EmblaCarouselAutoplay({
       >
         <CarouselContent className="-ml-4">
           {slides.map((slide, index) => (
-            <CarouselItem 
-              key={index} 
-              className={cn("pl-4 basis-[70%] md:basis-[60%]", itemClassName)}
+            <CarouselItem
+              key={index}
+              className={cn(
+                "pl-4 basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4",
+                itemClassName
+              )}
             >
-              <div className="aspect-video bg-[#111] border border-zinc-800 rounded-3xl flex items-center justify-center text-5xl font-bold text-accent">
+              <div className="aspect-video rounded-3xl flex items-center justify-center text-5xl font-bold text-accent">
                 {slide}
               </div>
             </CarouselItem>
@@ -149,16 +157,16 @@ export default function EmblaCarouselAutoplay({
           </div>
 
           {/* Progress Bar */}
-          <div 
-             className={cn(
-               "flex-1 max-w-[150px] mx-8 h-[2px] bg-zinc-800 rounded-full overflow-hidden transition-opacity duration-300",
-               isPlaying ? "opacity-100" : "opacity-0"
-             )}
+          <div
+            className={cn(
+              "flex-1 max-w-[150px] mx-8 h-[2px] bg-zinc-800 rounded-full overflow-hidden transition-opacity duration-300",
+              isPlaying ? "opacity-100" : "opacity-0"
+            )}
           >
-            <div 
+            <div
               ref={progressBarRef}
-              className="h-full bg-secondary"
-              style={{ width: '0%' }}
+              className="h-full bg-white"
+              style={{ width: "0%" }}
             />
           </div>
 
@@ -172,5 +180,5 @@ export default function EmblaCarouselAutoplay({
         </div>
       </Carousel>
     </div>
-  )
+  );
 }

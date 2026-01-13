@@ -67,7 +67,7 @@ export default async function NewsPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-12">
+    <main className="container min-h-screen mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8">Latest News</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
