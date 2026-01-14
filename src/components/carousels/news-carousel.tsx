@@ -96,7 +96,7 @@ export default function NewsHeadlines() {
   }, [api]);
 
   return (
-    <div className="relative w-full pt-8">
+    <div className="relative w-full ">
       <Carousel
         setApi={setApi}
         opts={{
@@ -116,7 +116,10 @@ export default function NewsHeadlines() {
                 lg:basis-1/3
               "
             >
-              <div className="w-10 mx-4 h-1 bg-muted rounded ">
+              
+              {/* CARD */}
+              <article className="h-full space-y-2 px-4 pt-4 bg-black/10 relative">
+              <div className="w-10  h-1 bg-muted rounded ">
                 <div
                   className="h-1 bg-primary rounded "
                   style={{
@@ -126,8 +129,6 @@ export default function NewsHeadlines() {
                   }}
                 />
               </div>
-              {/* CARD */}
-              <article className="h-full px-4 pt-4 relative">
                 {/* Meta row */}
                 <div className="mb-1 text-xs text-muted-foreground">
                   {item.category} · {item.time}

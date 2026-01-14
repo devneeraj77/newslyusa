@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: Props) {
      // If category not found in DB, maybe showing empty state or 404
      // For now, let's show a message instead of 404 to avoid breaking if seeding isn't done
      return (
-        <div className="container mx-auto px-4 py-12 text-center">
+        <div className="container min-h-screen mx-auto px-4 py-12 text-center">
             <h1 className="text-2xl font-bold">Category "{decodedCategory}" Not Found</h1>
         </div>
      )

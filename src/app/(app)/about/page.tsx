@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import DotGrid from "@/components/DotGrid";
 
 export default function About() {
   return (
@@ -34,6 +35,16 @@ export default function About() {
             priority
           />
         </div> */}
+        <div className="absolute inset-0 w-full h-full">
+            <DotGrid
+             dotSize={2}
+             gap={20}
+             baseColor="#9ca3af" // muted-foreground color roughly
+             activeColor="#22c55e" // primary/green color
+             proximity={100}
+             shockRadius={150}
+            />
+        </div>
         <div className="container relative z-10 mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-mono font-bold tracking-tighter  mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             About NewslyUSA

@@ -2,7 +2,7 @@ import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className=" text-primary pt-8 px-6 md:px-4 lg:px-6 xl:px-8">
+    <footer className=" text-primary-foreground bg-primary tex pt-8 px-6 md:px-4 lg:px-6 xl:px-8">
       <div className="flex flex-wrap justify-between gap-12 md:gap-6">
         <div className="max-w-80">
           <a href="" className="text-lg font-bold pb-10">
@@ -44,7 +44,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-lg text-gray-800">COMPANY</p>
+          <p className="text-lg text-primary-foreground">COMPANY</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
               <a href="about">About</a>
@@ -65,7 +65,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-lg text-gray-800">SUPPORT</p>
+          <p className="text-lg text-primary-foreground">SUPPORT</p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li>
               <a href="#">Help Center</a>
@@ -86,17 +86,17 @@ export function Footer() {
         </div>
 
         <div className="max-w-80">
-          <p className="text-lg text-gray-800">STAY UPDATED</p>
+          <p className="text-lg text-primary-foreground">STAY UPDATED</p>
           <p className="mt-3 text-sm">
             Subscribe to our newsletter for inspiration and special offers.
           </p>
           <div className="flex items-center mt-4">
             <input
               type="text"
-              className="bg-white rounded-l border border-gray-300 h-9 px-3 outline-none"
+              className="bg-white text-black rounded-l border border-gray-300 h-9 px-3 outline-none"
               placeholder="Your email"
             />
-            <button className="flex items-center justify-center bg-black h-9 w-9 aspect-square rounded-r">
+            <button className="flex items-center justify-center bg-background text-black h-9 w-9 aspect-square rounded-r">
               {/* Arrow icon */}
               <svg
                 className="w-4 h-4 text-white"
@@ -127,10 +127,10 @@ export function Footer() {
         </p>
         <ul className="flex items-center gap-4">
           <li>
-            <a href="#">Privacy</a>
+            <a href="privacy-policy">Privacy</a>
           </li>
           <li>
-            <a href="#">Terms</a>
+            <a href="terms-and-conditions">Terms</a>
           </li>
           <li>
             <a href="#">Sitemap</a>

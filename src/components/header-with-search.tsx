@@ -24,38 +24,38 @@ export function Header() {
     },
     {
       label: "Politics",
-      href: "#",
+      href: "politics",
     },
     {
       label: "Tech & Media",
-      href: "#",
+      href: "tech-and-media",
     },
     {
       label: "Business",
-      href: "#",
+      href: "business",
     },
     {
       label: "Health",
-      href: "#",
+      href: "health",
     },
     {
       label: "Sports",
-      href: "#",
+      href: "sports",
     },
     {
       label: "Science",
-      href: "#",
+      href: "science",
     },
     {
       label: "more",
-      href: "#",
+      href: "more",
     },
   ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full py-2  backdrop-blur-lg",
+        "sticky top-0 z-50 w-full   backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80"
       )}
     >
