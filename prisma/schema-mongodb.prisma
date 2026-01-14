@@ -1,10 +1,11 @@
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  // url      = env("DATABASE_URL")
 }
  
 generator client {
   provider = "prisma-client"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
   output   = "../src/generated/prisma"
   engineType = "library"
 }

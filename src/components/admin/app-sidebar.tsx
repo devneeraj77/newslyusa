@@ -25,29 +25,32 @@ import {
   Command,
   ChevronsUpDown,
   LogOut,
+  FileText,
+  PenLine,
+  LogIn,
 } from "lucide-react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import Image from "next/image"
+import { links } from "@/app/(admin)/config/pages"
 
 // Menu items.
-const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Admin",
-    url: "/admin",
-    icon: User,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-]
+const items = links.map((link) => ({
+  title: link.label,
+  url: link.href,
+  icon:
+    link.label === "Dashboard"
+      ? LayoutDashboard
+      : link.label === "News"
+      ? FileText
+      : link.label === "Create Article"
+      ? PenLine
+      : link.label === "Admin"
+      ? User
+      : link.label === "Sign In"
+      ? LogIn
+      : Settings,
+}))
 
 export function AppSidebar() {
   const { data: session } = useSession()
