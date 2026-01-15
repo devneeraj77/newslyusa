@@ -63,12 +63,10 @@ const TiptapEditor = ({
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
         },
-        history: false,
+        history: true,
       }),
       // Add it back with your custom settings
-      History.configure({
-        depth: 50,
-      }),
+      
       Placeholder.configure({
         placeholder: placeholder || "Start typing something amazing...",
       }),

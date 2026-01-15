@@ -24,7 +24,7 @@ export async function GET(req: Request) {
       return NextResponse.json(article);
     }
 
-    const articles = await prisma.post.findMany({
+    let articles = await prisma.post.findMany({
       orderBy: { createdAt: "desc" },
       include: {
         categories: true,
@@ -37,6 +37,51 @@ export async function GET(req: Request) {
         },
       },
     });
+
+    // Dummy data seeding if empty
+    if (articles.length === 0) {
+      const admin = await prisma.admin.findFirst();
+      if (admin) {
+        console.log("Seeding dummy articles...");
+        await prisma.post.createMany({
+          data: [
+            {
+              title: "Welcome to Newsly",
+              slug: "welcome-to-newsly",
+              content: "<p>This is a sample article to get you started. You can edit or delete it from the admin panel.</p>",
+              published: true,
+              authorId: admin.id,
+              categoryIds: [],
+              tagIds: [],
+            },
+            {
+              title: "The Power of Next.js",
+              slug: "the-power-of-next-js",
+              content: "<p>Next.js gives you the best developer experience with all the features you need for production: hybrid static & server rendering, TypeScript support, smart bundling, route pre-fetching, and more.</p>",
+              published: false,
+              authorId: admin.id,
+              categoryIds: [],
+              tagIds: [],
+            },
+          ],
+        });
+
+        // Re-fetch after seeding
+        articles = await prisma.post.findMany({
+          orderBy: { createdAt: "desc" },
+          include: {
+            categories: true,
+            tags: true,
+            author: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        });
+      }
+    }
 
     return NextResponse.json(articles);
   } catch (error) {
@@ -62,7 +107,6 @@ export async function POST(req: Request) {
          return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Find the admin user associated with the session email
     const author = await prisma.admin.findUnique({
         where: { email: session.user.email }
     });
@@ -107,7 +151,6 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Article ID is required" }, { status: 400 });
     }
 
-    // Filter out undefined values to allow partial updates
     const cleanData = Object.fromEntries(
       Object.entries(updateData).filter(([_, v]) => v !== undefined)
     );

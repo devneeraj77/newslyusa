@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid2x2PlusIcon, MenuIcon, SearchIcon, Sparkle } from "lucide-react";
+import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -12,59 +12,57 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "./darkModebtn";
-import Image from "next/image";
+import { IconMovie, IconRun } from "@tabler/icons-react";
+
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const links = [
-    {
-      label: "News",
-      href: "news",
-    },
-    {
-      label: "Politics",
-      href: "politics",
-    },
-    {
-      label: "Tech & Media",
-      href: "tech-and-media",
-    },
-    {
-      label: "Business",
-      href: "business",
-    },
-    {
-      label: "Health",
-      href: "health",
-    },
-    {
-      label: "Sports",
-      href: "sports",
-    },
-    {
-      label: "Science",
-      href: "science",
-    },
-    {
-      label: "more",
-      href: "more",
-    },
+    { label: "News", href: "news", icon: Newspaper },
+    { label: "US", href: "us", icon: Sparkles }, // Example icon
+    { label: "Politics", href: "politics", icon: Speech }, // Example icon
+    // { label: "Business", href: "business", icon: BriefcaseBusiness }, // Example icon
+    { label: "Health", href: "health", icon: HeartPlus }, // Example icon
+    { label: "Travel", href: "travel", icon: TicketsPlane }, // Example icon
+    { label: "Sports", href: "sports", icon: IconRun }, // Example icon
+    { label: "Tech & Media", href: "tech-and-media", icon: Cpu }, // Example icon
+    { label: "Entertainment", href: "entertainment", icon: IconMovie }, // Example icon
   ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full   backdrop-blur-lg",
-        "bg-background/35 supports-[backdrop-filter]:bg-background/80"
+        "sticky top-0 z-50 w-full transition-transform duration-300 backdrop-blur-lg",
+        "bg-background/35 supports-[backdrop-filter]:bg-background/80",
+        isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
       <nav className="mx-auto flex h-14 w-full space-x-12 px-2 items-center justify-between md:px-2 lg:px-6 xl:px-8">
         <div className="hover:bg-accent flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
-          <Grid2x2PlusIcon className="size-6" />
+          <Grid2x2Plus className="size-6" />
           <p className="font-mono text-lg font-bold">NewslyUSA</p>
         </div>
-        <div className="flex lg:w-full items-center justify-between gap-2">
+        <div className="flex lg:w-full items-center justify-between ">
           <div className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
               <a
@@ -75,7 +73,7 @@ export function Header() {
                 {link.label}{" "}
                 {/* {link.icon && (
                   <Image src={link.icon} width={20} height={20} alt="user" />
-                )} */}
+                )} */} {/* Removed the incorrect JSX usage */}
               </a>
             ))}
             {/* <Button variant="outline">Sign In</Button>
@@ -84,12 +82,12 @@ export function Header() {
           <div className="flex gap-2">
             <SearchModal data={blogs}>
               <Button
-                variant="outline"
+                variant="ghost"
                 className="relative size-9 cursor-pointer p-0 md:border xl:h-9 xl:w-60 xl:justify-between xl:px-3 xl:py-2"
               >
                 <span className="hidden xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
-                <SearchIcon className="size-4" />
+                <Search className="size-4" />
               </Button>
             </SearchModal>
             <div className="hidden items-center  gap-1 lg:flex">
@@ -99,11 +97,11 @@ export function Header() {
           <Sheet open={open} onOpenChange={setOpen}>
             <Button
               size="icon"
-              variant="outline"
+              variant="ghost"
               onClick={() => setOpen(!open)}
               className="lg:hidden"
             >
-              <MenuIcon className="size-4" />
+              <Menu className="size-4" />
             </Button>
 
             <SheetContent showClose={false} side="left">
@@ -124,8 +122,8 @@ export function Header() {
                     href={link.href}
                   >
                     {link.label}{" "}
-                    <Sparkle size={10} className="ml-1 fill-background" />
-                  </a>
+                    <link.icon size={20} />
+                   </a>
                 ))}
               </div>
               <SheetFooter>
