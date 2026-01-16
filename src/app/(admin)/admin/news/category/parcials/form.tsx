@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; // Assuming this path is correct
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-type CategoryFormValues = z.infer<typeof formSchema>;
+export type CategoryFormValues = z.infer<typeof formSchema>;
 
 interface CategoryFormProps {
   initialData?: CategoryFormValues | null;

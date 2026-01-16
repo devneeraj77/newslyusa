@@ -4,6 +4,7 @@ import {  Geist, Lora, Montserrat } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header-with-search";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import DotGrid from "@/components/DotGrid";
 import { Footer } from "@/components/footer";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           <Header />
           
           {children}
+          <SpeedInsights />
           <Footer/>
         </ThemeProvider>
       </body>

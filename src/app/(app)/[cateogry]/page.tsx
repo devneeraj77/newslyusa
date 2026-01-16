@@ -55,21 +55,21 @@ export default async function CategoryPage({ params }: Props) {
      category = {
         name: decodedCategory,
         posts: [
-            {
-                id: "mock-cat-post-1",
-                title: `Mock Post in ${decodedCategory}`,
-                slug: `mock-post-${decodedCategory.toLowerCase().replace(/\s+/g, '-')}`,
-                content: "This is a mock post content because the database is not reachable.",
-                published: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                authorId: "mock-admin",
-                categoryIds: ["mock-cat"],
-                tagIds: [],
-                author: { name: "System Admin" } as Admin,
-                categories: [{ name: decodedCategory } as Category]
-            }
-        ] as PostWithRelations[]
+          {
+            id: "mock-cat-post-1",
+            title: `Mock Post in ${decodedCategory}`,
+            slug: `mock-post-${decodedCategory.toLowerCase().replace(/\s+/g, '-')}`,
+            content: "This is a mock post content because the database is not reachable.",
+            published: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            authorId: "mock-admin",
+            categoryIds: ["mock-cat"],
+            tagIds: [],
+            author: { name: "System Admin" } as Admin,
+            categories: [{ name: decodedCategory } as Category] 
+          }
+        ] as unknown as PostWithRelations[]
      } as CategoryWithPosts;
   }
 

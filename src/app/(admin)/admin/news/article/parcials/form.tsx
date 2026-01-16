@@ -7,8 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2 } from "lucide-react";
+import { Loader2, Image as ImageIcon, Trash } from "lucide-react";
 import TiptapEditor from "@/components/ui/tiptap-editor";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
+import { env } from "process";
 
 interface Category {
   id: string;
@@ -26,6 +29,7 @@ interface ArticleFormProps {
     title: string;
     slug: string;
     content: string;
+    image?: string | null;
     published: boolean;
     categories?: Category[];
     tags?: Tag[];
@@ -56,6 +60,7 @@ export default function ArticleForm({
     title: initialData?.title || "",
     slug: initialData?.slug || "",
     content: initialData?.content || "",
+    image: initialData?.image || "",
     published: initialData?.published || false,
     categoryIds: initialCategoryIds,
     tagIds: initialTagIds,
@@ -104,6 +109,16 @@ export default function ArticleForm({
     });
   };
 
+  const handleImageUpload = (result: any) => {
+    if (result.event === "success") {
+      setFormData((prev) => ({ ...prev, image: result.info.secure_url }));
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData((prev) => ({ ...prev, image: "" }));
+  };
+
   const generateSlug = () => {
     const slug = formData.title
       .toLowerCase()
@@ -144,6 +159,7 @@ export default function ArticleForm({
           title: "",
           slug: "",
           content: "",
+          image: "",
           published: false,
           categoryIds: [],
           tagIds: [],
@@ -152,9 +168,9 @@ export default function ArticleForm({
       // Optionally redirect
       if (!initialData) {
         // Maybe redirect to list or just stay
-        router.push("/admin/news");
+        router.push("/admin/news/allArticle");
       } else {
-        router.push("/admin/news");
+        router.push("/admin/news/allArticle");
       }
     } catch (err: any) {
       setError(err.message);
@@ -212,6 +228,51 @@ export default function ArticleForm({
                 required
               />
             </div>
+            
+             <div className="space-y-2">
+              <Label>Featured Image</Label>
+              <div className="flex flex-col gap-4">
+                {formData.image ? (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+                    <Image
+                      src={formData.image}
+                      alt="Article cover"
+                      fill
+                      className="object-cover"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute right-2 top-2 h-8 w-8"
+                      onClick={handleRemoveImage}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <CldUploadWidget
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                    onSuccess={handleImageUpload}
+                  >
+                    {({ open }) => {
+                      return (
+                        <div
+                          onClick={() => open()}
+                          className="flex aspect-video cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed bg-muted/50 transition-colors hover:bg-muted"
+                        >
+                          <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                          <span className="mt-2 text-sm text-muted-foreground">
+                            Upload Featured Image
+                          </span>
+                        </div>
+                      );
+                    }}
+                  </CldUploadWidget>
+                )}
+              </div>
+            </div>
+
           </div>
 
           <div className="space-y-6">

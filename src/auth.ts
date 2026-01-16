@@ -1,11 +1,9 @@
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import type { Provider } from "next-auth/providers"
 import db from "@/lib/prisma"
+import { authConfig } from "./auth.config"
 
-
- 
 const providers: Provider[] = [
   Credentials({
     credentials: {
@@ -40,8 +38,9 @@ const providers: Provider[] = [
       }
     },
   }),
-  Google,
+  ...authConfig.providers,
 ]
+
 export const providerMap = providers
   .map((provider) => {
     if (typeof provider === "function") {
@@ -54,31 +53,6 @@ export const providerMap = providers
   .filter((provider) => provider.id !== "credentials")
  
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers,
-  pages: {
-    signIn: "/admin/signin",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        token.name = user.name
-        token.email = user.email
-        token.picture = user.image
-      }
-      return token
-    },
-    session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        session.user.name = token.name
-        session.user.email = token.email as string
-        session.user.image = token.picture
-      }
-      return session
-    },
-  },
 })

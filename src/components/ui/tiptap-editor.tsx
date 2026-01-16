@@ -13,7 +13,6 @@ import TiptapTableHeader from "@tiptap/extension-table-header";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
-import History from "@tiptap/extension-history";
 import { useMemo, useState, useEffect } from "react";
 import {
   Bold,
@@ -63,10 +62,8 @@ const TiptapEditor = ({
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
         },
-        history: true,
       }),
       // Add it back with your custom settings
-      
       Placeholder.configure({
         placeholder: placeholder || "Start typing something amazing...",
       }),
