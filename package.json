@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "prisma generate --schema=prisma/schema-mongodb.prisma",
     "db:seed": "prisma db seed"
   },
   "dependencies": {
@@ -64,6 +64,7 @@
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
     "react-icons": "^5.5.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "vaul": "^1.1.2",
     "zod": "^4.3.5"

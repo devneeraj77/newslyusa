@@ -6,7 +6,7 @@ import { defineConfig, env } from "prisma/config";
 export default defineConfig({
   schema: "prisma/schema-mongodb.prisma",
   // Ensure the engine is set to "classic" for Prisma 6.19 if not using driver adapters
-  engine: "classic", 
+
   datasource: {
     url: env("DATABASE_URL"),
   },

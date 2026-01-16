@@ -7,7 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Image as ImageIcon, Trash } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown, Loader2, Image as ImageIcon, Trash } from "lucide-react";
 import TiptapEditor from "@/components/ui/tiptap-editor";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
@@ -112,6 +120,7 @@ export default function ArticleForm({
   const handleImageUpload = (result: any) => {
     if (result.event === "success") {
       setFormData((prev) => ({ ...prev, image: result.info.secure_url }));
+      console.log(initialData?.image)
     }
   };
 
@@ -278,33 +287,49 @@ export default function ArticleForm({
           <div className="space-y-6">
             <div className="space-y-2">
               <Label>Categories</Label>
-              <div className="border rounded-md p-4 max-h-[200px] overflow-y-auto space-y-2">
-                {categories.length === 0 && (
-                  <p className="text-sm text-muted-foreground">
-                    No categories found.
-                  </p>
-                )}
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="flex items-center space-x-2"
-                  >
-                    <Checkbox
-                      id={`cat-${category.id}`}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between">
+                    {formData.categoryIds.length > 0
+                      ? `${formData.categoryIds.length} selected`
+                      : "Select Categories"}
+                    <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="start">
+                  <DropdownMenuLabel>Categories</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {categories.length === 0 && (
+                     <div className="p-2 text-sm text-muted-foreground">No categories found</div>
+                  )}
+                  {categories.map((category) => (
+                    <DropdownMenuCheckboxItem
+                      key={category.id}
                       checked={formData.categoryIds.includes(category.id)}
                       onCheckedChange={(checked) =>
                         handleCategoryChange(checked, category.id)
                       }
-                    />
-                    <Label
-                      htmlFor={`cat-${category.id}`}
-                      className="cursor-pointer"
                     >
                       {category.name}
-                    </Label>
-                  </div>
-                ))}
-              </div>
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {formData.categoryIds.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {formData.categoryIds.map((id) => {
+                    const cat = categories.find((c) => c.id === id);
+                    return cat ? (
+                      <span
+                        key={id}
+                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                      >
+                        {cat.name}
+                      </span>
+                    ) : null;
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">

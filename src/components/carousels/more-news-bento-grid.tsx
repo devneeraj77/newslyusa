@@ -122,16 +122,35 @@ const NewsGrid = () => {
       try {
         const response = await fetch("/api/news");
         const data = await response.json();
-        if (data && data.length > 0) {
-          setNewsData(data.map((post: any) => ({
+        
+        let mappedData: NewsItem[] = [];
+        if (data && Array.isArray(data) && data.length > 0) {
+          mappedData = data.map((post: any) => ({
             ...post,
-            category: post.categories[0]?.name || "General",
-            timestamp: "Just now"
-          })));
-        } else {
-          setNewsData(FALLBACK_NEWS_DATA);
+            image: post.image || "https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop", // Fallback image
+            category: post.categories?.[0]?.name || "General",
+            timestamp: new Date(post.createdAt).toLocaleDateString()
+          }));
         }
+
+        // Ensure we have at least 8 items for the grid layout
+        if (mappedData.length < 8) {
+          const needed = 8 - mappedData.length;
+          // Append fallback items that aren't already in mappedData (simple check or just slice)
+          // We'll just slice the fallback data to fill the gap. 
+          // Note: Real IDs might collide with "1", "2" etc from fallback if we aren't careful, 
+          // but for display this is acceptable or we can prefix fallback IDs.
+          const fallbackFill = FALLBACK_NEWS_DATA.slice(0, needed).map((item, index) => ({
+            ...item,
+            id: `fallback-${item.id}-${index}` // Ensure unique keys
+          }));
+          setNewsData([...mappedData, ...fallbackFill]);
+        } else {
+          setNewsData(mappedData);
+        }
+
       } catch (err) {
+        console.error("Failed to fetch news:", err);
         setNewsData(FALLBACK_NEWS_DATA);
       } finally {
         setLoading(false);

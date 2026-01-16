@@ -1,10 +1,11 @@
 import db from "@/lib/prisma";
 import { CategoryClient } from "./category-client";
+import { Category } from "@/generated/prisma/client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function CategoryPage() {
-  let categories = [];
+  let categories: Category[] = [];
   try {
     categories = await db.category.findMany({
       orderBy: {

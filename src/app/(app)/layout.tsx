@@ -23,6 +23,8 @@ const montserrat = Montserrat({
   weight: "400"
 });
 
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -45,6 +47,7 @@ export default function RootLayout({
           {children}
           <SpeedInsights />
           <Footer/>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
