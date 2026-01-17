@@ -17,6 +17,7 @@ interface NewsItem {
   timestamp: string;
   slug: string;
   content: string;
+  description: string;
   categories: CategoryItem[];
   createdAt: string;
 }
@@ -30,6 +31,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "2 hrs ago",
     slug: "thailand-crane-collapse",
     content: "It comes one day after a crane accident in another part of the country killed 32 people.",
+    description: "It comes one day after a crane accident in another part of the country killed 32 people.",
     categories: [{ id: "cat1", name: "USA" }],
     createdAt: new Date().toISOString(),
   },
@@ -41,6 +43,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "55 mins ago",
     slug: "indian-ship-oman",
     content: "The ship, which has no engine and moves under square sails, retraced the ancient route in 17 days.",
+    description: "The ship, which has no engine and moves under square sails, retraced the ancient route in 17 days.",
     categories: [{ id: "cat2", name: "USA" }],
     createdAt: new Date().toISOString(),
   },
@@ -52,6 +55,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "11 hrs ago",
     slug: "gaza-peace-plan",
     content: "It includes the establishment of a technocratic Palestinian government and demilitarisation.",
+    description: "It includes the establishment of a technocratic Palestinian government and demilitarisation.",
     categories: [{ id: "cat3", name: "World" }],
     createdAt: new Date().toISOString(),
   },
@@ -63,6 +67,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "2 hrs ago",
     slug: "labubu-labour-claims",
     content: "Investigators allege that a factory making Pop Mart products neglected staff safety.",
+    description: "Investigators allege that a factory making Pop Mart products neglected staff safety.",
     categories: [{ id: "cat4", name: "Business" }],
     createdAt: new Date().toISOString(),
   },
@@ -74,6 +79,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "6 hrs ago",
     slug: "hunger-strike-ends",
     content: "The BBC understands that one of the protesters was taken to hospital in poor condition.",
+    description: "The BBC understands that one of the protesters was taken to hospital in poor condition.",
     categories: [{ id: "cat5", name: "UK" }],
     createdAt: new Date().toISOString(),
   },
@@ -85,6 +91,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "4 hrs ago",
     slug: "zelensky-energy-emergency",
     content: "The move comes as US President Donald Trump said Ukraine is 'less ready'.",
+    description: "The move comes as US President Donald Trump said Ukraine is 'less ready'.",
     categories: [{ id: "cat6", name: "Europe" }],
     createdAt: new Date().toISOString(),
   },
@@ -96,6 +103,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "15 hrs ago",
     slug: "chiara-ferragni-cleared",
     content: "Chiara Ferragni had been accused of misleading consumers in her promotion of Christmas cakes.",
+    description: "Chiara Ferragni had been accused of misleading consumers in her promotion of Christmas cakes.",
     categories: [{ id: "cat7", name: "Europe" }],
     createdAt: new Date().toISOString(),
   },
@@ -107,10 +115,16 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     timestamp: "1 hr ago",
     slug: "spacex-starship-orbit",
     content: "The massive rocket achieved orbital velocity in a major milestone for the company.",
+    description: "The massive rocket achieved orbital velocity in a major milestone for the company.",
     categories: [{ id: "cat8", name: "Tech" }],
     createdAt: new Date().toISOString(),
   }
 ];
+
+const stripHtml = (html: string) => {
+  if (!html) return "";
+  return html.replace(/<[^>]*>?/gm, "");
+};
 
 const NewsGrid = () => {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
@@ -129,7 +143,8 @@ const NewsGrid = () => {
             ...post,
             image: post.image || "https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop", // Fallback image
             category: post.categories?.[0]?.name || "General",
-            timestamp: new Date(post.createdAt).toLocaleDateString()
+            timestamp: new Date(post.createdAt).toLocaleDateString(),
+            description: post.description || "",
           }));
         }
 
@@ -167,12 +182,16 @@ const NewsGrid = () => {
         {/* Main Content Area (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-8">
           {/* Article 1: Headline Left, Image Right */}
-          <Link href={`/news/${newsData[0].slug}`} className="grid grid-cols-1 md:grid-cols-3 gap-6 group">
+          <Link href={`/${newsData[0].category || "news"}/${newsData[0].slug}`} className="grid grid-cols-1 md:grid-cols-3 gap-6 group">
             <div className="md:col-span-1 order-2 md:order-1">
               <h2 className="text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
                 {newsData[0].title}
               </h2>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-4 md:line-clamp-none">{newsData[0].content}</p>
+              <p className="text-gray-600 text-sm mb-4 line-clamp-4 md:line-clamp-none">
+                {newsData[0].description
+                  ? stripHtml(newsData[0].description)
+                  : stripHtml(newsData[0].content)}
+              </p>
               <div className="flex items-center text-xs text-gray-500 uppercase tracking-wider font-medium">
                 <span>{newsData[0].timestamp}</span>
                 <Dot className="text-secondary" size={24} />
@@ -187,7 +206,7 @@ const NewsGrid = () => {
           {/* Former Bottom Section: 4 Column Grid - Now inside the 9-col container */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-8 border-dashed border-t">
             {newsData.slice(4, 8).map((news) => (
-              <Link key={news.id} href={`/news/${news.slug}`} className="group">
+              <Link key={news.id} href={`/${news.category || "news"}/${news.slug}`} className="group">
                  <div className="relative aspect-video mb-3 overflow-hidden ">
                    <Image src={news.image} alt={news.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                  </div>
@@ -205,7 +224,7 @@ const NewsGrid = () => {
         {/* Sidebar (Spans 3 cols) */}
         <div className="lg:col-span-3 flex flex-col gap-6 lg:border-l pl-0 lg:pl-6 border-gray-100">
            {/* First item with image */}
-           <Link href={`/news/${newsData[1].slug}`} className="group block">
+           <Link href={`/${newsData[1].category || "news"}/${newsData[1].slug}`} className="group block">
               <div className="relative aspect-video mb-3 overflow-hidden ">
                 <Image src={newsData[1].image} alt={newsData[1].title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
@@ -220,7 +239,7 @@ const NewsGrid = () => {
            <hr className="w-full border-dashed  " />
 
            {/* Second item text only */}
-           <Link href={`/news/${newsData[2].slug}`} className="group block">
+           <Link href={`/${newsData[2].category || "news"}/${newsData[2].slug}`} className="group block">
            <div className="relative lg:hidden block  aspect-video mb-3 overflow-hidden ">
                 <Image src={newsData[2].image} alt={newsData[2].title} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
@@ -235,7 +254,7 @@ const NewsGrid = () => {
            <hr className="w-full border-dashed  " />
 
            {/* Third item text only */}
-            <Link href={`/news/${newsData[3].slug}`} className="group block">
+            <Link href={`/${newsData[3].category || "news"}/${newsData[3].slug}`} className="group block">
             <div className="relative lg:hidden block aspect-video mb-3 overflow-hidden ">
                 <Image src={newsData[3].image} alt={newsData[3].title} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>

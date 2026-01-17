@@ -127,7 +127,7 @@ export default function NewsHeadlines() {
                   key={index}
                   className="pl-0 basis-full sm:basis-1/2 lg:basis-1/3 border-r last:border-r-0 border-dashed border-border/60"
                 >
-                  <Link href={`/news/${item.slug}`} className="block h-full group">
+                  <Link href={`/${item.category}/${item.slug}`} className="block h-full group">
                     <article className="relative h-full px-[20px] py-4 flex flex-col justify-between hover:bg-muted/30 transition-colors">
                       <div className="space-y-3">
                         {/* Progress Bar Container */}

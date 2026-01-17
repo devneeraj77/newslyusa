@@ -35,35 +35,35 @@ export default async function NewsPage() {
   } catch (error) {
     console.error("Failed to fetch posts from DB, using mock data:", error);
     posts = [
-        {
-            id: "mock-1",
-            title: "Mock News: Database Connection Failed",
-            slug: "mock-news-db-failed",
-            content: "This is a placeholder news article because the database connection could not be established. Please check your MongoDB connection settings.",
-            published: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            authorId: "mock-admin",
-            categoryIds: ["mock-cat"],
-            tagIds: [],
-            author: { name: "System Admin" } as Admin,
-            categories: [{ name: "System" } as Category]
-        },
-        {
-            id: "mock-2",
-            title: "Sample Article for Preview",
-            slug: "sample-article-preview",
-            content: "Another sample article to populate the UI when the database is unreachable. It helps in developing the frontend without a live backend connection.",
-            published: true,
-            createdAt: new Date(Date.now() - 86400000), // 1 day ago
-            updatedAt: new Date(),
-            authorId: "mock-admin",
-            categoryIds: ["mock-cat"],
-            tagIds: [],
-            author: { name: "Editor" } as Admin,
-            categories: [{ name: "General" } as Category]
-        }
-    ] as PostWithRelations[];
+      {
+        id: "mock-1",
+        title: "Mock News: Database Connection Failed",
+        slug: "mock-news-db-failed",
+        content: "This is a placeholder news article because the database connection could not be established. Please check your MongoDB connection settings.",
+        published: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        authorId: "mock-admin",
+        categoryIds: ["mock-cat"],
+        tagIds: [],
+        author: { name: "System Admin" } as Admin,
+        categories: [{ name: "System" } as Category]
+      },
+      {
+        id: "mock-2",
+        title: "Sample Article for Preview",
+        slug: "sample-article-preview",
+        content: "Another sample article to populate the UI when the database is unreachable. It helps in developing the frontend without a live backend connection.",
+        published: true,
+        createdAt: new Date(Date.now() - 86400000), // 1 day ago
+        updatedAt: new Date(),
+        authorId: "mock-admin",
+        categoryIds: ["mock-cat"],
+        tagIds: [],
+        author: { name: "Editor" } as Admin,
+        categories: [{ name: "General" } as Category]
+      }
+    ] as unknown as PostWithRelations[];
   }
 
   return (
@@ -73,7 +73,7 @@ export default async function NewsPage() {
         {posts.map((post) => (
           <Link
             key={post.id}
-            href={`/news/${post.categories[0]?.name || "general"}/${post.slug}`}
+            href={`/${post.categories[0]?.name || "news"}/${post.slug}`}
             className="group block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="p-4">

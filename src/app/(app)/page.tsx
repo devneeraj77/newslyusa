@@ -13,7 +13,7 @@ import MoreNewsBentoGrid from "@/components/carousels/more-news-bento-grid";
 import NewsHighlightCard, {
   FALLBACK_HIGHLIGHTS,
   NewsItem,
-} from "@/components/news-highlight-card";
+} from "@/components/carousels/news-highlight-card";
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
@@ -115,85 +115,89 @@ export default function Home() {
     fetchHighlights();
   }, []);
 
-    const handleAnimationComplete = () => {
-      // Animation complete callback
-      console.log("Animation complete!");
-    };
+  const handleAnimationComplete = () => {
+    // Animation complete callback
+    console.log("Animation complete!");
+  };
 
-    return (
-      <main className="items-center justify-center  ">
-        <section className="container mx-auto  flex flex-col items-center justify-center px-4 py-2">
-          <div className=" grid grid-cols-1 xl:grid-cols-4  gap-8">
-            {/* Main Content Area */}
-            <div className="xl:col-span-3 space-y-4">
-              <div className=" top-4 left-4 z-20">
-            <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
-              Best of the week
-            </span>
-          </div>
-              {/* Featured Story */}
-              <div className="relative group overflow-hidden  bg-muted shadow-sm">
-                <div className="aspect-[16/10] md:aspect-[21/9] relative w-full overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Featured News"
-                    fill
-                    priority
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                </div>
-
-                <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 text-white z-20">
-                  <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm text-gray-200 mb-3">
-                    <span className="font-semibold text-primary-foreground/90">
-                      General News
-                    </span>
-                    <Dot className="text-gray-400" size={16} />
-                    <span>2 hours ago</span>
-                  </div>
-
-                  <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold  font-mono leading-tight mb-4 max-w-4xl drop-shadow-md">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Optio, vel.
-                  </h1>
-
-                  <div className="flex gap-3">
-                    {["#bitcoin", "#cryptonews"].map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs md:text-sm font-medium text-gray-300 bg-white/10 px-2 py-1 rounded-md backdrop-blur-md border border-white/10"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+  return (
+    <main className="items-center justify-center md:py-2 m-2 ">
+      <section className="container mx-auto  flex flex-col items-center justify-center py-2">
+        <div className=" grid grid-cols-1 xl:grid-cols-4  gap-2 lg:gap-8">
+          {/* Main Content Area */}
+          <div className="xl:col-span-3 space-y-4">
+            <div className=" top-4 left-4 z-20">
+              <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+                Best of the week
+              </span>
+            </div>
+            {/* Featured Story */}
+            <div className="relative group overflow-hidden  bg-muted shadow-sm">
+              <div className="aspect-[16/10] md:aspect-[24/10] relative w-full overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Featured News"
+                  fill
+                  priority
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               </div>
 
-              {/* Sub Headlines */}
-              <div className="">
-                <div className="flex items-center mb-6 pl-4 border-l-4 border-primary">
-                  <h2 className="text-2xl font-bold tracking-tight">Headlines</h2>
+              <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 text-white z-20">
+                <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm text-gray-200 mb-3">
+                  <span className="font-semibold text-primary-foreground/90">
+                    General News
+                  </span>
+                  <Dot className="text-gray-400" size={16} />
+                  <span>2 hours ago</span>
                 </div>
-                <NewsHeadlines />
+
+                <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold  font-mono leading-tight mb-4 max-w-4xl drop-shadow-md">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Optio, vel.
+                </h1>
+
+                <div className="flex gap-3">
+                  {["#bitcoin", "#cryptonews"].map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs md:text-sm font-medium text-gray-300 bg-white/10 px-2 py-1 rounded-md backdrop-blur-md border border-white/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Sidebar Area */}
-            <div className="xl:col-span-1   space-y-6">
-              <div className="flex items-center justify-between mt-2 pb-6 border-b">
-                <span className="font-bold text-lg">Highlights</span>
-                <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1">
-                  View all <ChevronRight size={16} />
-                </button>
+            {/* Sub Headlines */}
+            <div className="md:pt-2">
+              <div className="flex items-center mt-2 mb-4 md:mb-6 pl-4  border-l-4 border-primary">
+                <h2 className="text-2xl font-bold tracking-tight">Headlines</h2>
               </div>
+              <NewsHeadlines />
+            </div>
+          </div>
 
-              <div className="flex flex-col gap-1 lg:max-h-154 overflow-y-scroll">
-                {loadingHighlights ? (
-                  // Loading skeleton for highlights
+          {/* Sidebar Area */}
+          <div className="xl:col-span-1  space-y-2">
+            <hr className="md:hidden mt-2 mb-2"/>
+            <div className="flex items-center  justify-between mt-2 py-2 pt-4 ">
+              <span className="font-bold text-lg">Highlights</span>
+              <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1">
+                View all <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-1 lg:max-h-154 overflow-y-scroll">
+              {loadingHighlights
+                ? // Loading skeleton for highlights
                   [...Array(5)].map((_, i) => (
-                    <div key={i} className="flex gap-4 p-3 animate-pulse">
+                    <div
+                      key={i}
+                      className="flex w-full gap-4 p-3 animate-pulse"
+                    >
                       <div className="flex-1 space-y-2">
                         <div className="h-4 bg-gray-200 rounded"></div>
                         <div className="h-3 bg-gray-200 rounded w-5/6"></div>
@@ -201,12 +205,10 @@ export default function Home() {
                       <div className="h-16 w-24 bg-gray-200 rounded-md"></div>
                     </div>
                   ))
-                ) : (
-                  highlightNews.map((news) => (
+                : highlightNews.map((news) => (
                     <NewsHighlightCard key={news.id} news={news} />
-                  ))
-                )}
-              </div>
+                  ))}
+            </div>
             {/* Ad Placeholder or Extra Widget can go here */}
             {/* <div className="w-full h-64 bg-muted/30 rounded-lg flex items-center justify-center border border-dashed text-muted-foreground text-sm">
               Advertisement / Widget
@@ -259,7 +261,7 @@ export default function Home() {
           </div>
         </div>
       </section> */}
-      <hr className="border m-4 md:mx-16 lg:mx-20  border-dashed" />
+      <hr className="border m-4 md:mx-16 lg:mx-17  border-dashed" />
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
           <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
@@ -327,7 +329,7 @@ export default function Home() {
         </div>
         <div className=" flex flex-col gap-4 lg:flex-row mx-auto flex-col items-center justify-between     sm:items-start">
           <div className="w-full">
-            <MoreNewsBentoGrid/>
+            <MoreNewsBentoGrid />
           </div>
         </div>
       </section>

@@ -38,26 +38,26 @@ export function Header() {
   }, [lastScrollY]);
 
   const links = [
-    { label: "News", href: "news", icon: Newspaper },
-    { label: "US", href: "us", icon: Sparkles }, // Example icon
-    { label: "Politics", href: "politics", icon: Speech }, // Example icon
-    // { label: "Business", href: "business", icon: BriefcaseBusiness }, // Example icon
-    { label: "Health", href: "health", icon: HeartPlus }, // Example icon
-    { label: "Travel", href: "travel", icon: TicketsPlane }, // Example icon
-    { label: "Sports", href: "sports", icon: IconRun }, // Example icon
-    { label: "Tech & Media", href: "tech-and-media", icon: Cpu }, // Example icon
-    { label: "Entertainment", href: "entertainment", icon: IconMovie }, // Example icon
+    { label: "News", href: "/news", icon: Newspaper },
+    { label: "US", href: "/us", icon: Sparkles }, // Example icon
+    { label: "Politics", href: "/politics", icon: Speech }, // Example icon
+    // { label: "Business", href: "/business", icon: BriefcaseBusiness }, // Example icon
+    { label: "Health", href: "/health", icon: HeartPlus }, // Example icon
+    { label: "Travel", href: "/travel", icon: TicketsPlane }, // Example icon
+    { label: "Sports", href: "/sports", icon: IconRun }, // Example icon
+    { label: "Tech & Media", href: "/tech-and-media", icon: Cpu }, // Example icon
+    { label: "Entertainment", href: "/entertainment", icon: IconMovie }, // Example icon
   ];
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-transform duration-300 backdrop-blur-lg",
+        "sticky top-0 z-50  transition-transform duration-300 backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80",
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full space-x-12 px-2 items-center justify-between md:px-2 lg:px-6 xl:px-8">
+      <nav className="mx-auto flex h-18 mx-auto container space-x-14 px-2 md:px-0 items-center justify-between ">
         <div className="hover:bg-accent flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
           <Grid2x2Plus className="size-6" />
           <p className="font-mono text-lg font-bold">NewslyUSA</p>
@@ -76,14 +76,14 @@ export function Header() {
                 )} */} {/* Removed the incorrect JSX usage */}
               </a>
             ))}
-            {/* <Button variant="outline">Sign In</Button>
+            {/* <Button variant="ghost">Sign In</Button>
 					<Button>Get Started</Button> */}
           </div>
           <div className="flex gap-2">
             <SearchModal data={blogs}>
               <Button
                 variant="ghost"
-                className="relative size-9 cursor-pointer p-0 md:border xl:h-9 xl:w-60 xl:justify-between xl:px-3 xl:py-2"
+                className="relative size-9 cursor-pointer p-0 md:border xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
               >
                 <span className="hidden xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
@@ -127,7 +127,7 @@ export function Header() {
                 ))}
               </div>
               <SheetFooter>
-                <Button variant="outline">Sign In</Button>
+                <Button variant="ghost">Sign In</Button>
                 <Button>Get Started</Button>
                 <div className="flex w-full items-center justify-between pt-4">
                   <span className="text-sm font-medium">Theme</span>

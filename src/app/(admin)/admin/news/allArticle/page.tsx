@@ -58,10 +58,12 @@ export default async function AllArticlesPage() {
             ) : (
               posts.map((post) => (
                 <TableRow key={post.id}>
-                  <TableCell className="font-medium">
-                    <div>{post.title}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {post.slug}
+                  <TableCell className="font-medium  w-96 ">
+                    <div className="truncate w-[97%]">{post.title}</div>
+                    <div className="text-xs text-muted-foreground   mt-1">
+                      <p className="truncate w-80">
+                        {post.description}
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>

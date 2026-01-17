@@ -132,7 +132,7 @@ export function CategoryClient({ initialCategories }: CategoryClientProps) {
               </DialogDescription>
             </DialogHeader>
             {error && (
-              <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+              <div className="bg-destructive/15 text-destructive text-sm p-3 ">
                 {error}
               </div>
             )}

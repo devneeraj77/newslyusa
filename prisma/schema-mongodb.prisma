@@ -104,6 +104,7 @@ model Post {
   title       String
   slug        String     @unique
   content     String
+  description String?
   image       String?
   published   Boolean    @default(false)
   author      Admin      @relation(fields: [authorId], references: [id])

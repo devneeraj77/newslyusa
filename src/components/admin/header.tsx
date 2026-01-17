@@ -61,7 +61,7 @@ export function Header() {
         "bg-background/95 supports-[backdrop-filter]:bg-background/80"
       )}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-7xl  items-center justify-between  px-4">
+      <nav className="mx-auto flex h-14 w-full   items-center justify-between  px-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={toggleSidebar}>
             <IconLayoutSidebarFilled className="size-6" />
