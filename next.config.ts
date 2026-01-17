@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
-const nextConfig: NextConfig = {
-  /* config options here */
+import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 
+const nextConfig: NextConfig = {
   reactCompiler: true,
   allowedDevOrigins: ['192.168.1.18'],
+
   images: {
     remotePatterns: [
       {
@@ -43,6 +44,15 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+
+  experimental: {
+    serverComponentsExternalPackages: ["prisma", "@prisma/client"],
+  },
+
+  webpack: (config) => {
+    config.plugins.push(new PrismaPlugin());
+    return config;
   },
 };
 
