@@ -66,7 +66,7 @@
   --secondary: #A9ACA9;
   --secondary-foreground: #2F2235;
 
-  --muted: #A9ACA9;
+  --muted: #dbdbdb;
   --muted-foreground: #3F3244;
 
   --accent: #60495A;
@@ -107,10 +107,10 @@
   --primary: #BFC3BA;
   --primary-foreground: #030203;
 
-  --secondary: #140f13;
+  --secondary: #e2c9dd;
   --secondary-foreground: #FFFFFF;
 
-  --muted: #3F3244;
+  --muted: #ffffff;
   --muted-foreground: #A9ACA9;
 
   --accent: #60495A;
@@ -149,7 +149,7 @@
 
 /* Fallback styles for Tiptap editor headings if prose plugin fails */
 .ProseMirror h1 {
-  @apply text-4xl font-extrabold lg:text-5xl mb-4;
+  @apply text-4xl font-extrabold font-mono lg:text-5xl mb-4;
 }
 .ProseMirror h2 {
   @apply text-3xl font-semibold mb-3;
@@ -178,13 +178,29 @@
   100% { transform: translate3d(100%, 0, 0); }
 }
 
-/* For Webkit browsers (Chrome, Safari, Edge, Opera) */
+/* Custom Scrollbar 4px */
 ::-webkit-scrollbar {
-  all: initial; /* Resets all scrollbar-related styles */
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
 
 /* For Firefox */
 * {
-  scrollbar-width: auto; /* Reverts to the default browser width */
-  scrollbar-color: initial; /* Reverts scrollbar colors to default */
+  scrollbar-width: thin;
+  scrollbar-gutter: var(--card-foreground);
+  scrollbar-color: var(--muted-foreground) transparent;
 }

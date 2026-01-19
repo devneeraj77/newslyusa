@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -13,9 +16,11 @@ import { cn } from "@/lib/utils";
 import { CommandItem, SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "./darkModebtn";
 import { IconMovie, IconRun } from "@tabler/icons-react";
+import Link from "next/link";
 
 
 export function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
   const [lastScrollY, setLastScrollY] = React.useState(0);
@@ -58,23 +63,26 @@ export function Header() {
       )}
     >
       <nav className="mx-auto flex h-18 mx-auto container space-x-14 px-2 md:px-0 items-center justify-between ">
-        <div className="hover:bg-accent flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
+        <div className=" flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
           <Grid2x2Plus className="size-6" />
-          <p className="font-mono text-lg font-bold">NewslyUSA</p>
+          <Link href={"/"} className="font-mono text-lg font-bold"> NewslyUSA</Link>
         </div>
         <div className="flex lg:w-full items-center justify-between ">
           <div className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                className={buttonVariants({ variant: "link" })}
+                className={buttonVariants({
+                  variant: "link",
+                  className: pathname.startsWith(link.href) ? "font-bold underline" : ""
+                })}
                 href={link.href}
               >
                 {link.label}{" "}
                 {/* {link.icon && (
                   <Image src={link.icon} width={20} height={20} alt="user" />
                 )} */} {/* Removed the incorrect JSX usage */}
-              </a>
+              </Link>
             ))}
             {/* <Button variant="ghost">Sign In</Button>
 					<Button>Get Started</Button> */}
@@ -83,7 +91,7 @@ export function Header() {
             <SearchModal data={blogs}>
               <Button
                 variant="ghost"
-                className="relative size-9 cursor-pointer p-0 md:border xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
+                className="relative size-9 cursor-pointer p-0 md:bg-muted xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
               >
                 <span className="hidden xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
@@ -113,17 +121,17 @@ export function Header() {
               </SheetHeader>
               <div className="grid gap-y-2 overflow-y-auto px-4 pb-5">
                 {links.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     className={buttonVariants({
                       variant: "link",
-                      className: "justify-start text- gap-2",
+                      className: cn("justify-start gap-2", pathname.startsWith(link.href) && "font-bold"),
                     })}
                     href={link.href}
                   >
                     {link.label}{" "}
                     <link.icon size={20} />
-                   </a>
+                   </Link>
                 ))}
               </div>
               <SheetFooter>

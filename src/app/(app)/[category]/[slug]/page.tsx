@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import db from '@/lib/prisma';
 import { Post, Category, Tag, Admin } from "@/generated/prisma/client";
+import { stripHtml, blogSanitizer } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ slug: string; category: string }>
@@ -53,7 +54,7 @@ export default async function NewsPage({ params }: Props) {
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-mono font-bold mb-4">{post.title}</h1>
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 {post.author?.name && <span className="font-medium">{post.author.name}</span>}
                 <time dateTime={post.createdAt.toISOString()}>
@@ -77,7 +78,7 @@ export default async function NewsPage({ params }: Props) {
         </header>
 
         <div className="prose dark:prose-invert max-w-none">
-            {post.content}
+            {blogSanitizer(post.content || '')}
         </div>
         
         {/* Tags */}

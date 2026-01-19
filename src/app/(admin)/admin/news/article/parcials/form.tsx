@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -256,13 +256,11 @@ export default function ArticleForm({
     });
   };
 
-  const handleImageUpload = (result: any) => {
+  const handleImageUpload = useCallback((result: any) => {
     if (result.event === "success") {
-      setTimeout(() => {
-        setFormData((prev) => ({ ...prev, image: result.info.secure_url }));
-      }, 1000);
+      setFormData((prev) => ({ ...prev, image: result.info.secure_url }));
     }
-  };
+  }, []);
 
   const handleRemoveImage = () => {
     setFormData((prev) => ({ ...prev, image: "" }));
@@ -398,9 +396,9 @@ export default function ArticleForm({
 
             <div className="space-y-2">
               <Label>Featured Image</Label>
-              <div className="flex flex-col gap-4">
-                {formData.image ? (
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+              <div className="flex flex-col border gap-4">
+                {formData.image && (
+                  <div className="relative border bg-red-100 aspect-video  overflow-hidden rounded-lg border">
                     <Image
                       src={formData.image}
                       alt="Article cover"
@@ -417,7 +415,8 @@ export default function ArticleForm({
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
-                ) : (
+                )}
+                <div className={formData.image ? "hidden" : "block"}>
                   <CldUploadWidget
                     uploadPreset={
                       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
@@ -438,7 +437,7 @@ export default function ArticleForm({
                       );
                     }}
                   </CldUploadWidget>
-                )}
+                </div>
               </div>
             </div>
           </div>

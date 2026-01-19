@@ -1,141 +1,89 @@
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Facebook, Grid2x2Plus, Instagram, Linkedin, Twitter } from "lucide-react";
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className=" text-primary-foreground bg-primary tex pt-8 px-6 md:px-4 lg:px-6 xl:px-8">
-      <div className="flex flex-wrap justify-between gap-12 md:gap-6">
-        <div className="max-w-80">
-          <a href="" className="text-lg font-bold pb-10">
-            NewslyUSA
-          </a>
-          <p className="text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-          </p>
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
+    <footer className="bg-background text-secondary  bg-no-repeat bg-cover bg-[url(/img/blob-scene-haikei-small.svg)] md:bg-[url(/img/blob-scene-haikei.svg)] pt-16 pb-8 px-6 md:px-12 lg:px-24">
+      {/* Top Section: Logo + Links */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+        
+        {/* Brand/Logo Section */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          <div className="flex items-center gap-2">
+            {/* Logo Icon mimicking the image */}
+            <Grid2x2Plus className="size-6" />
+            <span className="text-2xl text-muted font-bold tracking-tight">NewslyUSA</span>
           </div>
-        </div>
-
-        <div>
-          <p className="text-lg text-primary-foreground">COMPANY</p>
-          <ul className="mt-3 flex flex-col gap-2 text-sm">
-            <li>
-              <a href="about">About</a>
-            </li>
-            <li>
-              <a href="contact">Contact</a>
-            </li>
-            <li>
-              <a href="#">Press</a>
-            </li>
-            <li>
-              <a href="#">Blog</a>
-            </li>
-            <li>
-              <a href="#">Partners</a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="text-lg text-primary-foreground">SUPPORT</p>
-          <ul className="mt-3 flex flex-col gap-2 text-sm">
-            <li>
-              <a href="#">Help Center</a>
-            </li>
-            <li>
-              <a href="#">Safety Information</a>
-            </li>
-            <li>
-              <a href="#">Cancellation Options</a>
-            </li>
-            <li>
-              <a href="#">Contact Us</a>
-            </li>
-            <li>
-              <a href="#">Accessibility</a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="max-w-80">
-          <p className="text-lg text-primary-foreground">STAY UPDATED</p>
-          <p className="mt-3 text-sm">
-            Subscribe to our newsletter for inspiration and special offers.
+          <p className="text-secondary text-sm max-w-xs leading-relaxed">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
-          <div className="flex items-center mt-4">
-            <input
-              type="text"
-              className="bg-white text-black rounded-l border border-gray-300 h-9 px-3 outline-none"
-              placeholder="Your email"
-            />
-            <button className="flex items-center justify-center bg-background text-black h-9 w-9 aspect-square rounded-r">
-              {/* Arrow icon */}
-              <svg
-                className="w-4 h-4 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 12H5m14 0-4 4m4-4-4-4"
-                />
-              </svg>
-            </button>
+        </div>
+       
+        {/* Links Sections */}
+        <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {/* Platform */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xs font-bold text-muted uppercase tracking-widest">Platform</h3>
+            <ul className="flex flex-col gap-3 text-sm font-medium">
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">About</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Features</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Pricing & Plans</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xs font-bold text-muted uppercase tracking-widest">Resources</h3>
+            <ul className="flex flex-col gap-3 text-sm font-medium">
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Account</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Tools</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Newsletter</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">FAQ</a></li>
+            </ul>
+          </div>
+
+          {/* Products */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xs font-bold text-muted uppercase tracking-widest">Products</h3>
+            <ul className="flex flex-col gap-3 text-sm font-medium">
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Swiftly</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Rareblocks</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">ClarityUI</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">NewslyUSA</a></li>
+            </ul>
+          </div>
+
+          {/* Legals */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xs font-bold text-muted uppercase tracking-widest">Legals</h3>
+            <ul className="flex flex-col gap-3 text-sm font-medium">
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Guides</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Terms & Conditions</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-muted-foreground transition-colors">Licensing</a></li>
+            </ul>
           </div>
         </div>
       </div>
-      <hr className="border-gray-300 mt-8" />
-      <div className="flex flex-col md:flex-row gap-2 items-center justify-between py-5">
-        <p>
-          © {new Date().getFullYear()} <a href="/">NewslyUSA</a>. All rights
-          reserved.
+
+      {/* Divider */}
+      <div className="max-w-7xl mx-auto border-t border-muted/45 mt-16 mb-8"></div>
+
+      {/* Bottom Section */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row sm:justify-between items-center gap-6">
+        <p className="text-muted text-sm">
+          © {currentYear}, All Rights Reserved by NewslyUSA
         </p>
-        <ul className="flex items-center gap-4">
-          <li>
-            <a href="privacy-policy">Privacy</a>
-          </li>
-          <li>
-            <a href="terms-and-conditions">Terms</a>
-          </li>
-          <li>
-            <a href="#">Sitemap</a>
-          </li>
-        </ul>
+        
+        {/* Optional: Social Icons (if you still want them included) */}
+        <div className="flex gap-5 text-muted">
+          <a href="#" className="hover:text-secondary transition-colors"><Twitter size={18} /></a>
+          <a href="#" className="hover:text-secondary transition-colors"><Facebook size={18} /></a>
+          <a href="#" className="hover:text-secondary transition-colors"><Instagram size={18} /></a>
+          <a href="#" className="hover:text-secondary transition-colors"><Linkedin size={18} /></a>
+        </div>
       </div>
     </footer>
   );

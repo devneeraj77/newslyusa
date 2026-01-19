@@ -1,6 +1,7 @@
 
 import db from "@/lib/prisma";
 import { Metadata } from "next";
+import { slugify } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,7 @@ export default async function TagsPage() {
         {tags.map((tag) => (
           <a
             key={tag.id}
-            href={`/tags/${tag.name}`}
+            href={`/tags/${slugify(tag.name)}`}
             className="px-4 py-2 bg-secondary/20 rounded-full text-lg transition-colors hover:bg-secondary/40"
           >
             <span className="font-medium">#{tag.name}</span>
