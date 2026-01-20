@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { stripHtml } from "@/lib/utils";
+import type { Metadata } from "next";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,7 +31,7 @@ type Props = {
   params: Promise<{ tag: string }>;
 };
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag).replace(/-/g, ' ');
   // Simple capitalization for title
@@ -126,7 +127,7 @@ export default async function TagPage({ params }: Props) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <Link key={post.id} href={`/${post.categories[0]?.slug || 'news'}/${post.slug}`} className="group flex flex-col h-full border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+              <Link key={post.id} href={`/${post.categories[0]?.slug || 'news'}/${post.slug}`} className="group flex flex-col h-full  overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative aspect-video w-full overflow-hidden">
                   <Image
                     src={post.image || "/api/placeholder/400/300"}
@@ -135,7 +136,7 @@ export default async function TagPage({ params }: Props) {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-4 flex flex-col flex-1">
+                <div className="py-4 flex flex-col flex-1">
                    <h2 className="font-bold font-mono text-lg leading-snug group-hover:underline mb-2 line-clamp-2">
                       {post.title}
                     </h2>

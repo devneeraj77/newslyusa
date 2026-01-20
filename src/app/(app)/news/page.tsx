@@ -146,7 +146,7 @@ export default async function NewsPage() {
             {/* 1. Main Featured Article (Latest Post) */}
             <div className="flex flex-col">
               <Link href={`/${mainPost.categories[0]?.name || "news"}/${mainPost.slug}`} className="group">
-                <div className="relative aspect-[16/10] w-full overflow-hidden mb-4">
+                <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
                     src={mainPost.image || "/api/placeholder/600/400"}
                     alt={mainPost.title}
@@ -161,7 +161,7 @@ export default async function NewsPage() {
                   {stripHtml(mainPost.content).substring(0, 200)}...
                 </p>
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                  <span className="text-green-800">{mainPost.categories[0]?.name || "News"}</span>
+                  <span className="text-accent">{mainPost.categories[0]?.name || "News"}</span>
                   <span className="text-gray-400 font-normal">
                     · {formatTimeAgo(mainPost.createdAt)}
                   </span>
@@ -185,7 +185,7 @@ export default async function NewsPage() {
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
-                    <span className="text-green-800">{post.categories[0]?.name || "News"}</span>
+                    <span className="text-accent">{post.categories[0]?.name || "News"}</span>
                     <span className="text-gray-400 font-normal">
                        · {formatTimeAgo(post.createdAt)}
                     </span>

@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body
         suppressHydrationWarning={true}
-        className={`${montserrat.variable} ${lora.variable} antialiased  bg-primary-foreground`}
+        className={`${geistSans.variable} ${lora.variable} antialiased bg-background text-foreground min-h-screen bg-primary-foreground`}
       >
         <ThemeProvider
           attribute="class"

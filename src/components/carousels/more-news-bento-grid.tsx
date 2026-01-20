@@ -178,7 +178,7 @@ const NewsGrid = () => {
 
   return (
     <div className=" mx-auto p-4 font-sans text-[#212121]">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 border-b pb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-2 border-dashed border-b ">
         {/* Main Content Area (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-8">
           {/* Article 1: Headline Left, Image Right */}
@@ -222,7 +222,7 @@ const NewsGrid = () => {
         </div>
 
         {/* Sidebar (Spans 3 cols) */}
-        <div className="lg:col-span-3 flex flex-col gap-6 lg:border-l pl-0 lg:pl-6 border-gray-100">
+        <div className="lg:col-span-3 flex flex-col gap-6  lg:pl-2 border-primary/5">
            {/* First item with image */}
            <Link href={`/${newsData[1].category || "news"}/${newsData[1].slug}`} className="group block">
               <div className="relative aspect-video mb-3 overflow-hidden ">

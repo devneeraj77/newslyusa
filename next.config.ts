@@ -46,9 +46,9 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  experimental: {
-    serverComponentsExternalPackages: ["prisma", "@prisma/client"],
-  },
+  serverExternalPackages: ["prisma", "@prisma/client"],
+
+  turbopack: {},
 
   webpack: (config) => {
     config.plugins.push(new PrismaPlugin());

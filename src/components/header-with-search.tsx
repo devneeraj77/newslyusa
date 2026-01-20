@@ -87,18 +87,18 @@ export function Header() {
             {/* <Button variant="ghost">Sign In</Button>
 					<Button>Get Started</Button> */}
           </div>
-          <div className="flex gap-2">
+          <div className="flex  gap-2">
             <SearchModal data={blogs}>
               <Button
-                variant="ghost"
-                className="relative size-9 cursor-pointer p-0 md:bg-muted xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
+                variant="outline"
+                className="relative size-9 bg-none cursor-pointer border-0 md:border  p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
               >
                 <span className="hidden xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
                 <Search className="size-4" />
               </Button>
             </SearchModal>
-            <div className="hidden items-center  gap-1 lg:flex">
+            <div className="hidden items-center  gap-2 lg:flex">
               <ModeToggle />
             </div>
           </div>
@@ -125,7 +125,7 @@ export function Header() {
                     key={link.label}
                     className={buttonVariants({
                       variant: "link",
-                      className: cn("justify-start gap-2", pathname.startsWith(link.href) && "font-bold"),
+                      className: cn("justify-start gap-2", pathname.startsWith(link.href) && "font-bold underline"),
                     })}
                     href={link.href}
                   >
@@ -139,7 +139,7 @@ export function Header() {
                 <Button>Get Started</Button>
                 <div className="flex w-full items-center justify-between pt-4">
                   <span className="text-sm font-medium">Theme</span>
-                  <ModeToggle />
+                  <ModeToggle  />
                 </div>
               </SheetFooter>
             </SheetContent>

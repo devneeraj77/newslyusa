@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 import { Post, Category, Admin } from "@/generated/prisma/client";
 import Image from "next/image";
 import { stripHtml } from "@/lib/utils";
+import CategoryArticlesPagination from "@/components/category-articles-pagination";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Dot } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,8 +31,29 @@ function formatTimeAgo(dateString: string | Date) {
   return `${diffInDays}d ago`;
 }
 
+function CategoryPaginationSkeleton() {
+  return (
+    <div className="w-full py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {Array.from({ length: 9 }).map((_, i) => (
+          <div key={i} className="flex flex-col h-full border rounded-lg overflow-hidden gap-2">
+            <Skeleton className="aspect-video w-full" />
+            <div className="p-4 flex flex-col gap-2">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 type Props = {
   params: Promise<{ category: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({ params }: Props) {
@@ -39,8 +64,10 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
   const { category } = await params;
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
   const decodedCategory = decodeURIComponent(category);
 
   const categoryData = await db.category.findFirst({
@@ -84,6 +111,33 @@ export default async function CategoryPage({ params }: Props) {
   const mainPost = posts[0];
   const remainingPosts = posts.slice(1);
 
+  const lastMonth = new Date();
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+  const viralPosts = await db.post.findMany({
+    where: {
+      published: true,
+      createdAt: {
+        gte: lastMonth,
+      },
+      categoryIds: {
+        has: categoryData.id
+      },
+      id: {
+        notIn: posts.map((post) => post.id),
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      categories: true,
+    },
+    take: 4,
+  });
+
+  const excludedIds = [...posts.map((p) => p.id), ...viralPosts.map((p) => p.id)];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -121,7 +175,7 @@ export default async function CategoryPage({ params }: Props) {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <section className="flex flex-col lg:flex-row gap-8">
+      <section className="min-h-screen flex flex-col lg:flex-row gap-8">
         
         {/* Main Content Area */}
         <div className="flex-1">
@@ -130,7 +184,7 @@ export default async function CategoryPage({ params }: Props) {
             {/* 1. Main Featured Article (Latest Post) */}
             <div className="flex flex-col">
               <Link href={`/${category}/${mainPost.slug}`} className="group">
-                <div className="relative aspect-[16/10] w-full overflow-hidden mb-4">
+                <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
                     src={mainPost.image || "/api/placeholder/600/400"}
                     alt={mainPost.title}
@@ -141,11 +195,12 @@ export default async function CategoryPage({ params }: Props) {
                 <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline">
                   {mainPost.title}
                 </h1>
+                
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
                   {stripHtml(mainPost.content).substring(0, 200)}...
                 </p>
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                  <span className="text-green-800">{mainPost.categories[0]?.name || categoryData.name}</span>
+                  <span className="text-primary">{mainPost.categories[0]?.name || categoryData.name}</span>
                   <span className="text-gray-400 font-normal">
                     · {formatTimeAgo(mainPost.createdAt)}
                   </span>
@@ -154,7 +209,7 @@ export default async function CategoryPage({ params }: Props) {
             </div>
 
             {/* 2. Secondary Articles Grid (Next 4 posts) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 content-start">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-6 gap-y-8 content-start">
               {remainingPosts.map((post) => (
                 <Link key={post.id} href={`/${category}/${post.slug}`} className="group flex flex-col">
                   <div className="relative aspect-video w-full overflow-hidden mb-3">
@@ -169,7 +224,7 @@ export default async function CategoryPage({ params }: Props) {
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
-                    <span className="text-green-800">{post.categories[0]?.name || categoryData.name}</span>
+                    <span className="text-primary">{post.categories[0]?.name || categoryData.name}</span>
                     <span className="text-gray-400 font-normal">
                        · {formatTimeAgo(post.createdAt)}
                     </span>
@@ -178,16 +233,61 @@ export default async function CategoryPage({ params }: Props) {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* 3. Advertisement Sidebar */}
-        <div className="w-full lg:w-64 shrink-0">
-          <div className="border border-gray-100 p-1 sticky top-4">
-            {/* <p className="text-[10px] text-right text-gray-400 mb-1 uppercase tracking-widest">Advertisement</p> */}
-            
+          <div className=" py-8 my-10">
+            <h3 className="text-xl font-bold mb-6">Trending Last Month</h3>
+            {viralPosts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {viralPosts.map((post) => (
+                  <Link key={post.id} href={`/${category}/${post.slug}`} className="group flex flex-col gap-2">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                      <Image
+                        src={post.image || "/api/placeholder/300/200"}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                         <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                            <span className="text-primary">{post.categories[0]?.name}</span>
+                            <Dot size={14} />
+                            <span>{formatTimeAgo(post.createdAt)}</span>
+                        </div>
+                        <h4 className="font-bold text-sm leading-tight group-hover:underline line-clamp-2">
+                            {post.title}
+                        </h4>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="py-10 text-center">
+                 <p className="text-muted-foreground">No post available</p>
+              </div>
+            )}
           </div>
         </div>
 
+        {/* 3. Advertisement Sidebar */}
+        <aside className="w-full lg:w-64 h-80 bg-muted/20 shrink-0">
+          <div className=" p-1 border-b border-muted sticky top-4">
+            <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest">Top Stories</p>
+            
+          </div>
+        </aside>
+
+      </section>
+      <section className="mt-12 min-h-80">
+        <h2 className="text-2xl font-bold mb-4">More {categoryData.name} News</h2>
+        <Suspense fallback={<CategoryPaginationSkeleton />}>
+          <CategoryArticlesPagination 
+            categoryId={categoryData.id}
+            categorySlug={category}
+            page={currentPage}
+            pageSize={9}
+            excludedIds={excludedIds}
+          />
+        </Suspense>
       </section>
     </main>
   );
