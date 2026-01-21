@@ -107,6 +107,8 @@ model Post {
   description String?
   image       String?
   published   Boolean    @default(false)
+  isTopStory    Boolean    @default(false)
+  isEditorsPick Boolean    @default(false)
   author      Admin      @relation(fields: [authorId], references: [id])
   authorId    String     @db.ObjectId
   categories  Category[] @relation(fields: [categoryIds], references: [id])

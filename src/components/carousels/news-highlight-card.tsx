@@ -3,8 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Dot } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface CategoryItem {
+  id: string;
+  name: string;
+}
+
+export interface TagItem {
   id: string;
   name: string;
 }
@@ -18,6 +24,7 @@ export interface NewsItem {
   slug: string;
   content: string;
   categories: CategoryItem[];
+  tags?: TagItem[];
   createdAt: string;
 }
 
@@ -145,6 +152,22 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
         />
       </div>
     </Link>
+  );
+};
+
+export const NewsHighlightCardSkeleton = () => {
+  return (
+    <div className="flex w-full gap-4 p-3 animate-pulse">
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-4 w-full bg-muted-foreground/20 rounded" />
+        <Skeleton className="h-3 w-5/6 bg-muted-foreground/20 rounded" />
+        <div className="flex gap-2 items-center mt-2">
+           <Skeleton className="h-3 w-16 bg-muted-foreground/20 rounded" />
+           <Skeleton className="h-3 w-16 bg-muted-foreground/20 rounded" />
+        </div>
+      </div>
+      <Skeleton className="h-16 w-24 bg-muted-foreground/20 rounded-md shrink-0" />
+    </div>
   );
 };
 

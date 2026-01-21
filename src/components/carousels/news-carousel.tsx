@@ -10,61 +10,87 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const newsItems = [
-  {
-    category: "Crypto",
-    time: "2h ago",
-    title: "Ethereum's New Upgrade Promises to Slash Transaction Fees by 90%",
-    slug: "ethereum-upgrade",
-  },
-  {
-    category: "Market",
-    time: "4h ago",
-    title: "S&P 500 Hits All-Time High as Tech Sector Rallies on AI Optimism",
-    slug: "sp500-all-time-high",
-  },
-  {
-    category: "Policy",
-    time: "5h ago",
-    title: "Global Leaders Agree on Historic Carbon Tax Framework at Summit",
-    slug: "global-carbon-tax",
-  },
-  {
-    category: "Tech",
-    time: "6h ago",
-    title: "Revolutionary Solid-State Battery Ready for Mass Production",
-    slug: "solid-state-battery",
-  },
-  {
-    category: "Startups",
-    time: "8h ago",
-    title: "AI-Powered Healthcare Platform Secures $100M Series B Funding",
-    slug: "ai-healthcare-funding",
-  },
-  {
-    category: "Space",
-    time: "10h ago",
-    title: "NASA Announces Major Discovery of Water on Mars",
-    slug: "mars-water-discovery",
-  },
-  {
-    category: "Health",
-    time: "12h ago",
-    title: "New Vaccine Shows 95% Efficacy Against Malaria in Trials",
-    slug: "malaria-vaccine",
-  },
-];
+export const NewsHeadlineSkeleton = () => (
+  <div className="relative h-full px-[20px] py-4 flex flex-col justify-between">
+    <div className="space-y-3 w-full">
+      <Skeleton className="w-12 h-1 rounded-full bg-muted-foreground/20" />
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-3 w-12 bg-muted-foreground/20" />
+          <Skeleton className="h-3 w-3 rounded-full bg-muted-foreground/20" />
+          <Skeleton className="h-3 w-10 bg-muted-foreground/20" />
+        </div>
+        <Skeleton className="h-4 w-full bg-muted-foreground/20" />
+        <Skeleton className="h-4 w-2/3 bg-muted-foreground/20" />
+      </div>
+    </div>
+  </div>
+);
 
-export default function NewsHeadlines() {
+function formatTimeAgo(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+
+  if (diffInHours < 24) {
+    return `${Math.max(0, diffInHours)}h ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+}
+
+interface NewsHeadlineItem {
+  category: string;
+  time: string;
+  title: string;
+  slug: string;
+}
+
+export default function NewsHeadlines({
+  isLoading: initialLoading = false,
+}: {
+  isLoading?: boolean;
+}) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [headlines, setHeadlines] = useState<NewsHeadlineItem[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  const isLoading = initialLoading || isLoadingData;
 
   const AUTOPLAY_DURATION = 4000;
 
   useEffect(() => {
-    if (!api) return;
+    const fetchHeadlines = async () => {
+      try {
+        const response = await fetch("/api/news?period=today");
+        if (response.ok) {
+          const data = await response.json();
+          const mappedData = data.map((item: any) => ({
+            category: item.categories[0]?.name || "News",
+            time: formatTimeAgo(item.createdAt),
+            title: item.title,
+            slug: item.slug,
+          }));
+          setHeadlines(mappedData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch headlines", error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    fetchHeadlines();
+  }, []);
+
+  useEffect(() => {
+    if (!api || isLoading) return;
 
     let animationFrameId: number;
     let startTimestamp: number | null = null;
@@ -106,7 +132,13 @@ export default function NewsHeadlines() {
       api.off("select", onSelect);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [api]);
+  }, [api, isLoading]);
+
+  const itemsToRender = headlines;
+
+  if (!isLoading && itemsToRender.length === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full  bg-background/50 backdrop-blur-sm">
@@ -120,50 +152,64 @@ export default function NewsHeadlines() {
           className="w-full"
         >
           <CarouselContent className="-ml-0">
-            {newsItems.map((item, index) => {
-              const isActive = index === current;
-              return (
-                <CarouselItem
-                  key={index}
-                  className="pl-0 basis-full sm:basis-1/2 lg:basis-1/3 border-r last:border-r-0 border-dashed border-border/60"
-                >
-                  <Link href={`/${item.category}/${item.slug}`} className="block h-full group">
-                    <article className="relative h-full px-[20px] py-4 flex flex-col justify-between hover:bg-muted/30 transition-colors">
-                      <div className="space-y-3">
-                        {/* Progress Bar Container */}
-                        <div className="w-12 h-1 bg-muted-foreground/20 rounded-full overflow-hidden">
-                          <div
-                            className={cn(
-                              "h-full bg-primary rounded-full transition-all duration-75 ease-linear",
-                              isActive ? "opacity-100" : "opacity-0 w-0"
-                            )}
-                            style={{
-                              width: isActive ? `${progress}%` : "0%",
-                            }}
-                          />
-                        </div>
+            {isLoading
+              ? [...Array(6)].map((_, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="pl-0 basis-full sm:basis-1/2 lg:basis-1/3 border-r last:border-r-0 border-dashed border-border/60"
+                  >
+                    <NewsHeadlineSkeleton />
+                  </CarouselItem>
+                ))
+              : itemsToRender.map((item, index) => {
+                  const isActive = index === current;
+                  return (
+                    <CarouselItem
+                      key={index}
+                      className="pl-0 basis-full sm:basis-1/2 lg:basis-1/3 border-r last:border-r-0 border-dashed border-border/60"
+                    >
+                      <Link
+                        href={`/${item.category}/${item.slug}`}
+                        className="block h-full group"
+                      >
+                        <article className="relative h-full px-[20px] py-4 flex flex-col justify-between hover:bg-muted/30 transition-colors">
+                          <div className="space-y-3">
+                            {/* Progress Bar Container */}
+                            <div className="w-12 h-1 bg-muted-foreground/20 rounded-full overflow-hidden">
+                              <div
+                                className={cn(
+                                  "h-full bg-primary rounded-full transition-all duration-75 ease-linear",
+                                  isActive ? "opacity-100" : "opacity-0 w-0"
+                                )}
+                                style={{
+                                  width: isActive ? `${progress}%` : "0%",
+                                }}
+                              />
+                            </div>
 
-                        <div className="space-y-1.5">
-                          <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
-                            <span className="text-primary">{item.category}</span>
-                            <span>•</span>
-                            <span>{item.time}</span>
+                            <div className="space-y-1.5">
+                              <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
+                                <span className="text-primary">
+                                  {item.category}
+                                </span>
+                                <span>•</span>
+                                <span>{item.time}</span>
+                              </div>
+                              <h3 className="text-sm font-medium leading-relaxed line-clamp-2 group-hover:text-primary transition-colors">
+                                {item.title}
+                              </h3>
+                            </div>
                           </div>
-                          <h3 className="text-sm font-medium leading-relaxed line-clamp-2 group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h3>
-                        </div>
-                      </div>
-                      
-                      {/* Hover hint */}
-                      <div className="absolute top-4 right-4 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                        <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                    </article>
-                  </Link>
-                </CarouselItem>
-              );
-            })}
+
+                          {/* Hover hint */}
+                          <div className="absolute top-4 right-4 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        </article>
+                      </Link>
+                    </CarouselItem>
+                  );
+                })}
           </CarouselContent>
         </Carousel>
       </div>

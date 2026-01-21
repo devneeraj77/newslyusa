@@ -141,7 +141,7 @@ const NewsGrid = () => {
         if (data && Array.isArray(data) && data.length > 0) {
           mappedData = data.map((post: any) => ({
             ...post,
-            image: post.image || "https://images.unsplash.com/photo-1632059368252-be6d65abc4e2?q=80&w=1470&auto=format&fit=crop", // Fallback image
+            image: post.image || "https://placehold.co/600x400", // Fallback image
             category: post.categories?.[0]?.name || "General",
             timestamp: new Date(post.createdAt).toLocaleDateString(),
             description: post.description || "",
@@ -178,7 +178,7 @@ const NewsGrid = () => {
 
   return (
     <div className=" mx-auto p-4 font-sans text-[#212121]">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-2 border-dashed border-b ">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b ">
         {/* Main Content Area (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-8">
           {/* Article 1: Headline Left, Image Right */}
@@ -198,8 +198,8 @@ const NewsGrid = () => {
                 <span>{newsData[0].category}</span>
               </div>
             </div>
-            <div className="md:col-span-2 order-1 md:order-2 relative aspect-[16/9] w-full">
-              <Image src={newsData[0].image} alt={newsData[0].title} fill  className="object-cover " />
+            <div className="md:col-span-2 order-1 md:order-2 relative  aspect-[16/9] w-full">
+              <Image src={newsData[0].image || "https://placehold.co/600x400" } alt={newsData[0].title} fill unoptimized={newsData[0].image} className="object-cover " />
             </div>
           </Link>
 
@@ -207,8 +207,8 @@ const NewsGrid = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-8 border-dashed border-t">
             {newsData.slice(4, 8).map((news) => (
               <Link key={news.id} href={`/${news.category || "news"}/${news.slug}`} className="group">
-                 <div className="relative aspect-video mb-3 overflow-hidden ">
-                   <Image src={news.image} alt={news.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                 <div className="relative aspect-video mb-3 overflow-hidden  group-hover:underline underline-offset-4">
+                   <Image src={news.image || "https://placehold.co/600x400"} alt={news.title} unoptimized={!news.image} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                  </div>
                  <h4 className="font-bold font-mono text-sm leading-snug group-hover:text-primary transition-colors mb-2 line-clamp-2">{news.title}</h4>
                  <div className="flex items-center text-[10px] text-muted-foreground uppercase font-medium">
@@ -226,7 +226,7 @@ const NewsGrid = () => {
            {/* First item with image */}
            <Link href={`/${newsData[1].category || "news"}/${newsData[1].slug}`} className="group block">
               <div className="relative aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[1].image} alt={newsData[1].title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[1].image || "https://placehold.co/600x400"} alt={newsData[1].title} unoptimized={newsData[1].image} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[1].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
@@ -236,12 +236,12 @@ const NewsGrid = () => {
               </div>
            </Link>
 
-           <hr className="w-full border-dashed  " />
+           <hr className="w-full border-dashed   " />
 
            {/* Second item text only */}
-           <Link href={`/${newsData[2].category || "news"}/${newsData[2].slug}`} className="group block">
+           <Link href={`/${newsData[2].category || "news"}/${newsData[2].slug}`} className="group block ">
            <div className="relative lg:hidden block  aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[2].image} alt={newsData[2].title} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[2].image || "https://placehold.co/600x400"} alt={newsData[2].title}unoptimized={!newsData[2].image} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[2].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
@@ -256,7 +256,7 @@ const NewsGrid = () => {
            {/* Third item text only */}
             <Link href={`/${newsData[3].category || "news"}/${newsData[3].slug}`} className="group block">
             <div className="relative lg:hidden block aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[3].image} alt={newsData[3].title} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[3].image || "https://placehold.co/600x400"} alt={newsData[3].title} fill unoptimized={!newsData[3].image} className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[3].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">

@@ -59,7 +59,7 @@ export default function ArticleActions({ article }: ArticleActionsProps) {
   };
 
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center justify-end px-2 gap-2">
       <Link href={`/admin/news/article?id=${article.id}`}>
         <Button variant="ghost" size="icon" title="Edit">
           <Pencil className="h-4 w-4" />

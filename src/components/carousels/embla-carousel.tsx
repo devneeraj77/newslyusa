@@ -128,7 +128,7 @@ export default function EmblaCarouselAutoplay({
                 itemClassName
               )}
             >
-              <div className="aspect-video rounded-3xl flex items-center justify-center text-5xl font-bold text-accent">
+              <div className="h-full w-full">
                 {slide}
               </div>
             </CarouselItem>
@@ -136,7 +136,7 @@ export default function EmblaCarouselAutoplay({
         </CarouselContent>
 
         {/* Custom Controls Bar */}
-        <div className="flex items-center justify-between mt-8 px-4">
+        <div className="flex items-center justify-between mt-4 mb-8  px-4">
           <div className="flex gap-2">
             <Button
               variant="outline"

@@ -1,20 +1,51 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const period = searchParams.get("period");
+    const limit = searchParams.get("limit");
+    const isEditorsPick = searchParams.get("isEditorsPick");
+    const category = searchParams.get("category");
+
+    const where: any = {
+      published: true,
+    };
+
+    if (category) {
+      where.categories = {
+        some: {
+          name: {
+            equals: category,
+            mode: 'insensitive', // Case-insensitive match
+          },
+        },
+      };
+    }
+
+    if (isEditorsPick === "true") {
+      where.isEditorsPick = true;
+    }
+
+    if (period === "today") {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      where.createdAt = {
+        gte: today,
+      };
+    }
+
     const posts = await db.post.findMany({
-      where: {
-        published: true,
-      },
+      where,
       include: {
         categories: true, // Include categories for each post
+        tags: true,
       },
       orderBy: {
         createdAt: "desc", // Order by creation date, newest first
       },
-      // You can add limits or pagination here if needed
-      // take: 10,
+      take: limit ? parseInt(limit) : undefined,
     });
 
     return NextResponse.json(posts);

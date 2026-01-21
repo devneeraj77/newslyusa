@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, X } from "lucide-react";
 import ArticleActions from "./article-actions";
+import ArticleStatusToggle from "./article-status-toggle";
 
 export default async function AllArticlesPage() {
   const posts = await prisma.post.findMany({
@@ -23,6 +24,9 @@ export default async function AllArticlesPage() {
       author: true,
     },
   });
+
+  const totalTopStories = posts.filter((p) => p.isTopStory).length;
+  // const totalEditorsPicks = posts.filter((p) => p.isEditorsPick).length;
 
   return (
     <div className="p-6">
@@ -39,9 +43,11 @@ export default async function AllArticlesPage() {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Editor's Pick</TableHead>
+              <TableHead >Top Story <span className="text-xs">({totalTopStories}/5)</span></TableHead>
               <TableHead>Categories</TableHead>
-              <TableHead>Tags</TableHead>
               <TableHead>Created At</TableHead>
+              <TableHead>Updated At</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -49,7 +55,7 @@ export default async function AllArticlesPage() {
             {posts.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={8}
                   className="text-center h-24 text-muted-foreground"
                 >
                   No articles found.
@@ -58,10 +64,10 @@ export default async function AllArticlesPage() {
             ) : (
               posts.map((post) => (
                 <TableRow key={post.id}>
-                  <TableCell className="font-medium  w-96 ">
-                    <div className="truncate w-[97%]">{post.title}</div>
+                  <TableCell className="font-medium  md:max-w-xs ">
+                    <div className="truncate w-sm sm:w-auto">{post.title}</div>
                     <div className="text-xs text-muted-foreground   mt-1">
-                      <p className="truncate w-80">
+                      <p className="truncate w-xs ">
                         {post.description}
                       </p>
                     </div>
@@ -77,14 +83,31 @@ export default async function AllArticlesPage() {
                       </div>
                     )}
                   </TableCell>
+                  
+                  <TableCell>
+                    <ArticleStatusToggle
+                      id={post.id}
+                      field="isEditorsPick"
+                      initialChecked={!!post.isEditorsPick}
+                      disabled={!post.published}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <ArticleStatusToggle
+                      id={post.id}
+                      field="isTopStory"
+                      initialChecked={!!post.isTopStory}
+                      disabled={!post.published || (!post.isTopStory && totalTopStories >= 5)}
+                    />
+                  </TableCell>
                   <TableCell>
                     {post.categories.map((c) => c.name).join(", ") || "-"}
                   </TableCell>
                   <TableCell>
-                    {post.tags.map((t) => t.name).join(", ") || "-"}
+                    {new Date(post.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    {new Date(post.createdAt).toLocaleDateString()}
+                    {new Date(post.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">
                     <ArticleActions article={post} />

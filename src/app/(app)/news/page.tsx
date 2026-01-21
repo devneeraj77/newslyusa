@@ -148,9 +148,10 @@ export default async function NewsPage() {
               <Link href={`/${mainPost.categories[0]?.name || "news"}/${mainPost.slug}`} className="group">
                 <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
-                    src={mainPost.image || "/api/placeholder/600/400"}
+                    src={mainPost.image || "https://placehold.co/600x400"}
                     alt={mainPost.title}
                     fill
+                    unoptimized={!mainPost.image}
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -175,9 +176,10 @@ export default async function NewsPage() {
                 <Link key={post.id} href={`/${post.categories[0]?.name || "news"}/${post.slug}`} className="group flex flex-col">
                   <div className="relative aspect-video w-full overflow-hidden mb-3">
                     <Image
-                      src={post.image || "/api/placeholder/300/200"}
+                      src={post.image || "https://placehold.co/600x400"}
                       alt={post.title}
                       fill
+                      unoptimized={!post.image}
                       className="object-cover"
                     />
                   </div>

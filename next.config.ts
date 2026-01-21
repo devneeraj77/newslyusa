@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
+// import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
         port: '',
         pathname: '/**',
       },
@@ -50,10 +56,10 @@ const nextConfig: NextConfig = {
 
   turbopack: {},
 
-  webpack: (config) => {
-    config.plugins.push(new PrismaPlugin());
-    return config;
-  },
+  // webpack: (config) => {
+  //   config.plugins.push(new PrismaPlugin());
+  //   return config;
+  // },
 };
 
 export default nextConfig;
