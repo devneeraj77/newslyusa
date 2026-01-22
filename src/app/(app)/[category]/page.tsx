@@ -35,17 +35,16 @@ function CategoryPaginationSkeleton() {
   return (
     <div className="w-full py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex flex-col h-full border rounded-lg overflow-hidden gap-2"
-          >
-            <Skeleton className="aspect-video w-full" />
-            <div className="p-4 flex flex-col gap-2">
-              <Skeleton className="h-3 w-20" />
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="flex flex-col h-full overflow-hidden">
+            <Skeleton className="aspect-[17/6] w-full rounded-md" />
+            <div className="py-4 flex flex-col gap-2 flex-grow">
+              <div className="flex items-center gap-2 mb-2">
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-3 w-12" />
+              </div>
               <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-6 w-3/4" />
             </div>
           </div>
         ))}
@@ -116,14 +115,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const mainPost = posts[0];
   const remainingPosts = posts.slice(1);
 
-  const lastMonth = new Date();
-  lastMonth.setMonth(lastMonth.getMonth() - 1);
+  const now = new Date();
+  const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
   const viralPosts = await db.post.findMany({
     where: {
       published: true,
       createdAt: {
-        gte: lastMonth,
+        gte: startOfLastMonth,
+        lt: startOfCurrentMonth,
       },
       categoryIds: {
         has: categoryData.id,
@@ -228,7 +229,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               <Link href={`/${category}/${mainPost.slug}`} className="group">
                 <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
-                    src={mainPost.image || "/api/placeholder/600/400"}
+                    src={mainPost.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
                     alt={mainPost.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -262,9 +263,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 >
                   <div className="relative aspect-video w-full overflow-hidden mb-3">
                     <Image
-                      src={post.image || "/api/placeholder/300/200"}
+                      src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
                       alt={post.title}
                       fill
+                      unoptimized={!post.image}
                       className="object-cover"
                     />
                   </div>
@@ -295,7 +297,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   >
                     <div className="relative aspect-video w-full overflow-hidden rounded-md">
                       <Image
-                        src={post.image || "/api/placeholder/300/200"}
+                        src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
                         alt={post.title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -324,10 +326,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           </div>
         </div>
 
-        <aside className="w-full lg:w-64 shrink-0">
+        <aside className="w-full xl:min-h-250 lg:w-64 shrink-0">
           <div className="sticky top-4 space-y-6">
             {/* Header */}
-            <div className="p-1 border-b border-muted">
+            <div className="p-1 border-b border-dashed border-muted">
               <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
                 Top Stories
               </p>
@@ -360,7 +362,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </div>
 
              {/* Editor's Pick */}
-            {editorsPicks.length > 0 && (
+            {/* {editorsPicks.length > 0 && (
               <>
                 <div className="p-1 border-b border-muted mt-8">
                   <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
@@ -394,7 +396,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   ))}
                 </div>
               </>
-            )}
+            )} */}
 
             {/* Minimal Newsletter Sign-up */}
             <div className="p-4 mt-8  bg-muted/10 border border-muted/20">
@@ -420,15 +422,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <h2 className="text-2xl font-bold mb-4">
           More {categoryData.name} News
         </h2>
-        <Suspense fallback={<CategoryPaginationSkeleton />}>
+       <Suspense key={currentPage} fallback={<CategoryPaginationSkeleton />}>
           <CategoryArticlesPagination
             categoryId={categoryData.id}
             categorySlug={category}
             page={currentPage}
-            pageSize={9}
+            pageSize={6}
             excludedIds={excludedIds}
           />
-        </Suspense>
+        </Suspense> 
       </section>
     </main>
   );

@@ -4,6 +4,15 @@ import db from "@/lib/prisma";
 import { Post, Category, Tag, Admin } from "@/generated/prisma/client";
 import { blogSanitizer } from "@/lib/utils";
 import Image from "next/image";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { IconUserFilled } from "@tabler/icons-react";
 
 type Props = {
   params: Promise<{ slug: string; category: string }>;
@@ -24,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function NewsPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug, category } = await params;
 
   // Safely attempt to fetch the post
   let post: PostWithDetails | null = null;
@@ -57,43 +66,65 @@ export default async function NewsPage({ params }: Props) {
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="">
+        
         <h1 className="text-4xl md:text-5xl font-mono font-bold mb-4">
           {post.title}
         </h1>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          {post.author?.name && (
-            <span className="font-medium">{post.author.name}</span>
-          )}
-          <time dateTime={post.createdAt.toISOString()}>
-            {new Date(post.createdAt).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
+        <div className="flex  gap-4 items-baseline  text-sm text-muted-foreground">
+          {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
+          
+          <div className="flex font-mono text-[1rem] font-bold gap-2 items-center">
+            {/* <div className=" h-8 w-8 flex justify-center items-center rounded-full bg-muted/50">
+              <IconUserFilled size={20} className="text-secondary" />
+            </div> */}
+            By
+            {post.author?.name && (
+              <span className="font-bold ">{post.author.name}</span>
+            )}
+          </div>
+          <time className="text-xs font-medium text-muted-foreground" dateTime={post.createdAt.toISOString()}>
+            {new Date(post.createdAt).toLocaleString("en-US", {
+              month: "short",
               day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              timeZoneName: "short",
             })}
           </time>
         </div>
-        {/* Categories */}
-        {post.categories.length > 0 && (
-          <div className="flex gap-2 mt-4">
-            {post.categories.map((cat) => (
-              <span
-                key={cat.id}
-                className="bg-secondary/20 px-2 py-1 rounded text-xs"
-              >
-                {cat.name}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Breadcrumbs */}
+        <div className="mt-4 mb-4 ">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem className="text-destructive font-semibold">
+                <BreadcrumbLink href={`/${category}`}>
+                  {post.categories.find((c) => c.slug === category)?.name ||
+                    category}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="truncate max-w-54 sm:max-w-xs md:max-w-xs ">
+                  {post.title}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
       </header>
 
       <div className="prose dark:prose-invert max-w-none">
-        <div className="relative aspect-[17/12] md:aspect-[17/7] w-full overflow-hidden ">
+        <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
           <Image
-            src={post.image || "/api/placeholder/600/400"}
+            src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
             alt={post.title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-300  group-hover:scale-105"
           />
         </div>
         {blogSanitizer(post.content || "")}

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Dot } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 interface CategoryItem {
   id: string;
@@ -141,7 +143,7 @@ const NewsGrid = () => {
         if (data && Array.isArray(data) && data.length > 0) {
           mappedData = data.map((post: any) => ({
             ...post,
-            image: post.image || "https://placehold.co/600x400", // Fallback image
+            image: post.image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Fallback image
             category: post.categories?.[0]?.name || "General",
             timestamp: new Date(post.createdAt).toLocaleDateString(),
             description: post.description || "",
@@ -174,7 +176,66 @@ const NewsGrid = () => {
     fetchNews();
   }, []);
 
-  if (loading) return <div className="p-8 text-center">Loading News...</div>;
+  if (loading) {
+    return (
+      <div className="mx-auto p-4 font-sans text-[#212121]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b">
+          {/* Main Content Area Skeleton (Spans 9 cols) */}
+          <div className="lg:col-span-9 flex flex-col gap-8">
+            {/* Article 1 Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-1 order-2 md:order-1 flex flex-col gap-3">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-24 w-full" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-3 w-3 rounded-full" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              </div>
+              <div className="md:col-span-2 order-1 md:order-2">
+                <Skeleton className="aspect-[16/9] w-full" />
+              </div>
+            </div>
+
+            {/* Bottom Section Skeleton */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-8 border-dashed border-t">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <Skeleton className="aspect-video w-full mb-1" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <div className="flex items-center gap-2 mt-1">
+                    <Skeleton className="h-2 w-10" />
+                    <Skeleton className="h-2 w-2 rounded-full" />
+                    <Skeleton className="h-2 w-10" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar Skeleton (Spans 3 cols) */}
+          <div className="lg:col-span-3 flex flex-col gap-6 lg:pl-2 border-primary/5">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                {/* Image shown on mobile for all, but on desktop only for first usually - simplifying to always show rough shape or match logic */}
+                <Skeleton className={`aspect-video w-full mb-1 ${i > 0 ? "lg:hidden" : ""}`} />
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-3/4" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-2 w-12" />
+                  <Skeleton className="h-2 w-2 rounded-full" />
+                  <Skeleton className="h-2 w-12" />
+                </div>
+                {i < 2 && <hr className="w-full border-dashed my-2" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className=" mx-auto p-4 font-sans text-[#212121]">
@@ -199,7 +260,7 @@ const NewsGrid = () => {
               </div>
             </div>
             <div className="md:col-span-2 order-1 md:order-2 relative  aspect-[16/9] w-full">
-              <Image src={newsData[0].image || "https://placehold.co/600x400" } alt={newsData[0].title} fill unoptimized={newsData[0].image} className="object-cover " />
+              <Image src={newsData[0].image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png" } alt={newsData[0].title} fill className="object-cover " />
             </div>
           </Link>
 
@@ -208,7 +269,7 @@ const NewsGrid = () => {
             {newsData.slice(4, 8).map((news) => (
               <Link key={news.id} href={`/${news.category || "news"}/${news.slug}`} className="group">
                  <div className="relative aspect-video mb-3 overflow-hidden  group-hover:underline underline-offset-4">
-                   <Image src={news.image || "https://placehold.co/600x400"} alt={news.title} unoptimized={!news.image} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                   <Image src={news.image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png"} alt={news.title} unoptimized={!news.image} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                  </div>
                  <h4 className="font-bold font-mono text-sm leading-snug group-hover:text-primary transition-colors mb-2 line-clamp-2">{news.title}</h4>
                  <div className="flex items-center text-[10px] text-muted-foreground uppercase font-medium">
@@ -226,7 +287,7 @@ const NewsGrid = () => {
            {/* First item with image */}
            <Link href={`/${newsData[1].category || "news"}/${newsData[1].slug}`} className="group block">
               <div className="relative aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[1].image || "https://placehold.co/600x400"} alt={newsData[1].title} unoptimized={newsData[1].image} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[1].image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png"} alt={newsData[1].title}   fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[1].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
@@ -241,7 +302,7 @@ const NewsGrid = () => {
            {/* Second item text only */}
            <Link href={`/${newsData[2].category || "news"}/${newsData[2].slug}`} className="group block ">
            <div className="relative lg:hidden block  aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[2].image || "https://placehold.co/600x400"} alt={newsData[2].title}unoptimized={!newsData[2].image} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[2].image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png"} alt={newsData[2].title}unoptimized={!newsData[2].image} fill className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[2].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
@@ -256,7 +317,7 @@ const NewsGrid = () => {
            {/* Third item text only */}
             <Link href={`/${newsData[3].category || "news"}/${newsData[3].slug}`} className="group block">
             <div className="relative lg:hidden block aspect-video mb-3 overflow-hidden ">
-                <Image src={newsData[3].image || "https://placehold.co/600x400"} alt={newsData[3].title} fill unoptimized={!newsData[3].image} className=" object-cover transition-transform duration-500 group-hover:scale-105" />
+                <Image src={newsData[3].image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png"} alt={newsData[3].title} fill unoptimized={!newsData[3].image} className=" object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <h3 className="text-lg font-mono font-bold leading-snug group-hover:text-primary transition-colors mb-2">{newsData[3].title}</h3>
                <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">

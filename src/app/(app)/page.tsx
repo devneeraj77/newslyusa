@@ -94,33 +94,59 @@ export default function Home() {
   const [loadingEditorsPick, setLoadingEditorsPick] = useState(true);
 
   const [healthNews, setHealthNews] = useState<any[]>(MOCK_NEWS_DATA);
+  const [loadingHealth, setLoadingHealth] = useState(true);
   const [sportsNews, setSportsNews] = useState<any[]>(MOCK_NEWS_DATA);
+  const [loadingSports, setLoadingSports] = useState(true);
 
   useEffect(() => {
-    const fetchCategoryNews = async (category: string, setter: React.Dispatch<React.SetStateAction<any[]>>) => {
+    const fetchCategoryNews = async (
+      category: string,
+      setter: React.Dispatch<React.SetStateAction<any[]>>,
+      setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
+      setLoading(true);
       try {
-        const response = await fetch(`/api/news?category=${category}&limit=10`);
-        if (!response.ok) return;
+        const fetchUrl = `/api/news/category?slug=${category.toLowerCase()}`;
+        console.log(`Fetching category news from: ${fetchUrl}`);
+        const response = await fetch(fetchUrl);
+
+        if (!response.ok) {
+          console.error(
+            `HTTP error! status: ${response.status} for ${category} news`
+          );
+          setter([]); // Set to empty array on HTTP error
+          return;
+        }
+
         const data = await response.json();
-        
+        console.log(`Received data for ${category}:`, data);
+
         if (data.length > 0) {
-           const transformed = data.map((post: any) => ({
+          const transformed = data.map((post: any) => ({
             id: post.id,
             title: post.title,
-            image: post.image || "https://placehold.co/600x400",
+            image:
+              post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png",
             category: post.categories?.[0]?.name || category,
             timestamp: formatTimeAgo(post.createdAt),
           }));
           setter(transformed);
+        } else {
+          console.log(
+            `No data received for ${category}. Setting to empty array.`
+          );
+          setter([]); // Set to empty array if no data
         }
-       
       } catch (error) {
         console.error(`Error fetching ${category} news:`, error);
+        setter([]); // Set to empty array on fetch error
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchCategoryNews("Health", setHealthNews);
-    fetchCategoryNews("Sports", setSportsNews);
+    fetchCategoryNews("Health", setHealthNews, setLoadingHealth);
+    fetchCategoryNews("Sports", setSportsNews, setLoadingSports);
   }, []);
 
   useEffect(() => {
@@ -161,7 +187,7 @@ export default function Home() {
           title: post.title,
           image:
             post.image ||
-            "https://placehold.co/600x400", // Default image
+            "https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Default image
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
           timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -236,7 +262,7 @@ export default function Home() {
   return (
     <main className="items-center justify-center  m-2 ">
       <section className="container mx-auto  flex flex-col items-center justify-center py-2">
-        <div className=" grid grid-cols-1 xl:grid-cols-4  gap-2 lg:gap-8">
+        <div className=" grid grid-cols-1 xl:grid-cols-4  gap-2 lg:gap-4">
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-4">
             <div className=" top-4 left-4 z-20 flex justify-between items-center">
@@ -279,8 +305,7 @@ export default function Home() {
                       ).map((tag) => (
                         <span
                           key={tag.id}
-                          className="inline-flex  items-center gap-1  px-3 py-1 text-xs font-semibold text-primary-foreground hover:text-white 
-             hover:bg-primary/40 transition-colors duration-200"
+                          className="inline-flex  items-center gap-1 text-xs"
                         >
                           <span className="text-base font-bold text-destructive">
                             #
@@ -292,8 +317,9 @@ export default function Home() {
                   </div>
                 </>
               ) : (
-                <div className="relative h-full w-full">
+                <div className="relative aspect-[16/10] md:aspect-[24/10] w-screen">
                   <Skeleton className="h-full w-full" />
+                  <div className="absolute inset-0  " />
                   <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                     <div className="flex gap-2 items-center">
                       <Skeleton className="h-4 w-24 bg-white/20" />
@@ -320,19 +346,19 @@ export default function Home() {
           </div>
 
           {/* Sidebar Area */}
-          <div className="xl:col-span-1  space-y-2">
-            <hr className="md:hidden mt-2 mb-2" />
-            <div className="flex items-center  justify-between mt-2 py-2 pt-4 ">
-              <span className="font-bold text-lg">Highlights</span>
-              <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1">
+          <div className="xl:col-span-1 space-y-2">
+            <hr className="md:hidden mb-2" />
+            <div className="flex items-center justify-between py-2 pt-4 ">
+              <span className="font-bold text-lg pl-2">Highlights</span>
+              <button className="flex md:pr-0 pr-2 items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1">
                 View all <ChevronRight size={16} />
               </button>
             </div>
 
-            <div className="flex flex-col gap-1 lg:max-h-154 overflow-y-scroll">
+            <div className="flex flex-col pr-2 gap-1 lg:max-h-154 overflow-y-scroll">
               {loadingHighlights
                 ? // Loading skeleton for highlights
-                  [...Array(5)].map((_, i) => (
+                  [...Array(8)].map((_, i) => (
                     <NewsHighlightCardSkeleton key={i} />
                   ))
                 : highlightNews
@@ -348,51 +374,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* <hr className="border m-4 md:mx-16 lg:mx-20  border-dashed" />
-      <section className=" py-2  mx-auto container my-2">
-        <div className="flex">
-          <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
-            Editor's pick
-          </p>
-        </div>
-        <div className=" flex flex-col gap-4 lg:flex-row  mx-auto flex-col items-center justify-between    sm:items-start">
-          <div className="w-full">
-            <EmblaCarouselAutoplay
-              slides={[...Array(16)].map((_, i) => (
-                <div key={i} className="m-2 py-2">
-                  <Image
-                    src={
-                      "https://placehold.co/600x400"
-                    }
-                    height={100}
-                    width={600}
-                    loading="lazy"
-                    className=" p-2"
-                    alt="you"
-                  />
-                  <div>
-                    <div className="text-xs text-accent flex justify-start items-center px-2">
-                      <span className="">Politics</span>
-                      <Dot className="text-secondary" size={24} />
-                      <span>3 hours ago</span>
-                    </div>
-                    <h4 className="text-sm sm:text-md  text-priamry font-semibold px-2">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Sit nam eius doloribus?
-                    </h4>
-                  </div>
-                  <div className="text-sm pt-4 px-2 flex justify-between items-center ">
-                    <a href="/">Read More</a>
-                    <IconArrowNarrowRight />
-                  </div>
-                </div>
-              ))}
-            />
-
-            <EmblaCarousel slides={SLIDES} options={OPTIONS} />
-          </div>
-        </div>
-      </section> */}
       <hr className="border m-4 md:mx-16 lg:mx-17  border-dashed" />
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
@@ -404,7 +385,7 @@ export default function Home() {
           <div className="w-full">
             {loadingEditorsPick ? (
               <EmblaCarouselAutoplay
-                slides={[...Array(6)].map((_, i) => (
+                slides={[...Array(3)].map((_, i) => (
                   <div key={i} className="m-2 py-2">
                     <Skeleton className="aspect-[16/10] w-full rounded-md" />
                     <div className="mt-2 space-y-2">
@@ -432,7 +413,7 @@ export default function Home() {
                     <div className="m-2 py-2">
                       <div className="relative aspect-[16/10] overflow-hidden ">
                         <Image
-                          src={news.image || "https://placehold.co/600x400" } 
+                          src={news.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png" } 
                           fill
                           unoptimized={!news.image}
                           className="object-cover transition-transform duration-300  hover:scale-105"
@@ -473,14 +454,94 @@ export default function Home() {
             <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
               Health News
             </p>
-            <EmblaTwoRow slides={healthNews} options={OPTIONS} />
+            {loadingHealth ? (
+              <div className="w-full p-3">
+                <div className="overflow-hidden">
+                  <div className="flex -ml-4">
+                    <div className="flex-[0_0_100%] min-w-0 pl-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {[...Array(2)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="aspect-[4/3] relative  overflow-hidden"
+                          >
+                            <Skeleton className="h-full w-full" />
+                            <div className="absolute inset-0 p-2 flex flex-col justify-end">
+                              <div className="flex items-center mb-2 gap-2">
+                                <Skeleton className="h-3 w-12 bg-white/20" />
+                                <Skeleton className="h-3 w-3 rounded-full bg-white/20" />
+                                <Skeleton className="h-3 w-10 bg-white/20" />
+                              </div>
+                              <Skeleton className="h-6 w-full bg-white/20" />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-8 px-2">
+                  <div className="flex gap-3">
+                    <Skeleton className="w-12 h-12 rounded-full" />
+                    <Skeleton className="w-12 h-12 rounded-full" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <EmblaTwoRow slides={healthNews} options={OPTIONS} />
+            )}
           </div>
           <div className="md:basis-1/2 ">
             <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
               Sports News
             </p>
 
-            <EmblaTwoRow slides={sportsNews} options={OPTIONS} />
+            {loadingSports ? (
+              <div className="w-full p-3">
+                <div className="overflow-hidden">
+                  <div className="flex -ml-4">
+                    <div className="flex-[0_0_100%] min-w-0 pl-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {[...Array(2)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="aspect-[4/3] relative  overflow-hidden"
+                          >
+                            <Skeleton className="h-full w-full" />
+                            <div className="absolute inset-0 p-2 flex flex-col justify-end">
+                              <div className="flex items-center mb-2 gap-2">
+                                <Skeleton className="h-3 w-12 bg-white/20" />
+                                <Skeleton className="h-3 w-3 rounded-full bg-white/20" />
+                                <Skeleton className="h-3 w-10 bg-white/20" />
+                              </div>
+                              <Skeleton className="h-6 w-full bg-white/20" />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-8 px-2">
+                  <div className="flex gap-3">
+                    <Skeleton className="w-12 h-12 rounded-full" />
+                    <Skeleton className="w-12 h-12 rounded-full" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                    <Skeleton className="w-3 h-3 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <EmblaTwoRow slides={sportsNews} options={OPTIONS} />
+            )}
           </div>
         </div>
       </section>

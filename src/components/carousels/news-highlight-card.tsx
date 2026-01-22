@@ -128,7 +128,7 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
   return (
     <Link
       href={`/${news.category || "news"}/${news.slug}`}
-      className="group flex space-x-2 p-3 w-full  hover:bg-muted/50 transition-colors cursor-pointer "
+      className="group flex gap-2 p-2 w-full hover:bg-muted transition-colors cursor-pointer "
     >
       <div className="flex flex-col justify-between flex-1 min-w-0">
         <h4 className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">
@@ -157,16 +157,16 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
 
 export const NewsHighlightCardSkeleton = () => {
   return (
-    <div className="flex w-full gap-4 p-3 animate-pulse">
-      <div className="flex-1 space-y-2">
-        <Skeleton className="h-4 w-full bg-muted-foreground/20 rounded" />
-        <Skeleton className="h-3 w-5/6 bg-muted-foreground/20 rounded" />
+    <div className="flex  gap-6 p-3 animate-pulse min-h-[5.5rem]">
+      <div className="flex-1 space-y-3">
+        <Skeleton className="h-4 w-full bg-muted-foreground/20 " />
+        <Skeleton className="h-3 w-5/6 bg-muted-foreground/20 " />
         <div className="flex gap-2 items-center mt-2">
-           <Skeleton className="h-3 w-16 bg-muted-foreground/20 rounded" />
-           <Skeleton className="h-3 w-16 bg-muted-foreground/20 rounded" />
+           <Skeleton className="h-3 w-16 bg-muted-foreground/20 " />
+           <Skeleton className="h-3 w-16 bg-muted-foreground/20 " />
         </div>
       </div>
-      <Skeleton className="h-16 w-24 bg-muted-foreground/20 rounded-md shrink-0" />
+      <Skeleton className="h-16 w-24 bg-muted-foreground/20 -md shrink-0" />
     </div>
   );
 };

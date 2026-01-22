@@ -29,7 +29,7 @@ function formatTimeAgo(dateString: string | Date) {
 }
 
 interface CategoryArticlesPaginationProps {
-  categoryId: string;
+  categoryId?: string;
   categorySlug: string;
   page?: number;
   pageSize?: number;
@@ -40,23 +40,28 @@ export default async function CategoryArticlesPagination({
   categoryId,
   categorySlug,
   page = 1,
-  pageSize = 10,
+  pageSize = 6,
   excludedIds = [],
 }: CategoryArticlesPaginationProps) {
   const skip = (page - 1) * pageSize;
 
+  const whereClause: any = {
+    published: true,
+    id: {
+      notIn: excludedIds,
+    },
+  };
+
+  if (categoryId) {
+    whereClause.categoryIds = {
+      has: categoryId,
+    };
+  }
+
   // Parallel fetch: posts and count
   const [posts, totalCount] = await Promise.all([
     db.post.findMany({
-      where: {
-        published: true,
-        categoryIds: {
-          has: categoryId,
-        },
-        id: {
-          notIn: excludedIds,
-        },
-      },
+      where: whereClause,
       orderBy: {
         createdAt: "desc",
       },
@@ -67,15 +72,7 @@ export default async function CategoryArticlesPagination({
       take: pageSize,
     }),
     db.post.count({
-      where: {
-        published: true,
-        categoryIds: {
-          has: categoryId,
-        },
-        id: {
-          notIn: excludedIds,
-        },
-      },
+      where: whereClause,
     }),
   ]);
 
@@ -85,13 +82,17 @@ export default async function CategoryArticlesPagination({
   const getPageUrl = (p: number) => `/${categorySlug}?page=${p}`;
 
   return (
-    <div className="w-full py-8">
+    <div  className="w-full py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {posts.map((post) => (
-          <Link key={post.id} href={`/${categorySlug}/${post.slug}`} className="group flex flex-col h-full   overflow-hidden ">
-            <div className="relative aspect-video w-full overflow-hidden">
+          <Link 
+            key={post.id} 
+            href={categoryId ? `/${categorySlug}/${post.slug}` : `/${post.categories[0]?.slug || "news"}/${post.slug}`} 
+            className="group flex flex-col h-full   overflow-hidden "
+          >
+            <div className="relative aspect-[17/6] w-full overflow-hidden">
               <Image
-                src={post.image || "/api/placeholder/400/300"}
+                src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -107,54 +108,102 @@ export default async function CategoryArticlesPagination({
               <h3 className="font-bold text-lg mb-2 group-hover:underline line-clamp-2">
                 {post.title}
               </h3>
-              <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-grow">
-                {stripHtml(post.content)}
-              </p>
+              {/* <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-grow">
+                {stripHtml(post.content).length > 120
+                  ? `${stripHtml(post.content).slice(0, 60)}...`
+                  : stripHtml(post.content)}
+              </p> */}
             </div>
           </Link>
         ))}
       </div>
 
-      <Pagination>
+      {totalPages > 1 && (
+        <Pagination>
           <PaginationContent>
-            {page > 1 && (
-              <PaginationItem>
-                <PaginationPrevious href={getPageUrl(page - 1)} />
-              </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious
+                href={page > 1 ? getPageUrl(page - 1) : "#"}
+                aria-disabled={page <= 1}
+                tabIndex={page <= 1 ? -1 : undefined}
+                className={page <= 1 ? "pointer-events-none opacity-50" : undefined}
+              />
+            </PaginationItem>
+
+            {totalPages <= 5 ? (
+              Array.from({ length: totalPages }).map((_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink href={getPageUrl(i + 1)} isActive={page === i + 1}>
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))
+            ) : (
+              <>
+                <PaginationItem>
+                  <PaginationLink href={getPageUrl(1)} isActive={page === 1}>
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+
+                {page > 3 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                {page > 2 && (
+                  <PaginationItem>
+                    <PaginationLink href={getPageUrl(page - 1)}>
+                      {page - 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+
+                {page !== 1 && page !== totalPages && (
+                  <PaginationItem>
+                    <PaginationLink href={getPageUrl(page)} isActive>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+
+                {page < totalPages - 1 && (
+                  <PaginationItem>
+                    <PaginationLink href={getPageUrl(page + 1)}>
+                      {page + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+
+                {page < totalPages - 2 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                <PaginationItem>
+                  <PaginationLink
+                    href={getPageUrl(totalPages)}
+                    isActive={page === totalPages}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
             )}
 
-             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
-                // Show first, last, current, and neighbors
-                if (
-                  p === 1 ||
-                  p === totalPages ||
-                  (p >= page - 1 && p <= page + 1)
-                ) {
-                  return (
-                    <PaginationItem key={p}>
-                      <PaginationLink href={getPageUrl(p)} isActive={p === page}>
-                        {p}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                }
-                // Show ellipsis
-                if (
-                    (p === page - 2 && p > 1) ||
-                    (p === page + 2 && p < totalPages)
-                ) {
-                     return <PaginationItem key={p}><PaginationEllipsis /></PaginationItem>;
-                }
-                return null;
-             })}
-
-            {page < totalPages && (
-              <PaginationItem>
-                <PaginationNext href={getPageUrl(page + 1)} />
-              </PaginationItem>
-            )}
+            <PaginationItem>
+              <PaginationNext
+                href={page < totalPages ? getPageUrl(page + 1) : "#"}
+                aria-disabled={page >= totalPages}
+                tabIndex={page >= totalPages ? -1 : undefined}
+                className={page >= totalPages ? "pointer-events-none opacity-50" : undefined}
+              />
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
+      )}
     </div>
   );
 }

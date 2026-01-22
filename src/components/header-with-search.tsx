@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles } from "lucide-react";
+import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles, Settings, Bell, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -62,33 +62,37 @@ export function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <nav className="mx-auto flex h-18 mx-auto container space-x-14 px-2 md:px-0 items-center justify-between ">
-        <div className=" flex  cursor-pointer items-center gap-2 rounded-md px-2 py-1 duration-100">
-          <Grid2x2Plus className="size-6" />
-          <Link href={"/"} className="font-mono text-lg font-bold"> NewslyUSA</Link>
+      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-6">
+        {/* Left: Logo */}
+        <div className="flex items-center gap-2">
+          {/* Logo Placeholder */}
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl group">
+            <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center text-white transition-transform group-hover:scale-105">
+               <Grid2x2Plus className="w-5 h-5" />
+            </div>
+            <span className="font-mono tracking-tight">NewslyUSA</span>
+          </Link>
         </div>
-        <div className="flex lg:w-full items-center justify-between ">
-          <div className="hidden items-center gap-1 lg:flex">
-            {links.map((link) => (
-              <Link
-                key={link.label}
-                className={buttonVariants({
-                  variant: "link",
-                  className: pathname.startsWith(link.href) ? "font-bold underline" : ""
-                })}
-                href={link.href}
-              >
-                {link.label}{" "}
-                {/* {link.icon && (
-                  <Image src={link.icon} width={20} height={20} alt="user" />
-                )} */} {/* Removed the incorrect JSX usage */}
-              </Link>
-            ))}
-            {/* <Button variant="ghost">Sign In</Button>
-					<Button>Get Started</Button> */}
-          </div>
-          <div className="flex  gap-2">
-            <SearchModal data={blogs}>
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+          {links.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className={cn(
+                "hover:text-primary transition-colors",
+                pathname.startsWith(link.href) ? "text-primary underline" : ""
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-3">
+          <SearchModal data={blogs}>
               <Button
                 variant="outline"
                 className="relative size-9 bg-none cursor-pointer border-0 md:border  p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
@@ -98,18 +102,20 @@ export function Header() {
                 <Search className="size-4" />
               </Button>
             </SearchModal>
-            <div className="hidden items-center  gap-2 lg:flex">
-              <ModeToggle />
-            </div>
-          </div>
-          <Sheet open={open} onOpenChange={setOpen}>
+           
+           <div className="hidden sm:flex">
+             <ModeToggle />
+           </div>
+
+           {/* Mobile Trigger */}
+           <Sheet open={open} onOpenChange={setOpen}>
             <Button
               size="icon"
               variant="ghost"
               onClick={() => setOpen(!open)}
-              className="lg:hidden"
+              className="lg:hidden rounded-full w-9 h-9"
             >
-              <Menu className="size-4" />
+              <Menu className="size-5" />
             </Button>
 
             <SheetContent showClose={false} side="left">
@@ -125,7 +131,7 @@ export function Header() {
                     key={link.label}
                     className={buttonVariants({
                       variant: "link",
-                      className: cn("justify-start gap-2", pathname.startsWith(link.href) && "font-bold underline"),
+                      className: cn("justify-start gap-2", pathname.startsWith(link.href) && " underline"),
                     })}
                     href={link.href}
                   >
