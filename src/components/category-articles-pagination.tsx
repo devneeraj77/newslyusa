@@ -40,7 +40,7 @@ export default async function CategoryArticlesPagination({
   categoryId,
   categorySlug,
   page = 1,
-  pageSize = 6,
+  pageSize = 10,
   excludedIds = [],
 }: CategoryArticlesPaginationProps) {
   const skip = (page - 1) * pageSize;

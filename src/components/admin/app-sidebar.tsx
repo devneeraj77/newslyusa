@@ -28,6 +28,10 @@ import {
   FileText,
   PenLine,
   LogIn,
+  Layers,
+  Tags,
+  Mail,
+  Users,
 } from "lucide-react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
@@ -41,10 +45,18 @@ const items = links.map((link) => ({
   icon:
     link.label === "Dashboard"
       ? LayoutDashboard
-      : link.label === "News"
+      : link.label === "All News"
       ? FileText
       : link.label === "Create Article"
       ? PenLine
+      : link.label === "Categories"
+      ? Layers
+      : link.label === "Tags"
+      ? Tags
+      : link.label === "Contact"
+      ? Mail
+      : link.label === "Subscriptions"
+      ? Users
       : link.label === "Admin"
       ? User
       : link.label === "Sign In"

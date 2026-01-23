@@ -6,7 +6,7 @@ export default function Loading() {
   return (
     <main className="items-center justify-center m-2">
       <section className="container mx-auto flex flex-col items-center justify-center py-2">
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-2 lg:gap-8 w-full">
+        <div className="grid grid-cols-1 xl:grid-cols-2  gap-2 lg:gap-8">
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-4 w-full">
             <div className="top-4 left-4 z-20 flex justify-between items-center">
@@ -14,9 +14,9 @@ export default function Loading() {
             </div>
             
             {/* Featured Story Skeleton */}
-            <div className="relative group overflow-hidden bg-muted shadow-sm aspect-[16/10] md:aspect-[24/10] w-full rounded-md">
+            <div className="relative group overflow-hidden shadow-sm aspect-[16/10] md:aspect-[28/10] w-full rounded-md">
               <Skeleton className="h-full w-full" />
-              <div className="absolute inset-0 bg-gradient-to-t from-muted/90 via-muted/40 to-transparent" />
+              <div className="absolute inset-0 bg-primary w-xs sm:w-xl md:w-5xl aspect-[16/10] md:aspect-[24/10]" />
               <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                 <div className="flex gap-2 items-center">
                   <Skeleton className="h-4 w-24 bg-white/20" />

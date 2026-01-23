@@ -67,7 +67,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
                 {group.map((item) => (
                   <div 
                     key={item.id} 
-                    className="aspect-[4/3] bg-card relative overflow-hidden flex flex-col justify-end text-foreground transition-all duration-300 hover:border-primary/50 group"
+                    className="aspect-[5/3] bg-card relative overflow-hidden flex flex-col justify-end text-foreground transition-all duration-300 hover:border-primary/50 group"
                   >
                     <Image
                       src={item.image}
@@ -96,21 +96,21 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
       </div>
 
       {/* Controls: Flexbox setup to match left/right layout */}
-      <div className="flex items-center justify-between mt-8 px-2">
+      <div className="flex items-center justify-between space-y-4 mt-8 px-2">
         
         {/* Navigation Arrows on the Left */}
         <div className="flex gap-3">
           <button
             onClick={onPrevButtonClick}
             disabled={prevBtnDisabled}
-            className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-foreground disabled:opacity-30 hover:bg-accent transition-colors"
+            className="w-12 h-12 rounded-full bg-transparent border-border border hover:bg-primary hover:text-accent-foreground active:text-accent-foreground flex items-center justify-center disabled:opacity-30 hover:bg-accent transition-colors"
           >
             <ChevronLeft size={24} />
           </button>
           <button
             onClick={onNextButtonClick}
             disabled={nextBtnDisabled}
-            className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-foreground disabled:opacity-30 hover:bg-accent transition-colors"
+            className="w-12 h-12 rounded-full bg-transparent border-border border  hover:bg-primary hover:text-accent-foreground active:text-accent-foreground flex items-center justify-center disabled:opacity-30 hover:bg-accent transition-colors"
           >
             <ChevronRight size={24} />
           </button>

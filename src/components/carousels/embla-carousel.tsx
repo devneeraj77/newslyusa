@@ -106,7 +106,7 @@ export default function EmblaCarouselAutoplay({
   return (
     <div
       className={cn(
-        "w-full text-accent mb-24 lg:px-3 flex flex-col gap-6",
+        "w-full text-accent  lg:px-3 flex flex-col gap-6",
         className
       )}
     >
@@ -141,7 +141,7 @@ export default function EmblaCarouselAutoplay({
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-transparent border-zinc-700 hover:bg-zinc-800 text-accent"
+              className="rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground"
               onClick={() => onAutoplayButtonClick(() => api?.scrollPrev())}
             >
               <ChevronLeft className="h-5 w-5" />
@@ -149,7 +149,7 @@ export default function EmblaCarouselAutoplay({
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-transparent border-zinc-700 hover:bg-zinc-800 text-accent"
+              className="rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground"
               onClick={() => onAutoplayButtonClick(() => api?.scrollNext())}
             >
               <ChevronRight className="h-5 w-5" />
@@ -172,7 +172,7 @@ export default function EmblaCarouselAutoplay({
 
           <Button
             variant="outline"
-            className="rounded-full bg-transparent border-zinc-700 hover:bg-zinc-800 text-accent px-8"
+            className="rounded-full rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground px-8"
             onClick={toggleAutoplay}
           >
             {isPlaying ? "Stop" : "Play"}

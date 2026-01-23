@@ -57,6 +57,7 @@ interface ArticleFormProps {
     description?: string | null;
     image?: string | null;
     published: boolean;
+    createdAt?: string | Date;
     categories?: Category[];
     tags?: Tag[];
     categoryIds?: string[]; // Fallback
@@ -64,6 +65,21 @@ interface ArticleFormProps {
   } | null;
   categories: Category[];
   tags: Tag[];
+}
+
+function formatDateForInput(dateString?: string | Date) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "";
+  
+  const pad = (num: number) => num.toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
 export default function ArticleForm({
@@ -116,6 +132,7 @@ export default function ArticleForm({
     content: initialData?.content || "",
     image: initialData?.image || "",
     published: initialData?.published || false,
+    createdAt: formatDateForInput(initialData?.createdAt) || "",
     categoryIds: initialCategoryIds,
     tagIds: initialTagIds,
   });
@@ -274,6 +291,7 @@ export default function ArticleForm({
     try {
       const payload = {
         ...formData,
+        createdAt: formData.createdAt ? new Date(formData.createdAt).toISOString() : undefined,
         id: initialData?.id,
       };
 
@@ -301,6 +319,7 @@ export default function ArticleForm({
           content: "",
           image: "",
           published: false,
+          createdAt: "",
           categoryIds: [],
           tagIds: [],
         });
@@ -326,7 +345,7 @@ export default function ArticleForm({
       </h2>
 
       {error && (
-        <div className="bg-destructive/15 text-destructive p-3 rounded-md mb-4 text-sm">
+        <div className="bg-destructive/15 text-destructive p-3  mb-4 text-sm">
           {error}
         </div>
       )}
@@ -398,7 +417,7 @@ export default function ArticleForm({
               <Label>Featured Image</Label>
               <div className="flex flex-col border gap-4">
                 {formData.image && (
-                  <div className="relative border bg-red-100 aspect-video  overflow-hidden rounded-lg border">
+                  <div className="relative border bg-red-100 aspect-video  overflow-hidden  border">
                     <Image
                       src={formData.image}
                       alt="Article cover"
@@ -427,7 +446,7 @@ export default function ArticleForm({
                       return (
                         <div
                           onClick={() => open()}
-                          className="flex aspect-video cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed bg-muted/50 transition-colors hover:bg-muted"
+                          className="flex aspect-video cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
                         >
                           <ImageIcon className="h-10 w-10 text-muted-foreground" />
                           <span className="mt-2 text-sm text-muted-foreground">
@@ -482,7 +501,7 @@ export default function ArticleForm({
                     return cat ? (
                       <span
                         key={id}
-                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 "
                       >
                         {cat.name}
                       </span>
@@ -494,7 +513,7 @@ export default function ArticleForm({
 
             <div className="space-y-2">
               <Label>Tags</Label>
-              <div className="border rounded-md overflow-hidden relative">
+              <div className="border  overflow-hidden relative">
                 <Command shouldFilter={false}>
                   <div className="relative">
                     <CommandInput
@@ -565,7 +584,7 @@ export default function ArticleForm({
                     return tag ? (
                       <span
                         key={id}
-                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 "
                       >
                         {tag.name}
                       </span>
@@ -593,6 +612,17 @@ export default function ArticleForm({
               onCheckedChange={handleSwitchChange}
             />
             <Label htmlFor="published">Published</Label>
+          </div>
+          <div className="pt-4 max-w-sm">
+            <Label htmlFor="createdAt">Publish Date (Optional)</Label>
+            <Input
+                type="datetime-local"
+                id="createdAt"
+                name="createdAt"
+                value={formData.createdAt}
+                onChange={handleChange}
+                className="mt-1"
+            />
           </div>
         </div>
 

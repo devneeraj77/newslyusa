@@ -427,7 +427,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             categoryId={categoryData.id}
             categorySlug={category}
             page={currentPage}
-            pageSize={6}
+            pageSize={10}
             excludedIds={excludedIds}
           />
         </Suspense> 

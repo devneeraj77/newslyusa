@@ -373,7 +373,7 @@ export default async function NewsPage({ searchParams }: Props) {
           <CategoryArticlesPagination
             categorySlug="news"
             page={currentPage}
-            pageSize={6}
+            pageSize={10}
             excludedIds={excludedIds}
           />
         </Suspense>

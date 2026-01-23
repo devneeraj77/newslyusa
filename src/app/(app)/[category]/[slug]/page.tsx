@@ -13,6 +13,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { IconUserFilled } from "@tabler/icons-react";
+import { PostShare } from "@/components/post-share";
 
 type Props = {
   params: Promise<{ slug: string; category: string }>;
@@ -66,33 +67,6 @@ export default async function NewsPage({ params }: Props) {
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="">
-        
-        <h1 className="text-4xl md:text-5xl font-mono font-bold mb-4">
-          {post.title}
-        </h1>
-        <div className="flex  gap-4 items-baseline  text-sm text-muted-foreground">
-          {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
-          
-          <div className="flex font-mono text-[1rem] font-bold gap-2 items-center">
-            {/* <div className=" h-8 w-8 flex justify-center items-center rounded-full bg-muted/50">
-              <IconUserFilled size={20} className="text-secondary" />
-            </div> */}
-            By
-            {post.author?.name && (
-              <span className="font-bold ">{post.author.name}</span>
-            )}
-          </div>
-          <time className="text-xs font-medium text-muted-foreground" dateTime={post.createdAt.toISOString()}>
-            {new Date(post.createdAt).toLocaleString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              timeZoneName: "short",
-            })}
-          </time>
-        </div>
         {/* Breadcrumbs */}
         <div className="mt-4 mb-4 ">
           <Breadcrumb>
@@ -109,12 +83,48 @@ export default async function NewsPage({ params }: Props) {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage className="truncate max-w-54 sm:max-w-xs md:max-w-xs ">
+                <BreadcrumbPage className="truncate max-w-44 sm:max-w-xs lg:max-w-xs ">
                   {post.title}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-mono font-bold mb-4">
+          {post.title}
+        </h1>
+        <div className="flex items-end justify-between">
+        <div className="flex  pt-4 gap-2 items-center text-sm text-muted-foreground">
+          {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
+
+          <div className=" h-10 w-10  flex justify-center items-center rounded-full bg-muted/50">
+            <IconUserFilled size={20} className="text-secondary" />
+          </div>
+          <div className="">
+            <div className="flex font-mono text-sm font-bold items-center ">
+              {post.author?.name && (
+                <span className="font-bold text-sm">{post.author.name}</span>
+              )}
+            </div>
+            <time
+              className="text-xs font-medium text-muted-foreground"
+              dateTime={post.createdAt.toISOString()}
+            >
+              {new Date(post.createdAt).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                timeZoneName: "short",
+              })}
+            </time>
+          </div>
+          
+        </div>
+        <div>
+          <PostShare title={post.title}  />
+        </div>
         </div>
       </header>
 

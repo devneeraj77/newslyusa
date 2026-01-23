@@ -176,7 +176,7 @@ export default function Home() {
     const fetchHighlights = async () => {
       setLoadingHighlights(true);
       try {
-        const response = await fetch("/api/news?limit=10"); // Fetch up to 10 highlights
+        const response = await fetch("/api/news?limit=6"); // Fetch up to 10 highlights
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -262,16 +262,16 @@ export default function Home() {
   return (
     <main className="items-center justify-center  m-2 ">
       <section className="container mx-auto  flex flex-col items-center justify-center py-2">
-        <div className=" grid grid-cols-1 xl:grid-cols-4  gap-2 lg:gap-4">
+        <div className=" grid grid-cols-1 xl:grid-cols-4 w-full gap-2 lg:gap-4">
           {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-4">
-            <div className=" top-4 left-4 z-20 flex justify-between items-center">
+          <div className="xl:col-span-3 space-y-2">
+            <div className="top-4 left-4 z-20 flex justify-between items-center">
               <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
                 Best of the week
               </span>
             </div>
             {/* Featured Story */}
-            <div className="relative group overflow-hidden  bg-muted shadow-sm aspect-[16/10] md:aspect-[24/10]">
+            <div className="relative group overflow-hidden bg-foreground aspect-[16/10] md:aspect-[24/10]">
               {featuredPost ? (
                 <>
                   <div className="aspect-[16/10] md:aspect-[24/10] relative w-full overflow-hidden">
@@ -282,15 +282,15 @@ export default function Home() {
                       priority
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 " />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 text-white z-20">
-                    <div className="flex flex-wrap items-center  text-xs md:text-sm text-gray-200">
-                      <span className="font-semibold text-primary-foreground/90">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-10% from-black to-transparent p-4 md:p-8 text-white z-20">
+                    <div className="flex flex-wrap items-center  text-xs md:text-sm ">
+                      <span className="font-semibold text-primary-foreground/80">
                         {featuredPost.category}
                       </span>
-                      <Dot className="text-gray-400" size={24} />
+                      <Dot className="text-primary-foreground/80" size={24} />
                       <span>{formatTimeAgo(featuredPost.createdAt)}</span>
                     </div>
 
@@ -317,9 +317,8 @@ export default function Home() {
                   </div>
                 </>
               ) : (
-                <div className="relative aspect-[16/10] md:aspect-[24/10] w-screen">
-                  <Skeleton className="h-full w-full" />
-                  <div className="absolute inset-0  " />
+                <div className="relative bg-foreground w-screen lg:w-5xl aspect-[16/10] md:aspect-[24/10]">
+                  <Skeleton className="h-full w-full " />
                   <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                     <div className="flex gap-2 items-center">
                       <Skeleton className="h-4 w-24 bg-white/20" />
@@ -327,7 +326,7 @@ export default function Home() {
                       <Skeleton className="h-4 w-20 bg-white/20" />
                     </div>
                     <Skeleton className="h-12 w-3/4 bg-white/20" />
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 pb-2 md:pb-4">
                       <Skeleton className="h-6 w-20 bg-white/20" />
                       <Skeleton className="h-6 w-20 bg-white/20" />
                     </div>
@@ -337,7 +336,7 @@ export default function Home() {
             </div>
 
             {/* Sub Headlines */}
-            <div className="md:pt-2">
+            <div className="md:pt-2 h-44">
               <div className="flex items-center mt-2 mb-4 md:mb-6 pl-4  border-l-4 border-primary">
                 <h2 className="text-2xl font-bold tracking-tight">Headlines</h2>
               </div>
@@ -358,7 +357,7 @@ export default function Home() {
             <div className="flex flex-col pr-2 gap-1 lg:max-h-154 overflow-y-scroll">
               {loadingHighlights
                 ? // Loading skeleton for highlights
-                  [...Array(8)].map((_, i) => (
+                  [...Array(6)].map((_, i) => (
                     <NewsHighlightCardSkeleton key={i} />
                   ))
                 : highlightNews
