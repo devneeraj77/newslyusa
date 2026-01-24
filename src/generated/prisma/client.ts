@@ -93,3 +93,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Tag = Prisma.TagModel
+/**
+ * Model Subscriber
+ * 
+ */
+export type Subscriber = Prisma.SubscriberModel

@@ -57,12 +57,12 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50  transition-transform duration-300 backdrop-blur-lg",
+        "sticky top-0 z-50 border transition-transform duration-300 backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80",
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-2 md:p-0 ">
+      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-2 lg:p-0 ">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           {/* Logo Placeholder */}

@@ -57,7 +57,8 @@ export const ModelName = {
   Admin: 'Admin',
   Post: 'Post',
   Category: 'Category',
-  Tag: 'Tag'
+  Tag: 'Tag',
+  Subscriber: 'Subscriber'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -186,6 +187,15 @@ export const TagScalarFieldEnum = {
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const SubscriberScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
 
 
 export const SortOrder = {
