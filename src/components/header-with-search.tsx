@@ -13,7 +13,7 @@ import {
 } from "@/components/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CommandItem, SearchModal } from "@/components/search-modal";
+import { SearchModal } from "@/components/search-modal";
 import { ModeToggle } from "./darkModebtn";
 import { IconMovie, IconRun } from "@tabler/icons-react";
 import Link from "next/link";
@@ -57,12 +57,12 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border transition-transform duration-300 backdrop-blur-lg",
+        "sticky top-0 z-50 transition-transform duration-300 backdrop-blur-lg",
         "bg-background/35 supports-[backdrop-filter]:bg-background/80",
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-2 lg:p-0 ">
+      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-3 sx:px-2 lg:p-0 ">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           {/* Logo Placeholder */}
@@ -92,10 +92,10 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
-          <SearchModal data={blogs}>
+          <SearchModal>
               <Button
                 variant="outline"
-                className="relative size-9 bg-none cursor-pointer border-0 md:border  p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
+                className="relative size-9 bg-none cursor-pointer   p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
               >
                 <span className="hidden xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
@@ -103,7 +103,7 @@ export function Header() {
               </Button>
             </SearchModal>
            
-           <div className="hidden sm:flex">
+           <div className="hidden lg:flex">
              <ModeToggle />
            </div>
 
@@ -111,9 +111,9 @@ export function Header() {
            <Sheet open={open} onOpenChange={setOpen}>
             <Button
               size="icon"
-              variant="ghost"
+              variant="outline"
               onClick={() => setOpen(!open)}
-              className="lg:hidden rounded-full w-9 h-9"
+              className="lg:hidden w-9 h-9"
             >
               <Menu className="size-5" />
             </Button>
@@ -155,66 +155,3 @@ export function Header() {
     </header>
   );
 }
-
-const blogs: CommandItem[] = [
-  {
-    id: "blog-1",
-    title: "The Future of Web Dev",
-    description: "A quick look at upcoming web technologies.",
-    category: "Web Dev",
-  },
-  {
-    id: "blog-2",
-    title: "Minimalist Design Tips",
-    description: "Learn how less can often be more in UI design.",
-    category: "Design",
-  },
-  {
-    id: "blog-3",
-    title: "Boosting Page Speed",
-    description: "Simple tricks to make your site load faster.",
-    category: "Performance",
-  },
-  {
-    id: "blog-4",
-    title: "Intro to TypeScript",
-    description: "Why TypeScript makes JavaScript safer and clearer.",
-    category: "Programming",
-  },
-  {
-    id: "blog-5",
-    title: "Dark Mode Design",
-    description: "Best practices for building a dark theme UI.",
-    category: "Design",
-  },
-  {
-    id: "blog-6",
-    title: "Understanding APIs",
-    description: "Breaking down REST and GraphQL for beginners.",
-    category: "Backend",
-  },
-  {
-    id: "blog-7",
-    title: "CSS Grid Basics",
-    description: "A quick guide to building layouts with CSS Grid.",
-    category: "Frontend",
-  },
-  {
-    id: "blog-8",
-    title: "React State Management",
-    description: "Exploring useState, Redux, and other options.",
-    category: "Frontend",
-  },
-  {
-    id: "blog-9",
-    title: "SEO in 2025",
-    description: "Trends and tips to rank higher on Google.",
-    category: "SEO",
-  },
-  {
-    id: "blog-10",
-    title: "Debugging Like a Pro",
-    description: "Tools and techniques to fix bugs faster.",
-    category: "Programming",
-  },
-];

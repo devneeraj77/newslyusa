@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { IconUserFilled } from "@tabler/icons-react";
 import { PostShare } from "@/components/post-share";
+import SimilarPosts from "@/components/similar-posts";
 
 type Props = {
   params: Promise<{ slug: string; category: string }>;
@@ -65,93 +66,104 @@ export default async function NewsPage({ params }: Props) {
   }
 
   return (
-    <article className="container mx-auto px-4 py-8 max-w-4xl">
-      <header className="">
-        {/* Breadcrumbs */}
-        <div className="mt-4 mb-4 ">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem className="text-destructive font-semibold">
-                <BreadcrumbLink href={`/${category}`}>
-                  {post.categories.find((c) => c.slug === category)?.name ||
-                    category}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="truncate max-w-44 sm:max-w-xs lg:max-w-xs ">
-                  {post.title}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-        <h1 className="text-4xl md:text-5xl font-mono font-bold mb-4">
-          {post.title}
-        </h1>
-        <div className="flex items-end justify-between">
-        <div className="flex  pt-4 gap-2 items-center text-sm text-muted-foreground">
-          {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="basis-3/2">
+          <article className="max-w-4xl">
+            <header className="">
+              {/* Breadcrumbs */}
+              <div className="mt-4 mb-4 ">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem className="text-destructive font-semibold">
+                      <BreadcrumbLink href={`/${category}`}>
+                        {post.categories.find((c) => c.slug === category)?.name ||
+                          category}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="truncate max-w-44 sm:max-w-xs lg:max-w-xs ">
+                        {post.title}
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-4">
+                {post.title}
+              </h1>
+              <div className="flex items-end justify-between">
+                <div className="flex  pt-4 gap-2 items-center text-sm text-muted-foreground">
+                  {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
 
-          <div className=" h-10 w-10  flex justify-center items-center rounded-full bg-muted/50">
-            <IconUserFilled size={20} className="text-secondary" />
-          </div>
-          <div className="">
-            <div className="flex font-mono text-sm font-bold items-center ">
-              {post.author?.name && (
-                <span className="font-bold text-sm">{post.author.name}</span>
-              )}
+                  <div className=" h-10 w-10  flex justify-center items-center rounded-full bg-muted/50">
+                    <IconUserFilled size={20} className="text-secondary" />
+                  </div>
+                  <div className="">
+                    <div className="flex font-mono text-sm font-bold items-center ">
+                      {post.author?.name && (
+                        <span className="font-bold text-sm">{post.author.name}</span>
+                      )}
+                    </div>
+                    <time
+                      className="text-xs font-medium text-muted-foreground"
+                      dateTime={post.createdAt.toISOString()}
+                    >
+                      {new Date(post.createdAt).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        timeZoneName: "short",
+                      })}
+                    </time>
+                  </div>
+
+                </div>
+                <div>
+                  <PostShare title={post.title} />
+                </div>
+              </div>
+            </header>
+
+            <div className="prose dark:prose-invert max-w-none">
+              <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
+                <Image
+                  src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-300  group-hover:scale-105"
+                />
+              </div>
+              {blogSanitizer(post.content || "")}
             </div>
-            <time
-              className="text-xs font-medium text-muted-foreground"
-              dateTime={post.createdAt.toISOString()}
-            >
-              {new Date(post.createdAt).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                timeZoneName: "short",
-              })}
-            </time>
-          </div>
-          
-        </div>
-        <div>
-          <PostShare title={post.title}  />
-        </div>
-        </div>
-      </header>
 
-      <div className="prose dark:prose-invert max-w-none">
-        <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
-          <Image
-            src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
-            alt={post.title}
-            fill
-            className="object-cover transition-transform duration-300  group-hover:scale-105"
-          />
+            {/* Tags */}
+            {post.tags.length > 0 && (
+              <div className="mt-8 pt-4 border-t">
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span key={tag.id} className="text-sm text-muted-foreground">
+                      #{tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </article>
         </div>
-        {blogSanitizer(post.content || "")}
+        
+        {/* Sidebar */}
+        <aside className="basis-1/2 space-y-8 sticky top-24 h-fit">
+           <SimilarPosts currentPostId={post.id} categoryIds={post.categoryIds} />
+        </aside>
       </div>
-
-      {/* Tags */}
-      {post.tags.length > 0 && (
-        <div className="mt-8 pt-4 border-t">
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <span key={tag.id} className="text-sm text-muted-foreground">
-                #{tag.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-    </article>
+    </div>
   );
 }

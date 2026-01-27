@@ -8,10 +8,19 @@ export async function GET(req: NextRequest) {
     const limit = searchParams.get("limit");
     const isEditorsPick = searchParams.get("isEditorsPick");
     const category = searchParams.get("category");
+    const search = searchParams.get("search");
 
     const where: any = {
       published: true,
     };
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } },
+      ];
+    }
 
     if (category) {
       where.categories = {

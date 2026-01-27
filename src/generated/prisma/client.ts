@@ -98,3 +98,8 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type Subscriber = Prisma.SubscriberModel
+/**
+ * Model ContactMessage
+ * 
+ */
+export type ContactMessage = Prisma.ContactMessageModel

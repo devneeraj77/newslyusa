@@ -58,7 +58,8 @@ export const ModelName = {
   Post: 'Post',
   Category: 'Category',
   Tag: 'Tag',
-  Subscriber: 'Subscriber'
+  Subscriber: 'Subscriber',
+  ContactMessage: 'ContactMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -192,10 +193,25 @@ export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagSca
 export const SubscriberScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  isRead: 'isRead',
   createdAt: 'createdAt'
 } as const
 
 export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  subject: 'subject',
+  message: 'message',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SortOrder = {

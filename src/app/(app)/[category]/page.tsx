@@ -204,7 +204,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="text-4xl font-bold font-sans mb-8 capitalize">
+      <h1 className="text-4xl  font-bold font-sans mb-8 capitalize">
         {categoryData.name} News
       </h1>
       <Breadcrumb className="mb-6">

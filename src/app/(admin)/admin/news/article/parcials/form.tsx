@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -32,11 +31,13 @@ import {
   Check,
   X,
 } from "lucide-react";
-import TiptapEditor from "@/components/ui/tiptap-editor";
+
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { createTag } from "../../tags/actions";
 import { cn } from "@/lib/utils";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import TiptapEditor from "@/components/ui/tiptap-editor";
 
 interface Category {
   id: string;
@@ -71,14 +72,14 @@ function formatDateForInput(dateString?: string | Date) {
   if (!dateString) return "";
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "";
-  
+
   const pad = (num: number) => num.toString().padStart(2, "0");
   const year = date.getFullYear();
   const month = pad(date.getMonth() + 1);
   const day = pad(date.getDate());
   const hours = pad(date.getHours());
   const minutes = pad(date.getMinutes());
-  
+
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
@@ -152,7 +153,7 @@ export default function ArticleForm({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => {
@@ -176,7 +177,7 @@ export default function ArticleForm({
               const res = await fetch(
                 `/api/news/check-slug?slug=${generatedSlug}&excludeId=${
                   initialData?.id || ""
-                }`
+                }`,
               );
               const data = await res.json();
 
@@ -189,7 +190,7 @@ export default function ArticleForm({
                   const res2 = await fetch(
                     `/api/news/check-slug?slug=${uniqueSlug}&excludeId=${
                       initialData?.id || ""
-                    }`
+                    }`,
                   );
                   const data2 = await res2.json();
                   if (data2.isUnique) isUnique = true;
@@ -213,7 +214,7 @@ export default function ArticleForm({
               const res = await fetch(
                 `/api/news/check-slug?slug=${value}&excludeId=${
                   initialData?.id || ""
-                }`
+                }`,
               );
               const data = await res.json();
 
@@ -247,7 +248,7 @@ export default function ArticleForm({
 
   const handleCategoryChange = (
     checked: boolean | string,
-    categoryId: string
+    categoryId: string,
   ) => {
     setFormData((prev) => {
       const currentIds = prev.categoryIds;
@@ -291,7 +292,9 @@ export default function ArticleForm({
     try {
       const payload = {
         ...formData,
-        createdAt: formData.createdAt ? new Date(formData.createdAt).toISOString() : undefined,
+        createdAt: formData.createdAt
+          ? new Date(formData.createdAt).toISOString()
+          : undefined,
         id: initialData?.id,
       };
 
@@ -354,7 +357,7 @@ export default function ArticleForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title" className="text-xl">Title</Label>
               <Input
                 id="title"
                 name="title"
@@ -366,7 +369,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2 h-18">
-              <Label htmlFor="slug">Slug</Label>
+              <Label htmlFor="slug" className="text-xl">Slug</Label>
               <div className="relative">
                 <Input
                   id="slug"
@@ -388,7 +391,7 @@ export default function ArticleForm({
                     "text-xs flex items-center gap-1",
                     slugMessage.type === "success"
                       ? "text-green-600"
-                      : "text-destructive"
+                      : "text-destructive",
                   )}
                 >
                   {slugMessage.type === "success" ? (
@@ -402,7 +405,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description" className="text-xl">Description</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -414,10 +417,10 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label>Featured Image</Label>
-              <div className="flex flex-col border gap-4">
+              <Label className="text-xl">Featured Image</Label>
+              <div className="flex flex-col gap-4">
                 {formData.image && (
-                  <div className="relative border bg-red-100 aspect-video  overflow-hidden  border">
+                  <div className="relative bg-red-100 aspect-[17/5]  overflow-hidden ">
                     <Image
                       src={formData.image}
                       alt="Article cover"
@@ -446,7 +449,7 @@ export default function ArticleForm({
                       return (
                         <div
                           onClick={() => open()}
-                          className="flex aspect-video cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
+                          className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
                         >
                           <ImageIcon className="h-10 w-10 text-muted-foreground" />
                           <span className="mt-2 text-sm text-muted-foreground">
@@ -463,7 +466,7 @@ export default function ArticleForm({
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label>Categories</Label>
+              <Label className="text-xl">Categories</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full justify-between">
@@ -501,7 +504,7 @@ export default function ArticleForm({
                     return cat ? (
                       <span
                         key={id}
-                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 "
+                        className="text-xs bg-muted/40 text-secondary-foreground px-2 py-1 "
                       >
                         {cat.name}
                       </span>
@@ -512,10 +515,10 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label>Tags</Label>
-              <div className="border  overflow-hidden relative">
+              <Label className="text-xl">Tags</Label>
+              <div className="border   overflow-hidden relative">
                 <Command shouldFilter={false}>
-                  <div className="relative">
+                  <div className="relative ">
                     <CommandInput
                       placeholder="Search tags..."
                       value={searchTerm}
@@ -524,12 +527,12 @@ export default function ArticleForm({
                     {searchTerm &&
                       !availableTags.some(
                         (tag) =>
-                          tag.name.toLowerCase() === searchTerm.toLowerCase()
+                          tag.name.toLowerCase() === searchTerm.toLowerCase(),
                       ) && (
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                          className="absolute right-1 top-1/2 h-40 -translate-y-1/2 h-7  w-7"
                           onClick={() => handleCreateTag(searchTerm)}
                           disabled={isCreatingTag}
                         >
@@ -542,13 +545,13 @@ export default function ArticleForm({
                       )}
                   </div>
                   {searchTerm && (
-                    <CommandList className="max-h-[200px] overflow-y-auto">
+                    <CommandList className="max-h-[200px]  overflow-y-auto">
                       <CommandGroup>
                         {availableTags
                           .filter((tag) =>
                             tag.name
                               .toLowerCase()
-                              .includes(searchTerm.toLowerCase())
+                              .includes(searchTerm.toLowerCase()),
                           )
                           .map((tag) => (
                             <CommandItem
@@ -557,16 +560,16 @@ export default function ArticleForm({
                               onSelect={() => {
                                 handleTagChange(
                                   !formData.tagIds.includes(tag.id),
-                                  tag.id
+                                  tag.id,
                                 );
                               }}
                             >
                               <Check
                                 className={cn(
-                                  "mr-2 h-4 w-4",
+                                  "mx-2 h-4 w-2 hover:text-primary",
                                   formData.tagIds.includes(tag.id)
                                     ? "opacity-100"
-                                    : "opacity-0"
+                                    : "opacity-0",
                                 )}
                               />
                               {tag.name}
@@ -584,7 +587,7 @@ export default function ArticleForm({
                     return tag ? (
                       <span
                         key={id}
-                        className="text-xs bg-secondary text-secondary-foreground px-2 py-1 "
+                        className="text-xs bg-muted/40 text-secondary-foreground px-2 py-1 "
                       >
                         {tag.name}
                       </span>
@@ -596,14 +599,20 @@ export default function ArticleForm({
           </div>
         </div>
         <div>
-
-          <div className="space-y-2">
-            <Label htmlFor="content">Content</Label>
+          <div className="space-y-2  ">
+            <Label htmlFor="content" className="text-xl">Content</Label>
             <TiptapEditor
               content={formData.content}
               onChange={handleContentChange}
               placeholder="Write your article content here..."
+            
             />
+            {/* <SimpleEditor
+              content={formData.content}
+              onChange={handleContentChange}
+              placeholder="Write your article content here..."
+            
+            /> */}
           </div>
           <div className="flex items-center space-x-2 pt-4">
             <Switch
@@ -616,12 +625,12 @@ export default function ArticleForm({
           <div className="pt-4 max-w-sm">
             <Label htmlFor="createdAt">Publish Date (Optional)</Label>
             <Input
-                type="datetime-local"
-                id="createdAt"
-                name="createdAt"
-                value={formData.createdAt}
-                onChange={handleChange}
-                className="mt-1"
+              type="datetime-local"
+              id="createdAt"
+              name="createdAt"
+              value={formData.createdAt}
+              onChange={handleChange}
+              className="mt-1"
             />
           </div>
         </div>

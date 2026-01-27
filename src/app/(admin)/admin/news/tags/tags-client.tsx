@@ -30,12 +30,21 @@ import { TagForm, TagFormValues } from "./parcials/form";
 import { createTag, deleteTag, updateTag } from "./actions";
 import { Tag } from "@/generated/prisma/client";
 import { useToast } from "@/components/ui/use-toast";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
 interface TagsClientProps {
   initialTags: Tag[];
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
 }
 
-export function TagsClient({ initialTags }: TagsClientProps) {
+export function TagsClient({ 
+  initialTags,
+  currentPage,
+  pageSize,
+  totalCount
+}: TagsClientProps) {
   const [tags, setTags] = useState<Tag[]>(initialTags);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -198,6 +207,12 @@ export function TagsClient({ initialTags }: TagsClientProps) {
           </Table>
         </CardContent>
       </Card>
+
+      <PaginationWithLinks
+        currentPage={currentPage}
+        totalCount={totalCount}
+        pageSize={pageSize}
+      />
     </div>
   );
 }

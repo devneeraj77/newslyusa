@@ -30,12 +30,21 @@ import { CategoryForm, CategoryFormValues } from "./parcials/form";
 import { createCategory, deleteCategory, updateCategory } from "./actions";
 import { Category } from "@/generated/prisma/client";
 import { useToast } from "@/components/ui/use-toast";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
 interface CategoryClientProps {
   initialCategories: Category[];
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
 }
 
-export function CategoryClient({ initialCategories }: CategoryClientProps) {
+export function CategoryClient({ 
+  initialCategories,
+  currentPage,
+  pageSize,
+  totalCount
+}: CategoryClientProps) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -204,6 +213,12 @@ export function CategoryClient({ initialCategories }: CategoryClientProps) {
           </Table>
         </CardContent>
       </Card>
+      
+      <PaginationWithLinks
+        currentPage={currentPage}
+        totalCount={totalCount}
+        pageSize={pageSize}
+      />
     </div>
   );
 }

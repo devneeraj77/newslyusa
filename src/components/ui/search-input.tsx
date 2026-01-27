@@ -70,7 +70,7 @@ export function SearchInput({
       <Input
         type="search"
         placeholder={placeholder}
-        className="pl-8 bg-background rounded-lg "
+        className="pl-8 bg-background -lg "
         value={value}
         onChange={handleChange}
       />

@@ -57,8 +57,8 @@ export function Header() {
     <header
       className={cn(
         // TODO: replace this top-1/4 to top-0
-        "top-0 sticky z-50 w-full border-b broder-secondary/5 backdrop-blur-lg",
-        "bg-background/95 supports-[backdrop-filter]:bg-background/80"
+        "top-0 sticky z-50 w-full  backdrop-blur-lg",
+        "bg-background/95 border-b border-border/20 border-b supports-[backdrop-filter]:bg-background/80"
       )}
     >
       <nav className="mx-auto flex h-14 w-full   items-center justify-between  px-4">

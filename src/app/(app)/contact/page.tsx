@@ -1,10 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState } from "react";
+import DotGrid from "@/components/DotGrid";
 import {
   Card,
   CardContent,
@@ -12,51 +9,62 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Send,
-} from "lucide-react";
-
-const Textarea = React.forwardRef<
-  HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
->(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={cn(
-        "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-});
-Textarea.displayName = "Textarea";
-
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import DotGrid from "@/components/DotGrid";
+import { Send, MapPin, Phone, Mail } from "lucide-react";
+import Image from "next/image";
+import { toast } from "sonner";
 
 export default function ContactPage() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Form submitted:", data);
-    // Add your submission logic here
+    const data = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to send message");
+      }
+
+      toast.success(result.message || "Message sent successfully!");
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -166,9 +174,9 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full sm:w-auto">
+                <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isLoading}>
                   <Send className="w-4 h-4 mr-2" />
-                  Send Message
+                  {isLoading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </CardContent>
@@ -232,8 +240,8 @@ export default function ContactPage() {
         </div>
       </section>
       <section className="container mx-auto py-16 px-4">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="relative h-[400px] md:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative  aspect-[17/16] rounded-2xl overflow-hidden shadow-2xl">
              <Image
               src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?q=80&w=1470&auto=format&fit=crop"
               alt="FAQ Assistance"

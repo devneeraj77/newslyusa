@@ -46,7 +46,7 @@ export function Footer() {
             <ul className="flex flex-col gap-3 text-sm font-medium">
               <li>
                 <a
-                  href="#"
+                  href="about"
                   className="hover:text-muted-foreground transition-colors"
                 >
                   About
@@ -70,7 +70,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="contact"
                   className="hover:text-muted-foreground transition-colors"
                 >
                   Contact

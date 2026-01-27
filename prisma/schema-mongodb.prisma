@@ -138,5 +138,17 @@ model Tag {
 model Subscriber {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  email     String
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }

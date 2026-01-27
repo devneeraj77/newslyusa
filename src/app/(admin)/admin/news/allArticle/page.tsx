@@ -121,7 +121,7 @@ async function ArticlesTable({
 
   return (
     <>
-      <div className="rounded-md border overflow-hidden">
+      <div className="overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -237,8 +237,8 @@ export default async function AllArticlesPage({
         </div>
       </div>
 
-      <Suspense key={currentPage + query} fallback={<ArticlesTableSkeleton />}>
-        <ArticlesTable currentPage={currentPage} pageSize={pageSize} query={query} />
+      <Suspense  key={currentPage + query} fallback={<ArticlesTableSkeleton />}>
+        <ArticlesTable  currentPage={currentPage} pageSize={pageSize} query={query} />
       </Suspense>
     </div>
   );

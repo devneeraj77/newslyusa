@@ -27,18 +27,21 @@ export type AggregateSubscriber = {
 export type SubscriberMinAggregateOutputType = {
   id: string | null
   email: string | null
+  isRead: boolean | null
   createdAt: Date | null
 }
 
 export type SubscriberMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  isRead: boolean | null
   createdAt: Date | null
 }
 
 export type SubscriberCountAggregateOutputType = {
   id: number
   email: number
+  isRead: number
   createdAt: number
   _all: number
 }
@@ -47,18 +50,21 @@ export type SubscriberCountAggregateOutputType = {
 export type SubscriberMinAggregateInputType = {
   id?: true
   email?: true
+  isRead?: true
   createdAt?: true
 }
 
 export type SubscriberMaxAggregateInputType = {
   id?: true
   email?: true
+  isRead?: true
   createdAt?: true
 }
 
 export type SubscriberCountAggregateInputType = {
   id?: true
   email?: true
+  isRead?: true
   createdAt?: true
   _all?: true
 }
@@ -138,6 +144,7 @@ export type SubscriberGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type SubscriberGroupByOutputType = {
   id: string
   email: string
+  isRead: boolean
   createdAt: Date
   _count: SubscriberCountAggregateOutputType | null
   _min: SubscriberMinAggregateOutputType | null
@@ -165,12 +172,14 @@ export type SubscriberWhereInput = {
   NOT?: Prisma.SubscriberWhereInput | Prisma.SubscriberWhereInput[]
   id?: Prisma.StringFilter<"Subscriber"> | string
   email?: Prisma.StringFilter<"Subscriber"> | string
+  isRead?: Prisma.BoolFilter<"Subscriber"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Subscriber"> | Date | string
 }
 
 export type SubscriberOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -180,12 +189,14 @@ export type SubscriberWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SubscriberWhereInput | Prisma.SubscriberWhereInput[]
   OR?: Prisma.SubscriberWhereInput[]
   NOT?: Prisma.SubscriberWhereInput | Prisma.SubscriberWhereInput[]
+  isRead?: Prisma.BoolFilter<"Subscriber"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Subscriber"> | Date | string
 }, "id" | "email">
 
 export type SubscriberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SubscriberCountOrderByAggregateInput
   _max?: Prisma.SubscriberMaxOrderByAggregateInput
@@ -198,62 +209,73 @@ export type SubscriberScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SubscriberScalarWhereWithAggregatesInput | Prisma.SubscriberScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Subscriber"> | string
   email?: Prisma.StringWithAggregatesFilter<"Subscriber"> | string
+  isRead?: Prisma.BoolWithAggregatesFilter<"Subscriber"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subscriber"> | Date | string
 }
 
 export type SubscriberCreateInput = {
   id?: string
   email: string
+  isRead?: boolean
   createdAt?: Date | string
 }
 
 export type SubscriberUncheckedCreateInput = {
   id?: string
   email: string
+  isRead?: boolean
   createdAt?: Date | string
 }
 
 export type SubscriberUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubscriberUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubscriberCreateManyInput = {
   id?: string
   email: string
+  isRead?: boolean
   createdAt?: Date | string
 }
 
 export type SubscriberUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubscriberUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubscriberCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type SubscriberMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type SubscriberMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -262,6 +284,7 @@ export type SubscriberMinOrderByAggregateInput = {
 export type SubscriberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  isRead?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["subscriber"]>
 
@@ -270,10 +293,11 @@ export type SubscriberSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type SubscriberSelectScalar = {
   id?: boolean
   email?: boolean
+  isRead?: boolean
   createdAt?: boolean
 }
 
-export type SubscriberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "createdAt", ExtArgs["result"]["subscriber"]>
+export type SubscriberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "isRead" | "createdAt", ExtArgs["result"]["subscriber"]>
 
 export type $SubscriberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subscriber"
@@ -281,6 +305,7 @@ export type $SubscriberPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
+    isRead: boolean
     createdAt: Date
   }, ExtArgs["result"]["subscriber"]>
   composites: {}
@@ -676,6 +701,7 @@ export interface Prisma__SubscriberClient<T, Null = never, ExtArgs extends runti
 export interface SubscriberFieldRefs {
   readonly id: Prisma.FieldRef<"Subscriber", 'String'>
   readonly email: Prisma.FieldRef<"Subscriber", 'String'>
+  readonly isRead: Prisma.FieldRef<"Subscriber", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Subscriber", 'DateTime'>
 }
     

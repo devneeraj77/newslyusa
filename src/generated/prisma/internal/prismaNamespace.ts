@@ -399,7 +399,8 @@ export const ModelName = {
   Post: 'Post',
   Category: 'Category',
   Tag: 'Tag',
-  Subscriber: 'Subscriber'
+  Subscriber: 'Subscriber',
+  ContactMessage: 'ContactMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "admin" | "post" | "category" | "tag" | "subscriber"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "admin" | "post" | "category" | "tag" | "subscriber" | "contactMessage"
     txIsolationLevel: never
   }
   model: {
@@ -1159,6 +1160,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContactMessage: {
+      payload: Prisma.$ContactMessagePayload<ExtArgs>
+      fields: Prisma.ContactMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContactMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContactMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.ContactMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContactMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findMany: {
+          args: Prisma.ContactMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        create: {
+          args: Prisma.ContactMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        createMany: {
+          args: Prisma.ContactMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ContactMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        update: {
+          args: Prisma.ContactMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ContactMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContactMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ContactMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.ContactMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContactMessage>
+        }
+        groupBy: {
+          args: Prisma.ContactMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageGroupByOutputType>[]
+        }
+        findRaw: {
+          args: Prisma.ContactMessageFindRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        aggregateRaw: {
+          args: Prisma.ContactMessageAggregateRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        count: {
+          args: Prisma.ContactMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1301,10 +1376,25 @@ export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagSca
 export const SubscriberScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  isRead: 'isRead',
   createdAt: 'createdAt'
 } as const
 
 export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  subject: 'subject',
+  message: 'message',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1501,6 +1591,7 @@ export type GlobalOmitConfig = {
   category?: Prisma.CategoryOmit
   tag?: Prisma.TagOmit
   subscriber?: Prisma.SubscriberOmit
+  contactMessage?: Prisma.ContactMessageOmit
 }
 
 /* Types for Logging */

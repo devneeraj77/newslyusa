@@ -1,7 +1,19 @@
 "use client";
 
 import { useEditor, EditorContent, Extensions } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Strike from "@tiptap/extension-strike";
+import Heading from "@tiptap/extension-heading";
+import History from "@tiptap/extension-history";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
+import Blockquote from "@tiptap/extension-blockquote";
+import Code from "@tiptap/extension-code";
 import { Button } from "@/components/ui/button";
 import Underline from "@tiptap/extension-underline";
 import TiptapLink from "@tiptap/extension-link";
@@ -15,8 +27,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 import { useMemo, useState, useEffect } from "react";
 import {
-  Bold,
-  Italic,
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
   List,
   ListOrdered,
   Heading1,
@@ -35,7 +47,7 @@ import {
   Maximize,
   Minimize,
   Highlighter,
-  Code,
+  Code as CodeIcon,
   Link2,
   Image as ImageIcon,
   Minus,
@@ -58,11 +70,27 @@ const TiptapEditor = ({
 
   const extensions = useMemo(
     () => [
-      StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3, 4, 5, 6],
+      Document,
+      Paragraph,
+      Text,
+      Bold,
+      Italic,
+      Strike,
+      Code,
+      Heading.configure({
+        levels: [1, 2, 3, 4, 5, 6],
+        HTMLAttributes: {
+          // Define your custom properties here, e.g., class: "my-custom-heading"
         },
       }),
+      History.configure({
+        depth: 100,
+        newGroupDelay: 500,
+      }),
+      BulletList,
+      OrderedList,
+      ListItem,
+      Blockquote,
       // Add it back with your custom settings
       Placeholder.configure({
         placeholder: placeholder || "Start typing something amazing...",
@@ -99,7 +127,7 @@ const TiptapEditor = ({
     editorProps: {
       attributes: {
         class: cn(
-          "min-h-[300px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 prose dark:prose-invert max-w-none",
+          "min-h-[300px] w-full  border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 prose dark:prose-invert max-w-none",
           isFullScreen && "min-h-screen border-none rounded-none"
         ),
       },
@@ -152,11 +180,11 @@ const TiptapEditor = ({
   return (
     <div
       className={cn(
-        "flex flex-col text-black  fill-black gap-2 transition-all duration-300",
+        "flex flex-col text-primary fill-black gap-2 transition-all duration-300",
         isFullScreen && "fixed inset-0 z-50 bg-background p-4 overflow-auto"
       )}
     >
-      <div className="flex flex-wrap gap-1 border border-input bg-transparent p-1 rounded-md sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex flex-wrap gap-1 border border-input border-muted/10 bg-transparent p-1  sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <Button
           type="button"
           variant="ghost"
@@ -186,7 +214,7 @@ const TiptapEditor = ({
           className={cn(editor.isActive("bold") && "bg-muted")}
           title="Bold"
         >
-          <Bold className="h-4 w-4" />
+          <BoldIcon className="h-4 w-4" />
         </Button>
         <Button
           type="button"
@@ -196,7 +224,7 @@ const TiptapEditor = ({
           className={cn(editor.isActive("italic") && "bg-muted")}
           title="Italic"
         >
-          <Italic className="h-4 w-4" />
+          <ItalicIcon className="h-4 w-4" />
         </Button>
         <Button
           type="button"
@@ -226,7 +254,7 @@ const TiptapEditor = ({
           className={cn(editor.isActive("code") && "bg-muted")}
           title="Inline Code"
         >
-          <Code className="h-4 w-4" />
+          <CodeIcon className="h-4 w-4" />
         </Button>
         <Button
           type="button"

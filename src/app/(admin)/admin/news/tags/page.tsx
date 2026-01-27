@@ -4,17 +4,40 @@ import { Tag } from "@/generated/prisma/client";
 
 export const dynamic = 'force-dynamic';
 
-export default async function TagsPage() {
+interface TagsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function TagsPage({ searchParams }: TagsPageProps) {
+  const params = await searchParams;
+  const currentPage = Number(params.page) || 1;
+  const pageSize = 10;
+  const skip = (currentPage - 1) * pageSize;
+
   let tags: Tag[] = [];
+  let totalCount = 0;
+
   try {
-    tags = await db.tag.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    });
+    [tags, totalCount] = await Promise.all([
+      db.tag.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+        skip,
+        take: pageSize,
+      }),
+      db.tag.count(),
+    ]);
   } catch (error) {
     console.error("Failed to fetch tags:", error);
   }
 
-  return <TagsClient initialTags={tags} />;
+  return (
+    <TagsClient 
+      initialTags={tags}
+      currentPage={currentPage}
+      pageSize={pageSize}
+      totalCount={totalCount}
+    />
+  );
 }

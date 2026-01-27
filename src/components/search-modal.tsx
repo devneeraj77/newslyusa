@@ -17,12 +17,13 @@ import {
 	CommandList,
 } from '@/components/ui/command';
 
-import { LucideIcon, SearchIcon } from 'lucide-react';
+import { LucideIcon, SearchIcon, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type CommandItem = {
 	id: string;
 	title: string;
+	slug: string;
 	description: string;
 	category: string;
 	icon?: LucideIcon;
@@ -31,13 +32,13 @@ export type CommandItem = {
 
 type SearchModalProps = {
 	children: React.ReactNode;
-	data: CommandItem[];
 };
 
-
-export function SearchModal({ children, data }: SearchModalProps) {
+export function SearchModal({ children }: SearchModalProps) {
 	const [open, setOpen] = React.useState(false);
 	const [query, setQuery] = React.useState('');
+    const [results, setResults] = React.useState<CommandItem[]>([]);
+    const [loading, setLoading] = React.useState(false);
 
 	React.useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,17 +51,48 @@ export function SearchModal({ children, data }: SearchModalProps) {
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
+    React.useEffect(() => {
+        const fetchResults = async () => {
+            if (!query) {
+                setResults([]);
+                return;
+            }
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/news?search=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    const items: CommandItem[] = data.map((item: any) => ({
+                        id: item.id,
+						slug: item.slug,
+                        title: item.title,
+                        description: item.description || item.content?.substring(0, 50) + "...",
+                        category: item.categories?.[0]?.name || "News",
+                    }));
+                    setResults(items);
+                }
+            } catch (error) {
+                console.error("Failed to search news", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const timeoutId = setTimeout(fetchResults, 300);
+        return () => clearTimeout(timeoutId);
+    }, [query]);
+
 	return (
 		<Modal open={open} onOpenChange={setOpen}>
 			<ModalTrigger asChild>{children}</ModalTrigger>
 			<ModalContent className="p-1">
 				<ModalTitle className="sr-only">Search</ModalTitle>
-				<Command className="bg-background md:bg-card rounded-md md:border">
+				<Command className="bg-background  md:bg-card rounded-md md:border" shouldFilter={false}>
 					<CommandInput
 						className={cn(
 							'placeholder:text-muted-foreground flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
 						)}
-						placeholder="Search..."
+						placeholder="Search news..."
 						value={query}
 						onValueChange={setQuery}
 					/>
@@ -68,27 +100,27 @@ export function SearchModal({ children, data }: SearchModalProps) {
 						<CommandEmpty className="flex min-h-[280px] flex-col items-center justify-center">
 							<SearchIcon className="text-muted-foreground mb-2 size-6" />
 							<p className="text-muted-foreground mb-1 text-xs">
-								No commands found for "{query}"
+								{loading ? "Searching..." : `No results found for "${query}"`}
 							</p>
-							<Button onClick={() => setQuery('')} variant="ghost">
-								Clear search
-							</Button>
 						</CommandEmpty>
-						<CommandGroup>
-							{data.map((item, i) => {
+						<CommandGroup heading="Results">
+							{results.map((item) => {
 								return (
 									<CommandItem
-										key={i}
+										key={item.id}
 										className="flex cursor-pointer items-center gap-3"
 										value={item.title}
-										onSelect={() => setOpen(false)}
+										onSelect={() => {
+                                            window.location.href = `/news/${item.slug}`; // Or use router.push
+                                            setOpen(false);
+                                        }}
 									>
-										{item.icon && <item.icon className="size-5" />}
+										{item.icon ? <item.icon className="size-5" /> : <Newspaper className="size-5 text-muted-foreground" />}
 										<div className="flex flex-col">
 											<p className="max-w-[250px] truncate text-sm font-medium">
 												{item.title}
 											</p>
-											<p className="text-muted-foreground text-xs">
+											<p className="text-muted-foreground text-xs line-clamp-1">
 												{item.description}
 											</p>
 										</div>

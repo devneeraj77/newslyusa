@@ -14,14 +14,34 @@ export function NewsletterSubscribe() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
-    toast.success(
-      "Subscribed successfully! Thank you for joining our newsletter.",
-    );
-    setEmail("");
-    setIsLoading(false);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to subscribe");
+      }
+
+      toast.success(
+        data.message || "Subscribed successfully! Thank you for joining our newsletter.",
+      );
+      setEmail("");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

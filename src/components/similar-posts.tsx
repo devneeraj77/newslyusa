@@ -1,0 +1,87 @@
+import Link from "next/link";
+import Image from "next/image";
+import db from "@/lib/prisma";
+import { Dot } from "lucide-react";
+
+interface SimilarPostsProps {
+  currentPostId: string;
+  categoryIds: string[];
+}
+
+function formatTimeAgo(dateString: string | Date) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  
+  if (diffInHours < 24) {
+      return `${Math.max(0, diffInHours)}h ago`;
+  }
+  
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+}
+
+export default async function SimilarPosts({
+  currentPostId,
+  categoryIds,
+}: SimilarPostsProps) {
+  if (!categoryIds || categoryIds.length === 0) {
+    return null;
+  }
+
+  const similarPosts = await db.post.findMany({
+    where: {
+      published: true,
+      id: {
+        not: currentPostId,
+      },
+      categoryIds: {
+        hasSome: categoryIds,
+      },
+    },
+    include: {
+      categories: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 4, 
+  });
+
+  if (similarPosts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col  gap-6">
+      <div className="p-1 border-b border-dashed border-muted">
+              <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+                Similar Posts
+              </p>
+            </div>
+      <div className="flex flex-col gap-6">
+        {similarPosts.map((post) => (
+          <Link
+            key={post.id}
+            href={`/${post.categories[0]?.slug || "news"}/${post.slug}`}
+            className="group flex flex-col gap-3"
+          >
+            
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-1 text-primary">
+                <span>{post.categories[0]?.name}</span>
+                <span className="text-muted-foreground font-normal flex items-center">
+                  <Dot size={16} /> {formatTimeAgo(post.createdAt)}
+                </span>
+              </div>
+              <h4 className="font-bold text-xs md:text-base group-hover:underline line-clamp-2 leading-tight">
+                {post.title}
+              </h4>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
