@@ -127,7 +127,7 @@ export default async function TagPage({ params }: Props) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <Link key={post.id} href={`/${post.categories[0]?.slug || 'news'}/${post.slug}`} className="group flex flex-col h-full  overflow-hidden hover:shadow-lg transition-shadow">
+              <Link key={post.id} href={`/${post.categories[0]?.slug || 'news'}/${post.slug}`} className="group flex flex-col h-full  overflow-hidden  transition-shadow">
                 <div className="relative aspect-video w-full overflow-hidden">
                   <Image
                     src={post.image || "/api/placeholder/400/300"}

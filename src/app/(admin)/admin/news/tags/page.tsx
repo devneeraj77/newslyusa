@@ -1,6 +1,6 @@
 import db from "@/lib/prisma";
 import { TagsClient } from "./tags-client";
-import { Tag } from "@/generated/prisma/client";
+import { Tag } from "@prisma/client";
 
 export const dynamic = 'force-dynamic';
 

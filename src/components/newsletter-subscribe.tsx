@@ -60,7 +60,7 @@ export function NewsletterSubscribe() {
           required
           className="acitve:border rounded-lg hover:text-primary bg-background hover:text-accent hover:bg-accent-foreground focus:border "
         />
-        <Button type="submit" variant="outline"  className="py-5" disabled={isLoading}>
+        <Button type="submit" variant="default"  className="py-5  " disabled={isLoading}>
           {isLoading ? "Subscribing..." : "Subscribe"}
         </Button>
       </form>

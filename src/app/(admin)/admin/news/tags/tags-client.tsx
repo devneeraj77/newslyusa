@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { TagForm, TagFormValues } from "./parcials/form";
 import { createTag, deleteTag, updateTag } from "./actions";
-import { Tag } from "@/generated/prisma/client";
+import { Tag } from "@prisma/client";
 import { useToast } from "@/components/ui/use-toast";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
@@ -114,12 +114,10 @@ export function TagsClient({
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center pb-6 justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Tags</h2>
-          <p className="text-muted-foreground">
-            Manage your news tags here.
-          </p>
+         
         </div>
         <Dialog open={isCreateOpen} onOpenChange={(open) => { 
           setIsCreateOpen(open); 
@@ -128,8 +126,8 @@ export function TagsClient({
             setEditingTag(null);
           }
         }}>
-          <DialogTrigger asChild>
-            <Button>
+          <DialogTrigger asChild className="border">
+            <Button size="default" className="py-5">
               <Plus className="mr-2 h-4 w-4" /> Add Tag
             </Button>
           </DialogTrigger>
@@ -156,14 +154,14 @@ export function TagsClient({
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Tags</CardTitle>
+      <Card className="p-1 gap-4">
+        <CardHeader className="p-0">
+          <CardTitle>Edit Tag</CardTitle>
           <CardDescription>
             A list of all available tags on your site.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>

@@ -16,7 +16,7 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchInput } from "@/components/ui/search-input";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 
 interface AllArticlesPageProps {

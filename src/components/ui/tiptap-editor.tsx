@@ -180,12 +180,12 @@ const TiptapEditor = ({
   return (
     <div
       className={cn(
-        "flex flex-col text-primary fill-black gap-2 transition-all duration-300",
+        "flex flex-col text-primary  fill-black gap-2 transition-all duration-300",
         isFullScreen && "fixed inset-0 z-50 bg-background p-4 overflow-auto"
       )}
     >
-      <div className="flex flex-wrap gap-1 border border-input border-muted/10 bg-transparent p-1  sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <Button
+      <div className="flex flex-wrap font-bold gap-1 border border-input border-muted/10 bg-transparent p-1  sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        {/* <Button
           type="button"
           variant="ghost"
           size="sm"
@@ -204,8 +204,8 @@ const TiptapEditor = ({
           title="Redo"
         >
           <Redo className="h-4 w-4" />
-        </Button>
-        <div className="w-px h-6 bg-border mx-1 my-auto" />
+        </Button> */}
+        
         <Button
           type="button"
           variant="ghost"

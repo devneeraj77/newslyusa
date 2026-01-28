@@ -28,12 +28,15 @@ import {
 } from "@/components/ui/dialog";
 import { CategoryForm, CategoryFormValues } from "./parcials/form";
 import { createCategory, deleteCategory, updateCategory } from "./actions";
-import { Category } from "@/generated/prisma/client";
+import { Category } from "@prisma/client";
 import { useToast } from "@/components/ui/use-toast";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import { IconEdit } from "@tabler/icons-react";
+
+type CategoryWithCount = Category & { _count: { posts: number } };
 
 interface CategoryClientProps {
-  initialCategories: Category[];
+  initialCategories: CategoryWithCount[];
   currentPage: number;
   pageSize: number;
   totalCount: number;
@@ -45,11 +48,11 @@ export function CategoryClient({
   pageSize,
   totalCount
 }: CategoryClientProps) {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editingCategory, setEditingCategory] = useState<CategoryWithCount | null>(null);
   const { toast } = useToast();
 
   // Update local state when initialCategories changes (e.g. after revalidate)
@@ -89,6 +92,16 @@ export function CategoryClient({
   };
 
   const handleDelete = async (id: string) => {
+    const category = categories.find(c => c.id === id);
+    if (category && category._count.posts > 0) {
+        toast({
+            title: "Cannot delete",
+            description: "This category has associated posts. Please delete or reassign the posts first.",
+            variant: "destructive"
+        });
+        return;
+    }
+
     if(!confirm("Are you sure you want to delete this category?")) return;
     
     const result = await deleteCategory(id);
@@ -107,19 +120,17 @@ export function CategoryClient({
     }
   };
 
-  const handleEdit = (category: Category) => {
+  const handleEdit = (category: CategoryWithCount) => {
     setEditingCategory(category);
     setIsCreateOpen(true);
   };
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center pb-6 justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
-          <p className="text-muted-foreground">
-            Manage your news categories here.
-          </p>
+        
         </div>
         <Dialog open={isCreateOpen} onOpenChange={(open) => { 
           setIsCreateOpen(open); 
@@ -128,8 +139,8 @@ export function CategoryClient({
             setEditingCategory(null);
           }
         }}>
-          <DialogTrigger asChild>
-            <Button>
+          <DialogTrigger asChild className="border">
+            <Button size="default" className="py-5">
               <Plus className="mr-2 h-4 w-4" /> Add Category
             </Button>
           </DialogTrigger>
@@ -158,20 +169,21 @@ export function CategoryClient({
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Categories</CardTitle>
+      <Card className="p-0 gap-4">
+        <CardHeader className="p-0">
+          <CardTitle>Edit Category</CardTitle>
           <CardDescription>
             A list of all available categories on your site.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Slug</TableHead>
                 <TableHead>Description</TableHead>
+                <TableHead>Total Posts</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -181,6 +193,7 @@ export function CategoryClient({
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell>{category.slug}</TableCell>
                   <TableCell>{category.description}</TableCell>
+                  <TableCell>{category._count?.posts || 0}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button
@@ -188,15 +201,17 @@ export function CategoryClient({
                         size="icon"
                         onClick={() => handleEdit(category)}
                       >
-                        <Pencil className="h-4 w-4" />
+                        <IconEdit  />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
                         className="text-destructive hover:text-destructive/90"
                         onClick={() => handleDelete(category.id)}
+                        disabled={(category._count?.posts || 0) > 0}
+                        title={(category._count?.posts || 0) > 0 ? "Cannot delete category with posts" : "Delete category"}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 size={64} />
                       </Button>
                     </div>
                   </TableCell>
@@ -204,7 +219,7 @@ export function CategoryClient({
               ))}
               {categories.length === 0 && (
                  <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground">
+                    <TableCell colSpan={5} className="text-center text-muted-foreground">
                         No categories found.
                     </TableCell>
                  </TableRow>

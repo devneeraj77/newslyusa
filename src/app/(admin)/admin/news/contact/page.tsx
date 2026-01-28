@@ -65,7 +65,7 @@ async function ContactMessagesTable({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border overflow-hidden">
+      <div className=" overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

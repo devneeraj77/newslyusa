@@ -1,7 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
-import db from "@/lib/prisma";
 import { Dot } from "lucide-react";
+import Link from "next/link";
+import db from "@/lib/prisma";
 
 interface SimilarPostsProps {
   currentPostId: string;
@@ -13,13 +12,39 @@ function formatTimeAgo(dateString: string | Date) {
   const now = new Date();
   const diffInMs = now.getTime() - date.getTime();
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-  
+
   if (diffInHours < 24) {
-      return `${Math.max(0, diffInHours)}h ago`;
+    return `${Math.max(0, diffInHours)}h ago`;
   }
-  
+
   const diffInDays = Math.floor(diffInHours / 24);
   return `${diffInDays}d ago`;
+}
+
+export function SimilarPostsSkeleton() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="p-1 border-b border-dashed border-muted">
+        <div className="h-2.5 w-24 bg-muted animate-pulse  mb-1" />
+      </div>
+      <div className="flex flex-col gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex flex-col gap-3">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="h-3 w-16 bg-muted animate-pulse " />
+                <div className="h-3 w-12 bg-muted animate-pulse " />
+              </div>
+              <div className="space-y-1">
+                <div className="h-3 md:h-4 w-full bg-muted animate-pulse " />
+                <div className="h-3 md:h-4 w-3/4 bg-muted animate-pulse " />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default async function SimilarPosts({
@@ -46,7 +71,7 @@ export default async function SimilarPosts({
     orderBy: {
       createdAt: "desc",
     },
-    take: 4, 
+    take: 4,
   });
 
   if (similarPosts.length === 0) {
@@ -56,10 +81,10 @@ export default async function SimilarPosts({
   return (
     <div className="flex flex-col  gap-6">
       <div className="p-1 border-b border-dashed border-muted">
-              <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
-                Similar Posts
-              </p>
-            </div>
+        <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+          Similar Posts
+        </p>
+      </div>
       <div className="flex flex-col gap-6">
         {similarPosts.map((post) => (
           <Link
@@ -67,7 +92,6 @@ export default async function SimilarPosts({
             href={`/${post.categories[0]?.slug || "news"}/${post.slug}`}
             className="group flex flex-col gap-3"
           >
-            
             <div className="flex flex-col">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-1 text-primary">
                 <span>{post.categories[0]?.name}</span>

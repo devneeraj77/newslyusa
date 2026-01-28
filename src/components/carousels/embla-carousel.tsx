@@ -106,7 +106,7 @@ export default function EmblaCarouselAutoplay({
   return (
     <div
       className={cn(
-        "w-full text-accent  lg:px-3 flex flex-col gap-6",
+        "w-full text-accent   flex flex-col gap-6",
         className
       )}
     >

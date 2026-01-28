@@ -1,9 +1,10 @@
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import db from "@/lib/prisma";
-import { Post, Category, Tag, Admin } from "@/generated/prisma/client";
-import { blogSanitizer } from "@/lib/utils";
+import { IconUserFilled } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
+import { PostShare } from "@/components/post-share";
+import SimilarPosts, { SimilarPostsSkeleton } from "@/components/similar-posts";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,9 +13,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { IconUserFilled } from "@tabler/icons-react";
-import { PostShare } from "@/components/post-share";
-import SimilarPosts from "@/components/similar-posts";
+import type { Admin, Category, Post, Tag } from "@prisma/client";
+import db from "@/lib/prisma";
+import { blogSanitizer, slugify } from "@/lib/utils";
 
 type Props = {
   params: Promise<{ slug: string; category: string }>;
@@ -81,8 +82,8 @@ export default async function NewsPage({ params }: Props) {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem className="text-destructive font-semibold">
                       <BreadcrumbLink href={`/${category}`}>
-                        {post.categories.find((c) => c.slug === category)?.name ||
-                          category}
+                        {post.categories.find((c) => c.slug === category)
+                          ?.name || category}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -107,7 +108,9 @@ export default async function NewsPage({ params }: Props) {
                   <div className="">
                     <div className="flex font-mono text-sm font-bold items-center ">
                       {post.author?.name && (
-                        <span className="font-bold text-sm">{post.author.name}</span>
+                        <span className="font-bold text-sm">
+                          {post.author.name}
+                        </span>
                       )}
                     </div>
                     <time
@@ -124,7 +127,6 @@ export default async function NewsPage({ params }: Props) {
                       })}
                     </time>
                   </div>
-
                 </div>
                 <div>
                   <PostShare title={post.title} />
@@ -135,7 +137,10 @@ export default async function NewsPage({ params }: Props) {
             <div className="prose dark:prose-invert max-w-none">
               <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
                 <Image
-                  src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                  src={
+                    post.image ||
+                    "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                  }
                   alt={post.title}
                   fill
                   className="object-cover transition-transform duration-300  group-hover:scale-105"
@@ -149,8 +154,16 @@ export default async function NewsPage({ params }: Props) {
               <div className="mt-8 pt-4 border-t">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
-                    <span key={tag.id} className="text-sm text-muted-foreground">
-                      #{tag.name}
+                    <span
+                      key={tag.id}
+                      className="text-sm text-muted-foreground"
+                    >
+                      <Link
+                        href={`/tags/${slugify(tag.name)}`}
+                        className="hover:text-primary transition-colors"
+                      >
+                        #{tag.name}
+                      </Link>
                     </span>
                   ))}
                 </div>
@@ -158,10 +171,15 @@ export default async function NewsPage({ params }: Props) {
             )}
           </article>
         </div>
-        
+
         {/* Sidebar */}
-        <aside className="basis-1/2 space-y-8 sticky top-24 h-fit">
-           <SimilarPosts currentPostId={post.id} categoryIds={post.categoryIds} />
+        <aside className="basis-1/2 space-y-8 py-4 sticky top-24 h-fit">
+          <Suspense fallback={<SimilarPostsSkeleton />}>
+            <SimilarPosts
+              currentPostId={post.id}
+              categoryIds={post.categoryIds}
+            />
+          </Suspense>
         </aside>
       </div>
     </div>

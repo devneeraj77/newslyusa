@@ -357,7 +357,7 @@ export default function ArticleForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-xl">Title</Label>
+              <Label htmlFor="title" >Title</Label>
               <Input
                 id="title"
                 name="title"
@@ -369,7 +369,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2 h-18">
-              <Label htmlFor="slug" className="text-xl">Slug</Label>
+              <Label htmlFor="slug" >Slug</Label>
               <div className="relative">
                 <Input
                   id="slug"
@@ -405,7 +405,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-xl">Description</Label>
+              <Label htmlFor="description" >Description</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -417,7 +417,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xl">Featured Image</Label>
+              <Label >Featured Image</Label>
               <div className="flex flex-col gap-4">
                 {formData.image && (
                   <div className="relative bg-red-100 aspect-[17/5]  overflow-hidden ">
@@ -466,7 +466,7 @@ export default function ArticleForm({
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label className="text-xl">Categories</Label>
+              <Label >Categories</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full justify-between">
@@ -515,7 +515,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xl">Tags</Label>
+              <Label >Tags</Label>
               <div className="border   overflow-hidden relative">
                 <Command shouldFilter={false}>
                   <div className="relative ">
@@ -600,7 +600,7 @@ export default function ArticleForm({
         </div>
         <div>
           <div className="space-y-2  ">
-            <Label htmlFor="content" className="text-xl">Content</Label>
+            <Label htmlFor="content" >Content</Label>
             <TiptapEditor
               content={formData.content}
               onChange={handleContentChange}

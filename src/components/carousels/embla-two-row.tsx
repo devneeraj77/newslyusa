@@ -55,7 +55,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
   } = usePrevNextButtons(emblaApi)
 
   return (
-    <div className="w-full p-3">
+    <div className="w-full p-2">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex -ml-4 ">
           {groupedSlides.map((group, index) => (

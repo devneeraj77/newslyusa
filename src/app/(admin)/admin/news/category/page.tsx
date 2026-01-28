@@ -1,6 +1,6 @@
 import db from "@/lib/prisma";
 import { CategoryClient } from "./category-client";
-import { Category } from "@/generated/prisma/client";
+import { Category } from "@prisma/client";
 
 export const dynamic = 'force-dynamic';
 
@@ -14,14 +14,20 @@ export default async function CategoryPage({ searchParams }: CategoryPageProps) 
   const pageSize = 10;
   const skip = (currentPage - 1) * pageSize;
 
-  let categories: Category[] = [];
+  let categories: (Category & { _count: { posts: number } })[] = [];
   let totalCount = 0;
 
   try {
+    // @ts-ignore
     [categories, totalCount] = await Promise.all([
       db.category.findMany({
         orderBy: {
           name: 'asc',
+        },
+        include: {
+          _count: {
+            select: { posts: true },
+          },
         },
         skip,
         take: pageSize,

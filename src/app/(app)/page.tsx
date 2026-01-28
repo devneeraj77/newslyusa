@@ -6,7 +6,11 @@ import EmblaCarouselAutoplay from "@/components/carousels/embla-carousel";
 import { Dot, ChevronRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { EmblaOptionsType } from "embla-carousel";
-import { IconArrowNarrowRight, IconArrowUpRight } from "@tabler/icons-react";
+import {
+  IconArrowNarrowRight,
+  IconArrowRight,
+  IconArrowUpRight,
+} from "@tabler/icons-react";
 import NewsHeadlines from "@/components/carousels/news-carousel";
 import EmblaTwoRow from "@/components/carousels/embla-two-row";
 import MoreNewsBentoGrid from "@/components/carousels/more-news-bento-grid";
@@ -17,6 +21,7 @@ import NewsHighlightCard, {
 } from "@/components/carousels/news-highlight-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
@@ -102,7 +107,7 @@ export default function Home() {
     const fetchCategoryNews = async (
       category: string,
       setter: React.Dispatch<React.SetStateAction<any[]>>,
-      setLoading: React.Dispatch<React.SetStateAction<boolean>>
+      setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     ) => {
       setLoading(true);
       try {
@@ -112,7 +117,7 @@ export default function Home() {
 
         if (!response.ok) {
           console.error(
-            `HTTP error! status: ${response.status} for ${category} news`
+            `HTTP error! status: ${response.status} for ${category} news`,
           );
           setter([]); // Set to empty array on HTTP error
           return;
@@ -133,7 +138,7 @@ export default function Home() {
           setter(transformed);
         } else {
           console.log(
-            `No data received for ${category}. Setting to empty array.`
+            `No data received for ${category}. Setting to empty array.`,
           );
           setter([]); // Set to empty array if no data
         }
@@ -185,9 +190,7 @@ export default function Home() {
         const transformedData: NewsItem[] = data.map((post: any) => ({
           id: post.id,
           title: post.title,
-          image:
-            post.image ||
-            "https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Default image
+          image: post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Default image
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
           timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -229,8 +232,7 @@ export default function Home() {
         const transformedData: NewsItem[] = data.map((post: any) => ({
           id: post.id,
           title: post.title,
-          image:
-            post.image,
+          image: post.image,
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
           timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -266,7 +268,7 @@ export default function Home() {
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-2">
             <div className="top-4 left-4 z-20 flex justify-between items-center">
-              <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+              <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
                 Best of the week
               </span>
             </div>
@@ -285,9 +287,9 @@ export default function Home() {
                     <div className="absolute inset-0 " />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-10% from-black to-transparent p-4 md:p-8 text-white z-20">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-30% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
                     <div className="flex flex-wrap items-center  text-xs md:text-sm ">
-                      <span className="font-semibold text-primary-foreground/80">
+                      <span className="font-semibold text-green-500">
                         {featuredPost.category}
                       </span>
                       <Dot className="text-primary-foreground/80" size={24} />
@@ -298,26 +300,32 @@ export default function Home() {
                       {featuredPost.title}
                     </h1>
 
-                    <div className="flex gap-3 ">
-                      {(featuredPost.tags && featuredPost.tags.length > 0
-                        ? featuredPost.tags
-                        : []
-                      ).map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="inline-flex  items-center gap-1 text-xs"
-                        >
-                          <span className="text-base font-bold text-destructive">
-                            #
+                    <div className="flex justify-between">
+                      <div className="flex gap-3 ">
+                        {(featuredPost.tags && featuredPost.tags.length > 0
+                          ? featuredPost.tags
+                          : []
+                        ).map((tag) => (
+                          <span
+                            key={tag.id}
+                            className="inline-flex  items-center  text-xs"
+                          >
+                            <Badge className="truncate bg-green-200/20 ">
+                              <span className="text-green-500">#</span>
+                              {tag.name}
+                            </Badge>
                           </span>
-                          <span className="truncate">{tag.name}</span>
-                        </span>
-                      ))}
+                        ))}
+                      </div>
+                      <div className="group">
+                      {/* <Link href={featuredPost.title} className="p-2 pl-4 px-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold">Read Article <IconArrowUpRight className="" size={24}/></Link>  */}
+                      <Link href={featuredPost.title} className="p-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold"><IconArrowUpRight className="" size={24}/></Link> 
+                    </div>
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="relative bg-foreground w-screen lg:w-5xl aspect-[16/10] md:aspect-[24/10]">
+                <div className="relative bg-black w-screen lg:w-5xl aspect-[16/10] md:aspect-[24/10]">
                   <Skeleton className="h-full w-full " />
                   <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                     <div className="flex gap-2 items-center">
@@ -376,7 +384,7 @@ export default function Home() {
       <hr className="border m-4 md:mx-16 lg:mx-17  border-dashed" />
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+          <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
             Editor's pick
           </p>
         </div>
@@ -408,11 +416,18 @@ export default function Home() {
             ) : (
               <EmblaCarouselAutoplay
                 slides={editorsPickNews.map((news, i) => (
-                  <Link key={news.id} href={`/${news.category}/${news.slug}`} className="group block w-full h-full">
+                  <Link
+                    key={news.id}
+                    href={`/${news.category}/${news.slug}`}
+                    className="group block w-full h-full"
+                  >
                     <div className="m-2 py-2">
                       <div className="relative aspect-[16/10] overflow-hidden ">
                         <Image
-                          src={news.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png" } 
+                          src={
+                            news.image ||
+                            "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                          }
                           fill
                           unoptimized={!news.image}
                           className="object-cover transition-transform duration-300  hover:scale-105"
@@ -434,10 +449,11 @@ export default function Home() {
                       <div className="text-sm  pt-4 flex justify-between items-center text-muted-foreground hover:text-primary transition-colors">
                         <p>Read More</p>
                         <div className=" left-0 bottom-4  opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                          <IconArrowUpRight size={24} className=" text-muted-foreground" />
+                          <IconArrowUpRight
+                            size={24}
+                            className=" text-muted-foreground"
+                          />
                         </div>
-
-                        
                       </div>
                     </div>
                   </Link>
@@ -450,7 +466,7 @@ export default function Home() {
       <section className="py-2 mx-auto container my-8">
         <div className="md:flex  gap-4">
           <div className="md:basis-1/2 ">
-            <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+            <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
               Health News
             </p>
             {loadingHealth ? (
@@ -496,7 +512,7 @@ export default function Home() {
             )}
           </div>
           <div className="md:basis-1/2 ">
-            <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+            <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
               Sports News
             </p>
 
@@ -546,7 +562,7 @@ export default function Home() {
       </section>
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-2 p-1 md:tex-xl lg:text-2xl m-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background/35 to-transperant">
+          <p className="pl-3 lg:my-6 md:tex-xl lg:text-2xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
             More News
           </p>
         </div>
@@ -557,14 +573,33 @@ export default function Home() {
         </div>
       </section>
       <section className="min-h-90 flex items-center">
-        <div className='border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16'>
-            <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
-                <p className="text-xl font-medium max-w-md text-slate-800">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam?</p>
-                <Link  href="/" className="flex items-center gap-2 rounded py-3 px-8 bg-primary hover:bg-primary/90 transition text-white">
-                    <span>Stay updated on daily life.</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-4.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </Link>
-            </div>
+        <div className="border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16">
+          <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
+            <p className="text-xl font-medium max-w-md text-slate-800">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam?
+            </p>
+            <Link
+              href="/"
+              className="flex items-center gap-2 rounded py-3 px-8 bg-primary hover:bg-primary/90 transition text-white"
+            >
+              <span>Stay updated on daily life.</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4.5"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
     </main>

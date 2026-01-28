@@ -16,7 +16,7 @@ export default function Loading() {
             {/* Featured Story Skeleton */}
             <div className="relative group overflow-hidden shadow-sm aspect-[16/10] md:aspect-[28/10] w-full rounded-md">
               <Skeleton className="h-full w-full" />
-              <div className="absolute inset-0 bg-primary w-xs sm:w-xl md:w-5xl aspect-[16/10] md:aspect-[24/10]" />
+              <div className="absolute inset-0 m-2 w-xs sm:w-xl md:w-5xl aspect-[16/10] md:aspect-[24/10]" />
               <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                 <div className="flex gap-2 items-center">
                   <Skeleton className="h-4 w-24 bg-white/20" />

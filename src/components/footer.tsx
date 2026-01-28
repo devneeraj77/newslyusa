@@ -12,12 +12,12 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background text-primary mt-8  bg-no-repeat bg-cover  pt-6 pb-8 px-6 md:px-12 lg:px-24">
+    <footer className="bg-background text-primary mt-8  bg-no-repeat bg-cover pt-6 pb-8 px-3 md:px-8 lg:px-14">
       {/* Top Section: Logo + Links */}
-      <div className="pt-4 ">
-        <div className="max-w-7xl space-y-14 md:space-y-2 space-x-4 mx-auto  md:flex justify-between">
+      <div className="pt-4 container mx-auto">
+        <div className=" space-y-14 md:space-y-2 space-x-4 mx-auto  md:flex justify-between">
           {/* Brand/Logo Section */}
-          <div className=" lg:col-span-4 flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
               {/* Logo Icon mimicking the image */}
               <Grid2x2Plus className="size-6" />

@@ -1,7 +1,7 @@
 import db from "@/lib/prisma";
 import Link from "next/link";
 import { Metadata } from "next";
-import { Post, Category, Admin } from "@/generated/prisma/client";
+import { Post, Category, Admin } from "@prisma/client";
 import Image from "next/image";
 import { stripHtml } from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";
@@ -343,7 +343,7 @@ export default async function NewsPage({ searchParams }: Props) {
             </div>
 
              {/* Minimal Newsletter Sign-up */}
-             <div className="p-4 mt-8  bg-muted/10 border border-muted/20">
+             {/* <div className="p-4 mt-8  bg-muted/10 border border-muted/20">
               <p className="text-xs font-bold mb-2">The Newsly Pulse</p>
               <p className="text-[10px] text-muted-foreground mb-3">
                 The day&apos;s top 3 stories in your inbox.
@@ -358,7 +358,7 @@ export default async function NewsPage({ searchParams }: Props) {
                   Subscribe
                 </button>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </aside>

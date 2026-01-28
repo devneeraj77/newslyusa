@@ -204,7 +204,7 @@ const NewsGrid = () => {
 
   if (loading) {
     return (
-      <div className="mx-auto p-4 font-sans text-[#212121]">
+      <div className="mx-auto p-2 font-sans text-accent">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b">
           {/* Main Content Area Skeleton (Spans 9 cols) */}
           <div className="lg:col-span-9 flex flex-col gap-8">
@@ -266,7 +266,7 @@ const NewsGrid = () => {
   }
 
   return (
-    <div className=" mx-auto p-4 font-sans text-[#212121]">
+    <div className=" mx-auto p-2 font-sans text-accent">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b ">
         {/* Main Content Area (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-8">
@@ -276,17 +276,17 @@ const NewsGrid = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 group"
           >
             <div className="md:col-span-1 order-2 md:order-1">
-              <h2 className="text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
+              <h2 className="text-muted-foreground text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
                 {newsData[0].title.length > 150
                   ? `${newsData[0].title.slice(0, 150)}...`
                   : newsData[0].title}
               </h2>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-4 md:line-clamp-none">
+              <p className="text-secondary text-sm mb-4 line-clamp-4 md:line-clamp-none">
                 {newsData[0].description
                   ? stripHtml(newsData[0].description)
                   : stripHtml(newsData[0].content)}
               </p>
-              <div className="flex items-center text-xs text-gray-500 uppercase tracking-wider font-medium">
+              <div className="flex items-center text-xs text-muted uppercase tracking-wider font-medium">
                 <span>{newsData[0].timestamp}</span>
                 <Dot className="text-secondary" size={24} />
                 <span>{newsData[0].category}</span>
