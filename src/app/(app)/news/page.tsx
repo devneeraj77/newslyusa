@@ -7,7 +7,7 @@ import { stripHtml } from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Dot } from "lucide-react";
+import { Dog, Dot } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ function CategoryPaginationSkeleton() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="flex flex-col h-full border rounded-lg overflow-hidden gap-2"
+            className="flex flex-col h-full border  overflow-hidden gap-2"
           >
             <Skeleton className="aspect-video w-full" />
             <div className="p-4 flex flex-col gap-2">
@@ -216,7 +217,7 @@ export default async function NewsPage({ searchParams }: Props) {
               <Link href={`/${mainPost.categories[0]?.slug || "news"}/${mainPost.slug}`} className="group">
                 <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
-                    src={mainPost.image || "https://placehold.co/1000x700/F5F3F6/B9A2B2/png"}
+                    src={mainPost.image || "https://placehold.co/600x400/00000/ffffff/png"}
                     alt={mainPost.title}
                     fill
                     unoptimized={!mainPost.image}
@@ -229,10 +230,11 @@ export default async function NewsPage({ searchParams }: Props) {
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
                   {stripHtml(mainPost.content).substring(0, 200)}...
                 </p>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                  <span className="text-accent">{mainPost.categories[0]?.name || "News"}</span>
-                  <span className="text-gray-400 font-normal">
-                    · {formatTimeAgo(mainPost.createdAt)}
+                <div className="flex items-center text-xs font-bold uppercase tracking-wider">
+                  <span className="text-popover-foreground">{mainPost.categories[0]?.name || "News"}</span>
+                  <Dot className="text-muted"/>
+                  <span className="text-popover-foreground font-normal">
+                     {formatTimeAgo(mainPost.createdAt)}
                   </span>
                 </div>
               </Link>
@@ -244,7 +246,7 @@ export default async function NewsPage({ searchParams }: Props) {
                 <Link key={post.id} href={`/${post.categories[0]?.slug || "news"}/${post.slug}`} className="group flex flex-col">
                   <div className="relative aspect-video w-full overflow-hidden mb-3">
                     <Image
-                      src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                      src={post.image || "https://placehold.co/600x400/00000/ffffff/png"}
                       alt={post.title}
                       fill
                       unoptimized={!post.image}
@@ -254,10 +256,11 @@ export default async function NewsPage({ searchParams }: Props) {
                   <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline mb-2 line-clamp-2">
                     {post.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
-                    <span className="text-accent">{post.categories[0]?.name || "News"}</span>
-                    <span className="text-gray-400 font-normal">
-                       · {formatTimeAgo(post.createdAt)}
+                  <div className="flex items-center text-[11px] font-bold uppercase tracking-wide">
+                    <span className="text-popover-foreground">{post.categories[0]?.name || "News"}</span>
+                    <Dot className="text-muted"/>
+                    <span className="text-popover-foreground font-normal">
+                        {formatTimeAgo(post.createdAt)}
                     </span>
                   </div>
                 </Link>
@@ -275,9 +278,9 @@ export default async function NewsPage({ searchParams }: Props) {
                     href={`/${post.categories[0]?.slug || "news"}/${post.slug}`}
                     className="group flex flex-col gap-2"
                   >
-                    <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                    <div className="relative aspect-video w-full overflow-hidden ">
                       <Image
-                        src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                        src={post.image || "https://placehold.co/600x400/00000/ffffff/png"}
                         alt={post.title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -311,8 +314,8 @@ export default async function NewsPage({ searchParams }: Props) {
           <div className="sticky top-4 space-y-6">
              {/* Header */}
              <div className="p-1 border-b border-muted">
-              <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
-                Top Stories
+              <p className="text-[10px] text-left flex items-center text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+                Top Stories <IconTrendingUp  />
               </p>
             </div>
 

@@ -136,7 +136,7 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
   return (
     <Link
       href={`/${news.categorySlug || news.category || "news"}/${news.slug}`}
-      className="group flex gap-2 p-2 w-full hover:bg-muted transition-colors cursor-pointer "
+      className="group flex gap-2 p-2 w-full hover:bg-muted/10 transition-colors cursor-pointer "
     >
       <div className="flex flex-col justify-between flex-1 min-w-0">
         <h4 className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">

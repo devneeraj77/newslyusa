@@ -150,7 +150,7 @@ async function ArticlesTable({
             ) : (
               posts.map((post) => (
                 <TableRow key={post.id}>
-                  <TableCell className="font-medium md:max-w-xs">
+                  <TableCell className="font-medium lg:max-w-xs">
                     <div className="truncate w-sm sm:w-auto">{post.title}</div>
                     <div className="text-xs text-muted-foreground mt-1">
                       <p className="truncate w-xs">{post.description}</p>

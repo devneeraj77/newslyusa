@@ -39,7 +39,9 @@ import Image from "next/image"
 import { links } from "@/app/(admin)/config/pages"
 
 // Menu items.
-const items = links.map((link) => ({
+const items = links
+  .filter((link) => link.label !== "Admin")
+  .map((link) => ({
   title: link.label,
   url: link.href,
   icon:
@@ -57,8 +59,6 @@ const items = links.map((link) => ({
       ? Mail
       : link.label === "Subscriptions"
       ? Users
-      : link.label === "Admin"
-      ? User
       : link.label === "Sign In"
       ? LogIn
       : Settings,
@@ -69,14 +69,14 @@ export function AppSidebar() {
   const user = session?.user
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Command className="size-4" />
+                  <Command size={24} />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">Newsly Admin</span>

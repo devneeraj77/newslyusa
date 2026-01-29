@@ -95,9 +95,9 @@ export function Header() {
           <SearchModal>
               <Button
                 variant="outline"
-                className="relative size-9 bg-none cursor-pointer   p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
+                className="relative size-9 bg-none cursor-pointer text-foreground/60 p-0 xl:h-9 xl:w-63 xl:justify-between xl:px-3 xl:py-2"
               >
-                <span className="hidden xl:inline-flex">Search...</span>
+                <span className="hidden  xl:inline-flex">Search...</span>
                 <span className="sr-only">Search</span>
                 <Search className="size-4" />
               </Button>

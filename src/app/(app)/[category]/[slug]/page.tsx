@@ -139,7 +139,7 @@ export default async function NewsPage({ params }: Props) {
                 <Image
                   src={
                     post.image ||
-                    "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                    "https://placehold.co/600x400/00000/ffffff/png"
                   }
                   alt={post.title}
                   fill

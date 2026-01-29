@@ -16,6 +16,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { TextShimmer } from "@/components/ui/text-shimmer";
+import { IconTrendingUp } from "@tabler/icons-react";
 
 function formatTimeAgo(dateString: string | Date) {
   const date = new Date(dateString);
@@ -229,7 +231,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               <Link href={`/${category}/${mainPost.slug}`} className="group">
                 <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
-                    src={mainPost.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                    src={
+                      mainPost.image ||
+                      "https://placehold.co/600x400/00000/ffffff/png"
+                    }
                     alt={mainPost.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -263,7 +268,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 >
                   <div className="relative aspect-video w-full overflow-hidden mb-3">
                     <Image
-                      src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                      src={
+                        post.image ||
+                        "https://placehold.co/600x400/00000/ffffff/png"
+                      }
                       alt={post.title}
                       fill
                       unoptimized={!post.image}
@@ -286,41 +294,56 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </div>
           </div>
           <div className=" py-8 my-10">
-            <h3 className="text-xl font-bold mb-6">Trending Last Month</h3>
             {viralPosts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {viralPosts.map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/${category}/${post.slug}`}
-                    className="group flex flex-col gap-2"
-                  >
-                    <div className="relative aspect-video w-full overflow-hidden rounded-md">
-                      <Image
-                        src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                        <span className="text-primary">
-                          {post.categories[0]?.name}
-                        </span>
-                        <Dot size={14} />
-                        <span>{formatTimeAgo(post.createdAt)}</span>
+              <>
+                <div className="flex gap-1">
+                  <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                  Trending Last Month
+                </TextShimmer>
+                <IconTrendingUp size={24}/>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {viralPosts.map((post) => (
+                    <Link
+                      key={post.id}
+                      href={`/${category}/${post.slug}`}
+                      className="group flex flex-col gap-2"
+                    >
+                      <div className="relative aspect-video w-full overflow-hidden ">
+                        <Image
+                          src={
+                            post.image ||
+                            "https://placehold.co/600x400/00000/ffffff/png"
+                          }
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                       </div>
-                      <h4 className="font-bold text-sm leading-tight group-hover:underline line-clamp-2">
-                        {post.title}
-                      </h4>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                          <span className="text-primary">
+                            {post.categories[0]?.name}
+                          </span>
+                          <Dot size={14} />
+                          <span>{formatTimeAgo(post.createdAt)}</span>
+                        </div>
+                        <h4 className="font-bold text-sm leading-tight group-hover:underline line-clamp-2">
+                          {post.title}
+                        </h4>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="py-10 text-center">
-                <p className="text-muted-foreground">No post available</p>
+                <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                  No trending last month
+                </TextShimmer>
+                <p className="text-muted-foreground">
+                  Check back later for more updates!
+                </p>
               </div>
             )}
           </div>
@@ -330,8 +353,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <div className="sticky top-4 space-y-6">
             {/* Header */}
             <div className="p-1 border-b border-dashed border-muted">
-              <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
-                Top Stories
+              <p className="text-[10px] flex items-center text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+                Top Stories <IconTrendingUp  />
               </p>
             </div>
 
@@ -361,7 +384,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               ))}
             </div>
 
-             {/* Editor's Pick */}
+            {/* Editor's Pick */}
             {/* {editorsPicks.length > 0 && (
               <>
                 <div className="p-1 border-b border-muted mt-8">
@@ -422,7 +445,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <h2 className="text-2xl font-bold mb-4">
           More {categoryData.name} News
         </h2>
-       <Suspense key={currentPage} fallback={<CategoryPaginationSkeleton />}>
+        <Suspense key={currentPage} fallback={<CategoryPaginationSkeleton />}>
           <CategoryArticlesPagination
             categoryId={categoryData.id}
             categorySlug={category}
@@ -430,7 +453,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             pageSize={10}
             excludedIds={excludedIds}
           />
-        </Suspense> 
+        </Suspense>
       </section>
     </main>
   );

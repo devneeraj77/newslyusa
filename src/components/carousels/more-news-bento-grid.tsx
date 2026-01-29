@@ -177,7 +177,7 @@ const NewsGrid = () => {
           mappedData = data.map((post: any) => ({
             ...post,
             image:
-              post.image || " https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Fallback image
+              post.image || "https://placehold.co/600x400/00000/ffffff/png", // Fallback image
             category: post.categories?.[0]?.name || "General",
             timestamp: new Date(post.createdAt).toLocaleDateString(),
             description: post.description || "",
@@ -306,7 +306,7 @@ const NewsGrid = () => {
               <Image
                 src={
                   newsData[0].image ||
-                  " https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                  "https://placehold.co/600x400/00000/ffffff/png"
                 }
                 alt={newsData[0].title}
                 fill
@@ -327,7 +327,7 @@ const NewsGrid = () => {
                   <Image
                     src={
                       news.image ||
-                      " https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                      "https://placehold.co/600x400/00000/ffffff/png"
                     }
                     alt={news.title}
                     unoptimized={!news.image}
@@ -359,7 +359,7 @@ const NewsGrid = () => {
               <Image
                 src={
                   newsData[1].image ||
-                  " https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                  "https://placehold.co/600x400/00000/ffffff/png"
                 }
                 alt={newsData[1].title}
                 fill
@@ -387,7 +387,7 @@ const NewsGrid = () => {
               <Image
                 src={
                   newsData[2].image ||
-                  " https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                  "https://placehold.co/600x400/00000/ffffff/png"
                 }
                 alt={newsData[2].title}
                 unoptimized={!newsData[2].image}
@@ -416,7 +416,7 @@ const NewsGrid = () => {
               <Image
                 src={
                   newsData[3].image ||
-                  " https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                  "https://placehold.co/600x400/00000/ffffff/png"
                 }
                 alt={newsData[3].title}
                 fill

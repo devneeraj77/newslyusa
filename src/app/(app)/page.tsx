@@ -10,10 +10,12 @@ import {
   IconArrowNarrowRight,
   IconArrowRight,
   IconArrowUpRight,
+  IconTrendingUp,
 } from "@tabler/icons-react";
-import NewsHeadlines from "@/components/carousels/news-carousel";
+import NewsHeadlines, { NewsHeadlineItem } from "@/components/carousels/news-carousel";
 import EmblaTwoRow from "@/components/carousels/embla-two-row";
 import MoreNewsBentoGrid from "@/components/carousels/more-news-bento-grid";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 import NewsHighlightCard, {
   FALLBACK_HIGHLIGHTS,
   NewsItem,
@@ -116,6 +118,38 @@ export default function Home() {
   const [sportsNews, setSportsNews] = useState<any[]>(MOCK_NEWS_DATA);
   const [loadingSports, setLoadingSports] = useState(true);
 
+  const [headlines, setHeadlines] = useState<NewsHeadlineItem[]>([]);
+  const [loadingHeadlines, setLoadingHeadlines] = useState(true);
+
+  useEffect(() => {
+    const fetchHeadlines = async () => {
+      setLoadingHeadlines(true);
+      try {
+        const response = await fetch("/api/news?period=today");
+        if (response.ok) {
+          const data = await response.json();
+          const mappedData = data.map((item: any) => ({
+            category: item.categories[0]?.name || "News",
+            time: formatTimeAgo(item.createdAt),
+            title: item.title,
+            slug: item.slug,
+            categorySlug: item.categories[0]?.slug || "news",
+          }));
+          setHeadlines(mappedData);
+        } else {
+          setHeadlines([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch headlines", error);
+        setHeadlines([]);
+      } finally {
+        setLoadingHeadlines(false);
+      }
+    };
+
+    fetchHeadlines();
+  }, []);
+
   useEffect(() => {
     const fetchCategoryNews = async (
       category: string,
@@ -144,7 +178,7 @@ export default function Home() {
             id: post.id,
             title: post.title,
             image:
-              post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png",
+              post.image || "https://placehold.co/600x400/00000/ffffff/png",
             category: post.categories?.[0]?.name || category,
             timestamp: formatTimeAgo(post.createdAt),
             slug: post.slug,
@@ -205,7 +239,7 @@ export default function Home() {
         const transformedData: NewsItem[] = data.map((post: any) => ({
           id: post.id,
           title: post.title,
-          image: post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Default image
+          image: post.image || "https://placehold.co/600x400/00000/ffffff/png", // Default image
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
           categorySlug:
@@ -282,12 +316,12 @@ export default function Home() {
 
   return (
     <main className="items-center justify-center  m-2 ">
-      <section className="container mx-auto  flex flex-col items-center justify-center py-2">
+      <section className="container mx-auto  flex flex-col items-center justify-center px-1 py-2">
         <div className=" grid grid-cols-1 xl:grid-cols-4 w-full gap-2 lg:gap-4">
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-2">
             <div className="top-4 left-4 z-20 flex justify-between items-center">
-              <span className="pl-2 p-1  my-3 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
+              <span className="pl-2 p-1  my-3 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
                 Best of the week
               </span>
             </div>
@@ -306,7 +340,7 @@ export default function Home() {
                     <div className="absolute inset-0 " />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-30% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-20% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
                     <div className="flex flex-wrap items-center  text-xs md:text-sm ">
                       <span className="font-semibold text-primary-foreground">
                         {featuredPost.category}
@@ -367,11 +401,36 @@ export default function Home() {
             </div>
 
             {/* Sub Headlines */}
-            <div className="md:pt-2 h-44">
-              <div className="flex items-center mt-2 mb-4 md:mb-6 pl-4  border-l-4 border-primary">
-                <h2 className="text-2xl font-bold tracking-tight">Headlines</h2>
-              </div>
-              <NewsHeadlines />
+            <div className="md:pt-2 mt-4  h-44">
+              {loadingHeadlines ? (
+                 <Skeleton className="h-8 w-32" />
+              ) : headlines.length > 0 ? (
+                <div className="flex items-center justify-start my-4  mt-2  md:mb-4 gap-1 border-primary">
+                  <TextShimmer
+                    as="h2"
+                    className="text-xl  tracking-tight"
+                  >
+                     Top headlines
+                  </TextShimmer>
+                  <IconTrendingUp className="text-primary/80" size={24}/>
+                </div>
+              ) : (
+                <div className="flex items-center justify-star gap-1 mt-2 md:mb-4 border-destructive">
+                  <TextShimmer
+                    as="h2"
+                    className="text-xl  tracking-tight"
+                  >
+                     No headlines for yet
+                  </TextShimmer>
+                  <IconTrendingUp className="text-primary/80" size={24}/>
+                </div>
+              )}
+              {(loadingHeadlines || headlines.length > 0) && (
+                <NewsHeadlines
+                  headlines={headlines}
+                  isLoading={loadingHeadlines}
+                />
+              )}
             </div>
           </div>
 
@@ -407,7 +466,7 @@ export default function Home() {
       <hr className="border m-4 md:mx-16 lg:mx-17  border-dashed" />
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
+          <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
             Editor's pick
           </p>
         </div>
@@ -417,18 +476,18 @@ export default function Home() {
               <EmblaCarouselAutoplay
                 slides={[...Array(3)].map((_, i) => (
                   <div key={i} className="m-2 py-2">
-                    <Skeleton className="aspect-[16/10] w-full rounded-md" />
+                    <Skeleton className="aspect-[16/10] w-full " />
                     <div className="mt-2 space-y-2">
-                      <div className="flex items-center gap-2 px-2">
+                      <div className="flex items-center gap-2">
                         <Skeleton className="h-3 w-16" />
                         <Skeleton className="h-3 w-3 rounded-full" />
                         <Skeleton className="h-3 w-20" />
                       </div>
-                      <div className="px-2 space-y-1">
+                      <div className=" space-y-1">
                         <Skeleton className="h-4 w-full" />
                         <Skeleton className="h-4 w-2/3" />
                       </div>
-                      <div className="pt-4 px-2 flex justify-between items-center">
+                      <div className="pt-4  flex justify-between items-center">
                         <Skeleton className="h-3 w-20" />
                         <Skeleton className="h-4 w-4" />
                       </div>
@@ -449,7 +508,7 @@ export default function Home() {
                         <Image
                           src={
                             news.image ||
-                            "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                            "https://placehold.co/600x400/00000/ffffff/png"
                           }
                           fill
                           unoptimized={!news.image}
@@ -458,11 +517,11 @@ export default function Home() {
                         />
                       </div>
                       <div>
-                        <div className="text-xs text-accent flex justify-start items-center  mt-2">
-                          <span className="uppercase font-semibold text-primary/80">
+                        <div className="text-xs text-popover-foreground flex justify-start items-center  mt-2">
+                          <span className="uppercase font-semibold ">
                             {news.category}
                           </span>
-                          <Dot className="text-secondary" size={24} />
+                          <Dot className="" size={24} />
                           <span>{formatTimeAgo(news.createdAt)}</span>
                         </div>
                         <h4 className="text-sm sm:text-md text-primary font-semibold  line-clamp-2 mt-1">
@@ -489,7 +548,7 @@ export default function Home() {
       <section className="py-2 mx-auto container my-8">
         <div className="md:flex  gap-4">
           <div className="md:basis-1/2 ">
-            <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
+            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
               Health News
             </p>
             {loadingHealth ? (
@@ -534,8 +593,8 @@ export default function Home() {
               <EmblaTwoRow slides={healthNews} options={OPTIONS} />
             )}
           </div>
-          <div className="md:basis-1/2 ">
-            <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
+          <div className="md:basis-1/2  ">
+            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
               Sports News
             </p>
 
@@ -585,7 +644,7 @@ export default function Home() {
       </section>
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-3 lg:my-6 md:tex-xl lg:text-2xl m-2 block border-l-2 border-border w-fit bg-linear-to-r/decreasing from-background to-transperant">
+          <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
             More News
           </p>
         </div>
@@ -596,10 +655,10 @@ export default function Home() {
         </div>
       </section>
       <section className="min-h-90 flex items-center">
-        <div className="border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16">
+        <div className="border-y border border-dashed border-slate-200 w-full max-w-5xl mx-auto  sm:px-10">
           <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
-            <p className="text-xl font-medium max-w-md text-slate-800">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam?
+            <p className="text-xl font-medium max-w-md text-primary">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
             </p>
             <Link
               href="/"
