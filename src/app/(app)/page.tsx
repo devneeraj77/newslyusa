@@ -22,6 +22,7 @@ import NewsHighlightCard, {
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { slugify } from "@/lib/utils";
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
@@ -33,6 +34,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1445&auto=format&fit=crop",
     category: "Finance",
     timestamp: "2 hours ago",
+    slug: "global-markets-rally",
+    categorySlug: "finance",
   },
   {
     id: "2",
@@ -41,6 +44,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1470&auto=format&fit=crop",
     category: "Technology",
     timestamp: "4 hours ago",
+    slug: "renewable-energy-storage",
+    categorySlug: "technology",
   },
   {
     id: "3",
@@ -49,6 +54,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1445&auto=format&fit=crop",
     category: "Culture",
     timestamp: "5 hours ago",
+    slug: "new-art-exhibition",
+    categorySlug: "culture",
   },
   {
     id: "4",
@@ -57,6 +64,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=1470&auto=format&fit=crop",
     category: "Sports",
     timestamp: "6 hours ago",
+    slug: "local-sports-team",
+    categorySlug: "sports",
   },
   {
     id: "5",
@@ -65,6 +74,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1632&auto=format&fit=crop",
     category: "Tech",
     timestamp: "1 hour ago",
+    slug: "future-of-ai",
+    categorySlug: "tech",
   },
   {
     id: "6",
@@ -73,6 +84,8 @@ const MOCK_NEWS_DATA = [
       "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1470&auto=format&fit=crop",
     category: "Lifestyle",
     timestamp: "3 hours ago",
+    slug: "sustainable-fashion",
+    categorySlug: "lifestyle",
   },
 ];
 
@@ -134,6 +147,8 @@ export default function Home() {
               post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png",
             category: post.categories?.[0]?.name || category,
             timestamp: formatTimeAgo(post.createdAt),
+            slug: post.slug,
+            categorySlug: post.categories?.[0]?.slug || category.toLowerCase(),
           }));
           setter(transformed);
         } else {
@@ -193,6 +208,8 @@ export default function Home() {
           image: post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png", // Default image
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
+          categorySlug:
+            post.categories.length > 0 ? post.categories[0].slug : "general",
           timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
@@ -235,6 +252,8 @@ export default function Home() {
           image: post.image,
           category:
             post.categories.length > 0 ? post.categories[0].name : "General",
+          categorySlug:
+            post.categories.length > 0 ? post.categories[0].slug : "general",
           timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
@@ -289,39 +308,43 @@ export default function Home() {
 
                   <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-30% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
                     <div className="flex flex-wrap items-center  text-xs md:text-sm ">
-                      <span className="font-semibold text-green-500">
+                      <span className="font-semibold text-primary-foreground">
                         {featuredPost.category}
                       </span>
                       <Dot className="text-primary-foreground/80" size={24} />
                       <span>{formatTimeAgo(featuredPost.createdAt)}</span>
                     </div>
-
                     <h1 className="text-xl md:text-3xl lg:text-4xl font-bold lg:w-2xl font-mono leading-tight mb-4 max-w-4xl drop-shadow-md">
                       {featuredPost.title}
                     </h1>
-
                     <div className="flex justify-between">
-                      <div className="flex gap-3 ">
+                      <div className="basis-2/3 flex h-auto flex-wrap gap-3">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
                           : []
                         ).map((tag) => (
                           <span
                             key={tag.id}
-                            className="inline-flex  items-center  text-xs"
+                            className="inline-flex items-center text-xs"
                           >
-                            <Badge className="truncate bg-green-200/20 ">
-                              <span className="text-green-500">#</span>
+                            <Badge className="truncate test-xs bg-primary-foreground/20">
+                            
+                              <span className="">#</span>
                               {tag.name}
                             </Badge>
                           </span>
                         ))}
                       </div>
-                      <div className="group">
-                      {/* <Link href={featuredPost.title} className="p-2 pl-4 px-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold">Read Article <IconArrowUpRight className="" size={24}/></Link>  */}
-                      <Link href={featuredPost.title} className="p-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold"><IconArrowUpRight className="" size={24}/></Link> 
-                    </div>
-                    </div>
+                      <div className="group opacity-100">
+                        {/* <Link href={featuredPost.title} className="p-2 pl-4 px-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold">Read Article <IconArrowUpRight className="" size={24}/></Link>  */}
+                        <Link
+                          href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
+                          className="p-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold"
+                        >
+                          <IconArrowUpRight className="" size={24} />
+                        </Link>
+                      </div>
+                    </div>{" "}
                   </div>
                 </>
               ) : (
@@ -418,7 +441,7 @@ export default function Home() {
                 slides={editorsPickNews.map((news, i) => (
                   <Link
                     key={news.id}
-                    href={`/${news.category}/${news.slug}`}
+                    href={`/${news.categorySlug}/${news.slug}`}
                     className="group block w-full h-full"
                   >
                     <div className="m-2 py-2">

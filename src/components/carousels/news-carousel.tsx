@@ -48,6 +48,7 @@ interface NewsHeadlineItem {
   time: string;
   title: string;
   slug: string;
+  categorySlug: string;
 }
 
 export default function NewsHeadlines({
@@ -76,6 +77,7 @@ export default function NewsHeadlines({
             time: formatTimeAgo(item.createdAt),
             title: item.title,
             slug: item.slug,
+            categorySlug: item.categories[0]?.slug || "news",
           }));
           setHeadlines(mappedData);
         }
@@ -169,7 +171,7 @@ export default function NewsHeadlines({
                       className="pl-0 basis-full sm:basis-1/2 lg:basis-1/3 border-r last:border-r-0 border-dashed border-border/60"
                     >
                       <Link
-                        href={`/${item.category}/${item.slug}`}
+                        href={`/${item.categorySlug}/${item.slug}`}
                         className="block  h-full group"
                       >
                         <article className="relative h-full px-[20px] py-4  flex flex-col justify-between hover:bg-muted/30 transition-colors">

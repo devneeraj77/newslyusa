@@ -141,7 +141,7 @@ export default function EmblaCarouselAutoplay({
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground"
+              className="rounded-full"
               onClick={() => onAutoplayButtonClick(() => api?.scrollPrev())}
             >
               <ChevronLeft className="h-5 w-5" />
@@ -149,7 +149,7 @@ export default function EmblaCarouselAutoplay({
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground"
+              className="rounded-full"
               onClick={() => onAutoplayButtonClick(() => api?.scrollNext())}
             >
               <ChevronRight className="h-5 w-5" />

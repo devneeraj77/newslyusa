@@ -21,6 +21,7 @@ interface NewsItem {
   description: string;
   categories: CategoryItem[];
   createdAt: string;
+  categorySlug: string;
 }
 
 const FALLBACK_NEWS_DATA: NewsItem[] = [
@@ -38,6 +39,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "It comes one day after a crane accident in another part of the country killed 32 people.",
     categories: [{ id: "cat1", name: "USA" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "usa",
   },
   {
     id: "2",
@@ -53,6 +55,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "The ship, which has no engine and moves under square sails, retraced the ancient route in 17 days.",
     categories: [{ id: "cat2", name: "USA" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "usa",
   },
   {
     id: "3",
@@ -69,6 +72,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "It includes the establishment of a technocratic Palestinian government and demilitarisation.",
     categories: [{ id: "cat3", name: "World" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "world",
   },
   {
     id: "4",
@@ -84,6 +88,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "Investigators allege that a factory making Pop Mart products neglected staff safety.",
     categories: [{ id: "cat4", name: "Business" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "business",
   },
   {
     id: "5",
@@ -99,6 +104,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "The BBC understands that one of the protesters was taken to hospital in poor condition.",
     categories: [{ id: "cat5", name: "UK" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "uk",
   },
   {
     id: "6",
@@ -114,6 +120,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "The move comes as US President Donald Trump said Ukraine is 'less ready'.",
     categories: [{ id: "cat6", name: "Europe" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "europe",
   },
   {
     id: "7",
@@ -129,6 +136,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "Chiara Ferragni had been accused of misleading consumers in her promotion of Christmas cakes.",
     categories: [{ id: "cat7", name: "Europe" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "europe",
   },
   {
     id: "8",
@@ -144,6 +152,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
       "The massive rocket achieved orbital velocity in a major milestone for the company.",
     categories: [{ id: "cat8", name: "Tech" }],
     createdAt: new Date().toISOString(),
+    categorySlug: "tech",
   },
 ];
 
@@ -172,6 +181,7 @@ const NewsGrid = () => {
             category: post.categories?.[0]?.name || "General",
             timestamp: new Date(post.createdAt).toLocaleDateString(),
             description: post.description || "",
+            categorySlug: post.categories?.[0]?.slug || "general",
           }));
         }
 
@@ -204,7 +214,7 @@ const NewsGrid = () => {
 
   if (loading) {
     return (
-      <div className="mx-auto p-2 font-sans text-accent">
+      <div className="mx-auto p-2 font-sans text-popover-foreground">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b">
           {/* Main Content Area Skeleton (Spans 9 cols) */}
           <div className="lg:col-span-9 flex flex-col gap-8">
@@ -266,29 +276,29 @@ const NewsGrid = () => {
   }
 
   return (
-    <div className=" mx-auto p-2 font-sans text-accent">
+    <div className=" mx-auto p-2 font-sans text-popover-foreground">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-2 pb-6 border-dashed border-b ">
         {/* Main Content Area (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-8">
           {/* Article 1: Headline Left, Image Right */}
           <Link
-            href={`/${newsData[0].category || "news"}/${newsData[0].slug}`}
+            href={`/${newsData[0].categorySlug || "news"}/${newsData[0].slug}`}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 group"
           >
             <div className="md:col-span-1 order-2 md:order-1">
-              <h2 className="text-muted-foreground text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
+              <h2 className="text-primary text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
                 {newsData[0].title.length > 150
                   ? `${newsData[0].title.slice(0, 150)}...`
                   : newsData[0].title}
               </h2>
-              <p className="text-secondary text-sm mb-4 line-clamp-4 md:line-clamp-none">
+              <p className="text-popover-foreground text-sm mb-4 line-clamp-4 md:line-clamp-none">
                 {newsData[0].description
                   ? stripHtml(newsData[0].description)
                   : stripHtml(newsData[0].content)}
               </p>
-              <div className="flex items-center text-xs text-muted uppercase tracking-wider font-medium">
+              <div className="flex items-center text-xs text-popover-foreground uppercase tracking-wider font-medium">
                 <span>{newsData[0].timestamp}</span>
-                <Dot className="text-secondary" size={24} />
+                <Dot className="text-popver-foreground" size={24} />
                 <span>{newsData[0].category}</span>
               </div>
             </div>
@@ -310,7 +320,7 @@ const NewsGrid = () => {
             {newsData.slice(4, 8).map((news) => (
               <Link
                 key={news.id}
-                href={`/${news.category || "news"}/${news.slug}`}
+                href={`/${news.categorySlug || "news"}/${news.slug}`}
                 className="group"
               >
                 <div className="relative aspect-video mb-3 overflow-hidden  group-hover:underline underline-offset-4">
@@ -328,7 +338,7 @@ const NewsGrid = () => {
                 <h4 className="font-bold font-mono text-sm leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2 line-clamp-2">
                   {news.title}
                 </h4>
-                <div className="flex items-center text-[10px] text-muted-foreground uppercase font-medium">
+                <div className="flex items-center text-[10px] text-popover-foreground uppercase font-medium">
                   <span>{news.timestamp}</span>
                   <Dot className="text-primary" size={16} />
                   <span>{news.category}</span>
@@ -342,7 +352,7 @@ const NewsGrid = () => {
         <div className="lg:col-span-3 flex flex-col gap-6  lg:pl-2 border-primary/5">
           {/* First item with image */}
           <Link
-            href={`/${newsData[1].category || "news"}/${newsData[1].slug}`}
+            href={`/${newsData[1].categorySlug || "news"}/${newsData[1].slug}`}
             className="group block"
           >
             <div className="relative aspect-video mb-3 overflow-hidden ">
@@ -356,10 +366,10 @@ const NewsGrid = () => {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
               {newsData[1].title}
             </h3>
-            <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
+            <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
               <span>{newsData[1].timestamp}</span>
               <Dot className="text-primary" size={24} />
               <span>{newsData[1].category}</span>
@@ -370,7 +380,7 @@ const NewsGrid = () => {
 
           {/* Second item text only */}
           <Link
-            href={`/${newsData[2].category || "news"}/${newsData[2].slug}`}
+            href={`/${newsData[2].categorySlug || "news"}/${newsData[2].slug}`}
             className="group block "
           >
             <div className="relative lg:hidden block  aspect-video mb-3 overflow-hidden ">
@@ -385,10 +395,10 @@ const NewsGrid = () => {
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
               {newsData[2].title}
             </h3>
-            <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
+            <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
               <span>{newsData[2].timestamp}</span>
               <Dot className="text-primary" size={24} />
               <span>{newsData[2].category}</span>
@@ -399,7 +409,7 @@ const NewsGrid = () => {
 
           {/* Third item text only */}
           <Link
-            href={`/${newsData[3].category || "news"}/${newsData[3].slug}`}
+            href={`/${newsData[3].categorySlug || "news"}/${newsData[3].slug}`}
             className="group block"
           >
             <div className="relative lg:hidden block aspect-video mb-3 overflow-hidden ">
@@ -414,10 +424,10 @@ const NewsGrid = () => {
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
               {newsData[3].title}
             </h3>
-            <div className="flex items-center text-xs text-muted-foreground uppercase font-medium">
+            <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
               <span>{newsData[3].timestamp}</span>
               <Dot className="text-primary" size={24} />
               <span>{newsData[3].category}</span>

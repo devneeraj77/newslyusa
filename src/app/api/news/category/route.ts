@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
           categoryIds: {
             has: category.id,
           },
+          published: true,
         },
         include: {
           author: {

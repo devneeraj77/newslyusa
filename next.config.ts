@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 // import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 
 const nextConfig: NextConfig = {
-  reactCompiler: true,
+  // reactCompiler: true,
   allowedDevOrigins: ['192.168.1.29'],
 
   images: {
