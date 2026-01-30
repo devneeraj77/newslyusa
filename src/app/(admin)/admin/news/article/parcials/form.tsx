@@ -36,7 +36,12 @@ import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { createTag } from "../../tags/actions";
 import { cn } from "@/lib/utils";
-import TiptapEditor from "@/components/ui/tiptap-editor";
+import dynamic from "next/dynamic";
+
+const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
+  ssr: false,
+  loading: () => <div className="min-h-[300px] border rounded-md" />,
+});
 
 interface Category {
   id: string;
