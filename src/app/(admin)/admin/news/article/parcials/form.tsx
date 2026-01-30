@@ -38,6 +38,7 @@ import { createTag } from "../../tags/actions";
 import { saveArticle, checkSlugUnique } from "../actions";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 
 const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
   ssr: false,
@@ -601,18 +602,18 @@ export default function ArticleForm({
         <div>
           <div className="space-y-2  ">
             <Label htmlFor="content" >Content</Label>
-            <TiptapEditor
-              content={formData.content}
-              onChange={handleContentChange}
-              placeholder="Write your article content here..."
-            
-            />
-            {/* <SimpleEditor
+            {/* <TiptapEditor
               content={formData.content}
               onChange={handleContentChange}
               placeholder="Write your article content here..."
             
             /> */}
+            <SimpleEditor
+              content={formData.content}
+              onChange={handleContentChange}
+              placeholder="Write your article content here..."
+            
+            />
           </div>
           <div className="flex items-center space-x-2 pt-4">
             <Switch

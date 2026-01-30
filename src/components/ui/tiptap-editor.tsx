@@ -180,7 +180,7 @@ const TiptapEditor = ({
   return (
     <div
       className={cn(
-        "flex flex-col text-primary  fill-black gap-2 transition-all duration-300",
+        "flex flex-col text-primary fill-black gap-2 transition-all duration-300",
         isFullScreen && "fixed inset-0 z-50 bg-background p-4 overflow-auto"
       )}
     >

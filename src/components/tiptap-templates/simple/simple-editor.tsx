@@ -59,6 +59,8 @@ import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
 import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
 import { LinkIcon } from "@/components/tiptap-icons/link-icon"
+import { MaximizeIcon } from "@/components/tiptap-icons/maximize-icon"
+import { MinimizeIcon } from "@/components/tiptap-icons/minimize-icon"
 
 // --- Hooks ---
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
@@ -70,6 +72,7 @@ import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
+import { cn } from "@/lib/utils"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
@@ -84,10 +87,14 @@ const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
   isMobile,
+  isFullScreen,
+  onToggleFullScreen,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
   isMobile: boolean
+  isFullScreen: boolean
+  onToggleFullScreen: () => void
 }) => {
   return (
     <>
@@ -101,7 +108,7 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
+        <HeadingDropdownMenu levels={[1, 2, 3, 4, 5, 6]} portal={isMobile} />
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
           portal={isMobile}
@@ -148,12 +155,25 @@ const MainToolbarContent = ({
         <ImageUploadButton text="Add" />
       </ToolbarGroup>
 
+      <ToolbarSeparator />
+
+      <ToolbarGroup>
+        <Button onClick={onToggleFullScreen} data-style="ghost" type="button">
+          {isFullScreen ? (
+            <MinimizeIcon className="tiptap-button-icon" />
+          ) : (
+            <MaximizeIcon className="tiptap-button-icon" />
+          )}
+        </Button>
+      </ToolbarGroup>
+
       <Spacer />
 
       {isMobile && <ToolbarSeparator />}
 
       <ToolbarGroup>
-        {/* <ThemeToggle /> */}
+        {/* <ThemeToggle  /> */}
+        {/* </> */}
       </ToolbarGroup>
     </>
   )
@@ -168,7 +188,7 @@ const MobileToolbarContent = ({
 }) => (
   <>
     <ToolbarGroup>
-      <Button data-style="ghost" onClick={onBack}>
+      <Button data-style="ghost" onClick={onBack} type="button">
         <ArrowLeftIcon className="tiptap-button-icon" />
         {type === "highlighter" ? (
           <HighlighterIcon className="tiptap-button-icon" />
@@ -198,6 +218,7 @@ export function SimpleEditor({
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main"
   )
+  const [isFullScreen, setIsFullScreen] = useState(false)
   const toolbarRef = useRef<HTMLDivElement>(null)
 
   const editor = useEditor({
@@ -265,7 +286,13 @@ export function SimpleEditor({
   }, [isMobile, mobileView])
 
   return (
-    <div className="border border-red-600">
+    <div
+      className={cn(
+        "border bg-muted/10",
+        isFullScreen &&
+          "fixed inset-0 z-50 bg-background h-screen w-screen   overflow-hidden"
+      )}
+    >
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}
@@ -282,6 +309,8 @@ export function SimpleEditor({
               onHighlighterClick={() => setMobileView("highlighter")}
               onLinkClick={() => setMobileView("link")}
               isMobile={isMobile}
+              isFullScreen={isFullScreen}
+              onToggleFullScreen={() => setIsFullScreen(!isFullScreen)}
             />
           ) : (
             <MobileToolbarContent
@@ -294,7 +323,7 @@ export function SimpleEditor({
         <EditorContent
           editor={editor}
           role="presentation"
-          className="simple-editor-content"
+          className="lg:max-w-5xl mx-auto py-14"
         />
       </EditorContext.Provider>
     </div>
