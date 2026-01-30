@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import ArticleForm from "./parcials/form";
 
+export const dynamic = "force-dynamic";
+
 interface ArticlePageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }

@@ -433,26 +433,34 @@ export default function ArticleForm({
                   </div>
                 )}
                 <div className={formData.image ? "hidden" : "block"}>
-                  <CldUploadWidget
-                    uploadPreset={
-                      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-                    }
-                    onSuccess={handleImageUpload}
-                  >
-                    {({ open }) => {
-                      return (
-                        <div
-                          onClick={() => open()}
-                          className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
-                        >
-                          <ImageIcon className="h-10 w-10 text-muted-foreground" />
-                          <span className="mt-2 text-sm text-muted-foreground">
-                            Upload Featured Image
-                          </span>
-                        </div>
-                      );
-                    }}
-                  </CldUploadWidget>
+                  {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
+                    <CldUploadWidget
+                      uploadPreset={
+                        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+                      }
+                      onSuccess={handleImageUpload}
+                    >
+                      {({ open }) => {
+                        return (
+                          <div
+                            onClick={() => open()}
+                            className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
+                          >
+                            <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                            <span className="mt-2 text-sm text-muted-foreground">
+                              Upload Featured Image
+                            </span>
+                          </div>
+                        );
+                      }}
+                    </CldUploadWidget>
+                  ) : (
+                    <div className="flex aspect-[17/5] flex-col items-center justify-center border border-dashed bg-muted/50 text-destructive">
+                      <span className="text-sm">
+                        Missing Cloudinary Upload Preset
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -538,8 +546,7 @@ export default function ArticleForm({
                         </Button>
                       )}
                   </div>
-                  {searchTerm && (
-                    <CommandList className="max-h-[200px]  overflow-y-auto">
+                  <CommandList className={!searchTerm ? "hidden" : "max-h-[200px] overflow-y-auto"}>
                       <CommandGroup>
                         {availableTags
                           .filter((tag) =>
@@ -571,7 +578,6 @@ export default function ArticleForm({
                           ))}
                       </CommandGroup>
                     </CommandList>
-                  )}
                 </Command>
               </div>
               {formData.tagIds.length > 0 && (
