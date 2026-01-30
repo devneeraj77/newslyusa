@@ -9,21 +9,28 @@ export default async function ArticlePage({
   searchParams,
 }: ArticlePageProps) {
   const resolvedSearchParams = await searchParams;
-  const id = resolvedSearchParams?.id as string | undefined;
+  const idParam = resolvedSearchParams?.id;
+  const id = Array.isArray(idParam) ? idParam[0] : idParam;
 
   let article = null;
   if (id) {
-    article = await prisma.post.findUnique({
+    const rawArticle = await prisma.post.findUnique({
       where: { id },
       include: {
         categories: true,
         tags: true,
       },
     });
+    if (rawArticle) {
+      article = JSON.parse(JSON.stringify(rawArticle));
+    }
   }
 
-  const categories = await prisma.category.findMany();
-  const tags = await prisma.tag.findMany();
+  const rawCategories = await prisma.category.findMany();
+  const rawTags = await prisma.tag.findMany();
+  
+  const categories = JSON.parse(JSON.stringify(rawCategories));
+  const tags = JSON.parse(JSON.stringify(rawTags));
 
   return (
     <div className="md:p-6">

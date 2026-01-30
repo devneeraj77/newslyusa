@@ -36,7 +36,6 @@ import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { createTag } from "../../tags/actions";
 import { cn } from "@/lib/utils";
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import TiptapEditor from "@/components/ui/tiptap-editor";
 
 interface Category {
