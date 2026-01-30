@@ -13,32 +13,69 @@ export default async function ArticlePage({
   const id = Array.isArray(idParam) ? idParam[0] : idParam;
 
   let article = null;
+
   if (id) {
     const rawArticle = await prisma.post.findUnique({
       where: { id },
       include: {
-        categories: true,
-        tags: true,
+        categories: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
+
     if (rawArticle) {
-      article = JSON.parse(JSON.stringify(rawArticle));
+      article = {
+        id: rawArticle.id,
+        title: rawArticle.title,
+        slug: rawArticle.slug,
+        content: rawArticle.content,
+        description: rawArticle.description,
+        image: rawArticle.image,
+        published: rawArticle.published,
+        createdAt: rawArticle.createdAt.toISOString(),
+        categories: rawArticle.categories,
+        tags: rawArticle.tags,
+      };
     }
   }
 
-  const rawCategories = await prisma.category.findMany();
-  const rawTags = await prisma.tag.findMany();
-  
-  const categories = JSON.parse(JSON.stringify(rawCategories));
-  const tags = JSON.parse(JSON.stringify(rawTags));
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  const tags = await prisma.tag.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   return (
     <div className="md:p-6">
-       <ArticleForm 
-          initialData={article} 
-          categories={categories} 
-          tags={tags} 
-       />
+      <ArticleForm
+        initialData={article}
+        categories={categories}
+        tags={tags}
+      />
     </div>
   );
 }

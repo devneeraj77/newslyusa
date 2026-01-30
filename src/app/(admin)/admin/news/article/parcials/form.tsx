@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -132,10 +132,19 @@ export default function ArticleForm({
     content: initialData?.content || "",
     image: initialData?.image || "",
     published: initialData?.published || false,
-    createdAt: formatDateForInput(initialData?.createdAt) || "",
+    createdAt: "",
     categoryIds: initialCategoryIds,
     tagIds: initialTagIds,
   });
+
+  useEffect(() => {
+    if (initialData?.createdAt) {
+      setFormData((prev) => ({
+        ...prev,
+        createdAt: formatDateForInput(initialData.createdAt) || "",
+      }));
+    }
+  }, [initialData]);
 
   const slugCheckTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
