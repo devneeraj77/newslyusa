@@ -35,6 +35,7 @@ import {
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { createTag } from "../../tags/actions";
+import { saveArticle, checkSlugUnique } from "../actions";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 
@@ -98,7 +99,6 @@ export default function ArticleForm({
 
   const [availableTags, setAvailableTags] = useState<Tag[]>(tags);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
-  const [openCombobox, setOpenCombobox] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleCreateTag = async (name: string) => {
@@ -187,26 +187,22 @@ export default function ArticleForm({
           slugCheckTimeoutRef.current = setTimeout(async () => {
             setIsCheckingSlug(true);
             try {
-              const res = await fetch(
-                `/api/news/check-slug?slug=${generatedSlug}&excludeId=${
-                  initialData?.id || ""
-                }`,
+              const res = await checkSlugUnique(
+                generatedSlug,
+                initialData?.id || ""
               );
-              const data = await res.json();
 
-              if (!data.isUnique) {
+              if (!res.isUnique) {
                 let counter = 1;
                 let uniqueSlug = generatedSlug;
                 let isUnique = false;
                 while (!isUnique && counter < 10) {
                   uniqueSlug = `${generatedSlug}-${counter}`;
-                  const res2 = await fetch(
-                    `/api/news/check-slug?slug=${uniqueSlug}&excludeId=${
-                      initialData?.id || ""
-                    }`,
+                  const res2 = await checkSlugUnique(
+                    uniqueSlug,
+                    initialData?.id || ""
                   );
-                  const data2 = await res2.json();
-                  if (data2.isUnique) isUnique = true;
+                  if (res2.isUnique) isUnique = true;
                   else counter++;
                 }
                 setFormData((prev) => ({ ...prev, slug: uniqueSlug }));
@@ -224,14 +220,9 @@ export default function ArticleForm({
           slugCheckTimeoutRef.current = setTimeout(async () => {
             setIsCheckingSlug(true);
             try {
-              const res = await fetch(
-                `/api/news/check-slug?slug=${value}&excludeId=${
-                  initialData?.id || ""
-                }`,
-              );
-              const data = await res.json();
+              const res = await checkSlugUnique(value, initialData?.id || "");
 
-              if (data.isUnique) {
+              if (res.isUnique) {
                 setSlugMessage({ type: "success", text: "Slug is available" });
               } else {
                 setSlugMessage({
@@ -305,27 +296,21 @@ export default function ArticleForm({
     try {
       const payload = {
         ...formData,
-        createdAt: formData.createdAt
-          ? new Date(formData.createdAt).toISOString()
-          : undefined,
+        // Optional: Ensure date is in ISO string or passed as string
+        createdAt: formData.createdAt, 
         id: initialData?.id,
       };
 
-      const method = initialData ? "PUT" : "POST";
-      const res = await fetch("/api/news/article", {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      // Call the Server Action
+      const res = await saveArticle(payload);
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Something went wrong");
+      if (!res.success) {
+        throw new Error(res.message || "Something went wrong");
       }
 
-      router.refresh();
+      // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
+      // router.refresh(); 
+      
       if (!initialData) {
         // Reset form on successful create
         setFormData({
@@ -340,19 +325,15 @@ export default function ArticleForm({
           tagIds: [],
         });
       }
-      // Optionally redirect
-      if (!initialData) {
-        // Maybe redirect to list or just stay
-        router.push("/admin/news/allArticle");
-      } else {
-        router.push("/admin/news/allArticle");
-      }
+      
+      router.push("/admin/news/allArticle");
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className=" mx-auto p-4 bg-background ">
