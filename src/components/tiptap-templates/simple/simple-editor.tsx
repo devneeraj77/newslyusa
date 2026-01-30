@@ -108,7 +108,7 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4, 5, 6]} portal={isMobile} />
+        <HeadingDropdownMenu levels={[2, 3, 4, 5, 6]} portal={isMobile} />
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
           portal={isMobile}
@@ -172,7 +172,7 @@ const MainToolbarContent = ({
       {isMobile && <ToolbarSeparator />}
 
       <ToolbarGroup>
-        {/* <ThemeToggle  /> */}
+        <ThemeToggle />
         {/* </> */}
       </ToolbarGroup>
     </>
@@ -288,7 +288,7 @@ export function SimpleEditor({
   return (
     <div
       className={cn(
-        "border bg-muted/10",
+        "border bg-muted/10 ",
         isFullScreen &&
           "fixed inset-0 z-50 bg-background h-screen w-screen   overflow-hidden"
       )}
@@ -323,7 +323,7 @@ export function SimpleEditor({
         <EditorContent
           editor={editor}
           role="presentation"
-          className="lg:max-w-5xl mx-auto py-14"
+          className="simple-editor-content  lg:max-w-6xl mx-auto"
         />
       </EditorContext.Provider>
     </div>

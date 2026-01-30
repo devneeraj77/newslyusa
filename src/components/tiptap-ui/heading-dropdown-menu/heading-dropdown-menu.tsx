@@ -80,46 +80,53 @@ export const HeadingDropdownMenu = forwardRef<
     }
 
     return (
-      <DropdownMenu modal open={isOpen} onOpenChange={handleOpenChange}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            data-style="ghost"
-            data-active-state={isActive ? "on" : "off"}
-            role="button"
-            tabIndex={-1}
-            disabled={!canToggle}
-            data-disabled={!canToggle}
-            aria-label="Format text as heading"
-            aria-pressed={isActive}
-            tooltip="Heading"
-            {...buttonProps}
-            ref={ref}
-          >
-            <Icon className="tiptap-button-icon" />
-            <ChevronDownIcon className="tiptap-button-dropdown-small" />
-          </Button>
-        </DropdownMenuTrigger>
+      <div
+        onMouseEnter={() => !portal && setIsOpen(true)}
+        onMouseLeave={() => !portal && setIsOpen(false)}
+        className="relative"
+      >
+        <DropdownMenu modal open={isOpen} onOpenChange={handleOpenChange}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              type="button"
+              data-style="ghost"
+              data-active-state={isActive ? "on" : "off"}
+              role="button"
+              tabIndex={-1}
+              disabled={!canToggle}
+              data-disabled={!canToggle}
+              aria-label="Format text as heading"
+              aria-pressed={isActive}
+              tooltip="Heading"
+              {...buttonProps}
+              ref={ref}
+            >
+              <Icon className="tiptap-button-icon" />
+              <ChevronDownIcon className="tiptap-button-dropdown-small" />
+            </Button>
+          </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" portal={portal}>
-          <Card>
-            <CardBody>
-              <ButtonGroup>
-                {levels.map((level) => (
-                  <DropdownMenuItem key={`heading-${level}`} asChild>
-                    <HeadingButton
-                      editor={editor}
-                      level={level}
-                      text={`Heading ${level}`}
-                      showTooltip={false}
-                    />
-                  </DropdownMenuItem>
-                ))}
-              </ButtonGroup>
-            </CardBody>
-          </Card>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <DropdownMenuContent align="start" portal={portal}>
+            <Card>
+              <CardBody>
+                <ButtonGroup>
+                  {levels.map((level) => (
+                    <DropdownMenuItem key={`heading-${level}`} asChild>
+                      <HeadingButton
+                        editor={editor}
+                        level={level}
+                        text={`Heading ${level}`}
+                        showTooltip={false}
+                        onClick={() => setIsOpen(false)}
+                      />
+                    </DropdownMenuItem>
+                  ))}
+                </ButtonGroup>
+              </CardBody>
+            </Card>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     )
   }
 )

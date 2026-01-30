@@ -20,7 +20,9 @@ function DropdownMenuPortal({
 const DropdownMenuTrigger = forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
->(({ ...props }, ref) => <DropdownMenuPrimitive.Trigger ref={ref} {...props} />)
+>(({ ...props }, ref) => (
+  <DropdownMenuPrimitive.Trigger ref={ref} type="button" {...props} />
+))
 DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 
 const DropdownMenuGroup = DropdownMenuPrimitive.Group
@@ -29,7 +31,17 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub
 
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup
 
-const DropdownMenuItem = DropdownMenuPrimitive.Item
+const DropdownMenuItem = forwardRef<
+  React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.Item
+    ref={ref}
+    className={cn(className)}
+    {...props}
+  />
+))
+DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 
 const DropdownMenuSubTrigger = DropdownMenuPrimitive.SubTrigger
 

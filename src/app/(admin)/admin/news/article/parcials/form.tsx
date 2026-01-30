@@ -8,15 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Command,
+  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -469,37 +467,53 @@ export default function ArticleForm({
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label >Categories</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
+              <Label>Categories</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between"
+                  >
                     {formData.categoryIds.length > 0
                       ? `${formData.categoryIds.length} selected`
                       : "Select Categories"}
-                    <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="start">
-                  <DropdownMenuLabel>Categories</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {categories.length === 0 && (
-                    <div className="p-2 text-sm text-muted-foreground">
-                      No categories found
-                    </div>
-                  )}
-                  {categories.map((category) => (
-                    <DropdownMenuCheckboxItem
-                      key={category.id}
-                      checked={formData.categoryIds.includes(category.id)}
-                      onCheckedChange={(checked) =>
-                        handleCategoryChange(checked, category.id)
-                      }
-                    >
-                      {category.name}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search categories..." />
+                    <CommandList>
+                      <CommandEmpty>No category found.</CommandEmpty>
+                      <CommandGroup>
+                        {categories.map((category) => (
+                          <CommandItem
+                            key={category.id}
+                            value={category.name}
+                            onSelect={() => {
+                              handleCategoryChange(
+                                !formData.categoryIds.includes(category.id),
+                                category.id
+                              )
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.categoryIds.includes(category.id)
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {category.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               {formData.categoryIds.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {formData.categoryIds.map((id) => {
@@ -518,36 +532,53 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label >Tags</Label>
-              <div className="border   overflow-hidden relative">
-                <Command shouldFilter={false}>
-                  <div className="relative ">
+              <Label>Tags</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-full justify-between"
+                  >
+                    {formData.tagIds.length > 0
+                      ? `${formData.tagIds.length} selected`
+                      : "Select Tags"}
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0" align="start">
+                  <Command shouldFilter={false}>
                     <CommandInput
                       placeholder="Search tags..."
                       value={searchTerm}
                       onValueChange={setSearchTerm}
                     />
-                    {searchTerm &&
-                      !availableTags.some(
-                        (tag) =>
-                          tag.name.toLowerCase() === searchTerm.toLowerCase(),
-                      ) && (
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="absolute right-1 top-1/2 h-40 -translate-y-1/2 h-7  w-7"
-                          onClick={() => handleCreateTag(searchTerm)}
-                          disabled={isCreatingTag}
-                        >
-                          {isCreatingTag ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Plus className="h-4 w-4" />
-                          )}
-                        </Button>
-                      )}
-                  </div>
-                  <CommandList className={!searchTerm ? "hidden" : "max-h-[200px] overflow-y-auto"}>
+                    <CommandList>
+                        {searchTerm &&
+                        !availableTags.some(
+                          (tag) =>
+                            tag.name.toLowerCase() === searchTerm.toLowerCase(),
+                        ) && (
+                          <CommandGroup>
+                              <div className="flex items-center justify-center p-1">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="w-full justify-start h-auto py-1.5"
+                                  onClick={() => handleCreateTag(searchTerm)}
+                                  disabled={isCreatingTag}
+                                >
+                                  {isCreatingTag ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <Plus className="mr-2 h-4 w-4" />
+                                  )}
+                                  Create "{searchTerm}"
+                                </Button>
+                              </div>
+                          </CommandGroup>
+                        )}
+                      <CommandEmpty>No tag found.</CommandEmpty>
                       <CommandGroup>
                         {availableTags
                           .filter((tag) =>
@@ -568,7 +599,7 @@ export default function ArticleForm({
                             >
                               <Check
                                 className={cn(
-                                  "mx-2 h-4 w-2 hover:text-primary",
+                                  "mr-2 h-4 w-4",
                                   formData.tagIds.includes(tag.id)
                                     ? "opacity-100"
                                     : "opacity-0",
@@ -579,8 +610,9 @@ export default function ArticleForm({
                           ))}
                       </CommandGroup>
                     </CommandList>
-                </Command>
-              </div>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               {formData.tagIds.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {formData.tagIds.map((id) => {
