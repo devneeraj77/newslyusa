@@ -139,17 +139,18 @@ export default function EmblaCarouselAutoplay({
         <div className="flex items-center justify-between mt-4 mb-8  px-4">
           <div className="flex gap-2">
             <Button
+            
               variant="outline"
-              size="icon"
-              className="rounded-full"
+              size="icon-lg"
+              className="rounded-full text-primary hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground"
               onClick={() => onAutoplayButtonClick(() => api?.scrollPrev())}
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
             <Button
               variant="outline"
-              size="icon"
-              className="rounded-full"
+              size="icon-lg"
+              className="rounded-full text-primary hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground" 
               onClick={() => onAutoplayButtonClick(() => api?.scrollNext())}
             >
               <ChevronRight className="h-5 w-5" />
@@ -159,20 +160,20 @@ export default function EmblaCarouselAutoplay({
           {/* Progress Bar */}
           <div
             className={cn(
-              "flex-1 max-w-[150px] mx-8 h-[2px] bg-zinc-800 rounded-full overflow-hidden transition-opacity duration-300",
+              "flex-1 max-w-[150px] mx-8 h-[2px] bg-muted-foreground/10 rounded-full overflow-hidden transition-opacity duration-300",
               isPlaying ? "opacity-100" : "opacity-0"
             )}
           >
             <div
               ref={progressBarRef}
-              className="h-full bg-white"
+              className="h-full bg-primary"
               style={{ width: "0%" }}
             />
           </div>
 
           <Button
-            variant="outline"
-            className="rounded-full rounded-full bg-transparent border-border  hover:bg-foreground hover:text-accent-foreground active:text-accent-foreground px-8"
+            variant="ghost"
+            className="rounded-full rounded-full bg-transparent  aactive:focus:bg-shade  bg-accent text-accent-foreground hover:bg-shade active:bg-shade active:text-accent-foreground px-8"
             onClick={toggleAutoplay}
           >
             {isPlaying ? "Stop" : "Play"}

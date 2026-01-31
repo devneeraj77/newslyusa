@@ -110,7 +110,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
             size="icon"
             onClick={onPrevButtonClick}
             disabled={prevBtnDisabled}
-            className=" rounded-full justify-center flex items-center justify-center disabled:opacity-30 transition-colors"
+            className="hover:bg-primary active:bg-primary/90  active:text-primary-foreground hover:text-primary-foreground rounded-full justify-center flex items-center justify-center disabled:opacity-30  transition-colors"
           >
             <ChevronLeft />
           </Button>
@@ -119,7 +119,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
             size="icon"
             onClick={onNextButtonClick}
             disabled={nextBtnDisabled}
-            className=" rounded-full justify-center flex items-center justify-center disabled:opacity-30 transition-colors"
+            className="hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground rounded-full justify-center flex items-center justify-center disabled:opacity-30 transition-colors"
           >
             <ChevronRight size={44} />
           </Button>

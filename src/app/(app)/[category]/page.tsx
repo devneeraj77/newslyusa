@@ -1,7 +1,6 @@
 import db from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Post, Category, Admin } from "@prisma/client";
 import Image from "next/image";
 import { stripHtml } from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";

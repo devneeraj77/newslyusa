@@ -36,7 +36,9 @@ import { createTag } from "../../tags/actions";
 import { saveArticle, checkSlugUnique } from "../actions";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { Badge } from "@/components/ui/badge";
 
 const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
   ssr: false,
@@ -94,11 +96,33 @@ export default function ArticleForm({
 }: ArticleFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [availableTags, setAvailableTags] = useState<Tag[]>(tags);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categorySearchTerm, setCategorySearchTerm] = useState("");
+
+  const categoriesRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        categoriesRef.current &&
+        !categoriesRef.current.contains(event.target as Node)
+      ) {
+        setCategorySearchTerm("");
+      }
+      if (tagsRef.current && !tagsRef.current.contains(event.target as Node)) {
+        setSearchTerm("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleCreateTag = async (name: string) => {
     if (!name.trim()) return;
@@ -106,6 +130,7 @@ export default function ArticleForm({
     try {
       const res = await createTag({ name: name });
       if (res.success && res.data) {
+        toast.success("Tag created successfully");
         setAvailableTags((prev) => [...prev, res.data]);
         setFormData((prev) => ({
           ...prev,
@@ -113,9 +138,11 @@ export default function ArticleForm({
         }));
         setSearchTerm("");
       } else {
+        toast.error(res.error || "Failed to create tag");
         console.error(res.error);
       }
     } catch (e) {
+      toast.error("Failed to create tag");
       console.error(e);
     } finally {
       setIsCreatingTag(false);
@@ -188,7 +215,7 @@ export default function ArticleForm({
             try {
               const res = await checkSlugUnique(
                 generatedSlug,
-                initialData?.id || ""
+                initialData?.id || "",
               );
 
               if (!res.isUnique) {
@@ -199,7 +226,7 @@ export default function ArticleForm({
                   uniqueSlug = `${generatedSlug}-${counter}`;
                   const res2 = await checkSlugUnique(
                     uniqueSlug,
-                    initialData?.id || ""
+                    initialData?.id || "",
                   );
                   if (res2.isUnique) isUnique = true;
                   else counter++;
@@ -290,13 +317,12 @@ export default function ArticleForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const payload = {
         ...formData,
         // Optional: Ensure date is in ISO string or passed as string
-        createdAt: formData.createdAt, 
+        createdAt: formData.createdAt,
         id: initialData?.id,
       };
 
@@ -307,9 +333,15 @@ export default function ArticleForm({
         throw new Error(res.message || "Something went wrong");
       }
 
+      toast.success(
+        initialData
+          ? "Article updated successfully"
+          : "Article created successfully",
+      );
+
       // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
-      // router.refresh(); 
-      
+      // router.refresh();
+
       if (!initialData) {
         // Reset form on successful create
         setFormData({
@@ -324,34 +356,28 @@ export default function ArticleForm({
           tagIds: [],
         });
       }
-      
+
       router.push("/admin/news/allArticle");
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
-    <div className=" mx-auto p-4 bg-background ">
+    <div className=" mx-auto p-4 md:p-8 bg-background ">
       <h2 className="text-2xl font-bold mb-6">
         {initialData ? "Edit Article" : "Create New Article"}
       </h2>
 
-      {error && (
-        <div className="bg-destructive/15 text-destructive p-3  mb-4 text-sm">
-          {error}
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="title" >Title</Label>
+            <div className="space-y-2 ">
+              <Label htmlFor="title">Title</Label>
               <Input
+                size="lg"
                 id="title"
                 name="title"
                 placeholder="Article Title"
@@ -361,10 +387,12 @@ export default function ArticleForm({
               />
             </div>
 
-            <div className="space-y-2 h-18">
-              <Label htmlFor="slug" >Slug</Label>
+            <div className="space-y-2  ">
+              <Label htmlFor="slug">Slug</Label>
               <div className="relative">
                 <Input
+                  size="lg"
+                  className="py-4"
                   id="slug"
                   name="slug"
                   placeholder="article-slug"
@@ -381,7 +409,7 @@ export default function ArticleForm({
               {slugMessage && (
                 <div
                   className={cn(
-                    "text-xs flex items-center gap-1",
+                    "text-xs flex items-center ",
                     slugMessage.type === "success"
                       ? "text-green-600"
                       : "text-destructive",
@@ -398,7 +426,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description" >Description</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -410,7 +438,7 @@ export default function ArticleForm({
             </div>
 
             <div className="space-y-2">
-              <Label >Featured Image</Label>
+              <Label>Featured Image</Label>
               <div className="flex flex-col gap-4">
                 {formData.image && (
                   <div className="relative bg-red-100 aspect-[17/5]  overflow-hidden ">
@@ -443,7 +471,7 @@ export default function ArticleForm({
                         return (
                           <div
                             onClick={() => open()}
-                            className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center  border border-dashed bg-muted/50 transition-colors hover:bg-muted"
+                            className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center rounded-md  border border-dashed bg-muted/20 transition-colors hover:bg-muted/30"
                           >
                             <ImageIcon className="h-10 w-10 text-muted-foreground" />
                             <span className="mt-2 text-sm text-muted-foreground">
@@ -454,7 +482,7 @@ export default function ArticleForm({
                       }}
                     </CldUploadWidget>
                   ) : (
-                    <div className="flex aspect-[17/5] flex-col items-center justify-center border border-dashed bg-muted/50 text-destructive">
+                    <div className="flex aspect-[17/5] flex-col items-center justify-center rounded-md border border-dashed bg-muted/20 text-destructive">
                       <span className="text-sm">
                         Missing Cloudinary Upload Preset
                       </span>
@@ -466,36 +494,39 @@ export default function ArticleForm({
           </div>
 
           <div className="space-y-6">
-            <div className="space-y-2">
+            <div className="space-y-2" ref={categoriesRef}>
               <Label>Categories</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-full justify-between"
+              <div className="border rounded-md overflow-hidden relative">
+                <Command shouldFilter={false}>
+                  <CommandInput
+                    placeholder="Search categories..."
+                    value={categorySearchTerm}
+                    onValueChange={setCategorySearchTerm}
+                  />
+                  <CommandList
+                    className={
+                      !categorySearchTerm
+                        ? "hidden"
+                        : "max-h-[200px] overflow-y-auto"
+                    }
                   >
-                    {formData.categoryIds.length > 0
-                      ? `${formData.categoryIds.length} selected`
-                      : "Select Categories"}
-                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search categories..." />
-                    <CommandList>
-                      <CommandEmpty>No category found.</CommandEmpty>
-                      <CommandGroup>
-                        {categories.map((category) => (
+                    <CommandEmpty>No category found.</CommandEmpty>
+                    <CommandGroup>
+                      {categories
+                        .filter((category) =>
+                          category.name
+                            .toLowerCase()
+                            .includes(categorySearchTerm.toLowerCase()),
+                        )
+                        .map((category) => (
                           <CommandItem
                             key={category.id}
                             value={category.name}
                             onSelect={() => {
                               handleCategoryChange(
                                 !formData.categoryIds.includes(category.id),
-                                category.id
-                              )
+                                category.id,
+                              );
                             }}
                           >
                             <Check
@@ -503,128 +534,100 @@ export default function ArticleForm({
                                 "mr-2 h-4 w-4",
                                 formData.categoryIds.includes(category.id)
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             {category.name}
                           </CommandItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </div>
               {formData.categoryIds.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {formData.categoryIds.map((id) => {
                     const cat = categories.find((c) => c.id === id);
-                    return cat ? (
-                      <span
-                        key={id}
-                        className="text-xs bg-muted/40 text-secondary-foreground px-2 py-1 "
-                      >
-                        {cat.name}
-                      </span>
-                    ) : null;
+                    return cat ? <Badge key={id}>{cat.name}</Badge> : null;
                   })}
                 </div>
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2" ref={tagsRef}>
               <Label>Tags</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-full justify-between"
-                  >
-                    {formData.tagIds.length > 0
-                      ? `${formData.tagIds.length} selected`
-                      : "Select Tags"}
-                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0" align="start">
-                  <Command shouldFilter={false}>
+              <div className="border rounded-md overflow-hidden relative">
+                <Command shouldFilter={false}>
+                  <div className="relative">
                     <CommandInput
                       placeholder="Search tags..."
                       value={searchTerm}
                       onValueChange={setSearchTerm}
                     />
-                    <CommandList>
-                        {searchTerm &&
-                        !availableTags.some(
-                          (tag) =>
-                            tag.name.toLowerCase() === searchTerm.toLowerCase(),
-                        ) && (
-                          <CommandGroup>
-                              <div className="flex items-center justify-center p-1">
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="w-full justify-start h-auto py-1.5"
-                                  onClick={() => handleCreateTag(searchTerm)}
-                                  disabled={isCreatingTag}
-                                >
-                                  {isCreatingTag ? (
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  ) : (
-                                    <Plus className="mr-2 h-4 w-4" />
-                                  )}
-                                  Create "{searchTerm}"
-                                </Button>
-                              </div>
-                          </CommandGroup>
-                        )}
-                      <CommandEmpty>No tag found.</CommandEmpty>
-                      <CommandGroup>
-                        {availableTags
-                          .filter((tag) =>
-                            tag.name
-                              .toLowerCase()
-                              .includes(searchTerm.toLowerCase()),
-                          )
-                          .map((tag) => (
-                            <CommandItem
-                              key={tag.id}
-                              value={tag.name}
-                              onSelect={() => {
-                                handleTagChange(
-                                  !formData.tagIds.includes(tag.id),
-                                  tag.id,
-                                );
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  formData.tagIds.includes(tag.id)
-                                    ? "opacity-100"
-                                    : "opacity-0",
-                                )}
-                              />
-                              {tag.name}
-                            </CommandItem>
-                          ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                    {searchTerm &&
+                      !availableTags.some(
+                        (tag) =>
+                          tag.name.toLowerCase() === searchTerm.toLowerCase(),
+                      ) && (
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                          onClick={() => handleCreateTag(searchTerm)}
+                          disabled={isCreatingTag}
+                        >
+                          {isCreatingTag ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                        </Button>
+                      )}
+                  </div>
+                  <CommandList
+                    className={
+                      !searchTerm ? "hidden" : "max-h-[200px] overflow-y-auto"
+                    }
+                  >
+                    <CommandEmpty>No tag found.</CommandEmpty>
+                    <CommandGroup>
+                      {availableTags
+                        .filter((tag) =>
+                          tag.name
+                            .toLowerCase()
+                            .includes(searchTerm.toLowerCase()),
+                        )
+                        .map((tag) => (
+                          <CommandItem
+                            key={tag.id}
+                            value={tag.name}
+                            onSelect={() => {
+                              handleTagChange(
+                                !formData.tagIds.includes(tag.id),
+                                tag.id,
+                              );
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.tagIds.includes(tag.id)
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {tag.name}
+                          </CommandItem>
+                        ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </div>
               {formData.tagIds.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {formData.tagIds.map((id) => {
                     const tag = availableTags.find((t) => t.id === id);
-                    return tag ? (
-                      <span
-                        key={id}
-                        className="text-xs bg-muted/40 text-secondary-foreground px-2 py-1 "
-                      >
-                        {tag.name}
-                      </span>
-                    ) : null;
+                    return tag ? <Badge key={id}>{tag.name}</Badge> : null;
                   })}
                 </div>
               )}
@@ -633,7 +636,7 @@ export default function ArticleForm({
         </div>
         <div>
           <div className="space-y-2  ">
-            <Label htmlFor="content" >Content</Label>
+            <Label htmlFor="content">Content</Label>
             {/* <TiptapEditor
               content={formData.content}
               onChange={handleContentChange}
@@ -644,7 +647,6 @@ export default function ArticleForm({
               content={formData.content}
               onChange={handleContentChange}
               placeholder="Write your article content here..."
-            
             />
           </div>
           <div className="flex items-center space-x-2 pt-4">

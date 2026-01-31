@@ -29,6 +29,7 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-shade: var(--accent-shade);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -68,8 +69,9 @@
   --secondary-foreground: #101619;
 
   /* 10% - Accent Color */
-  --accent: #F8D53A;
+  --accent: #f5b700;
   --accent-foreground: #101619;
+  --accent-shade: #e0a800;
 
   --muted: #64748b;
   --muted-foreground: #475569;
@@ -78,20 +80,20 @@
 
   --border: #d1d5db;
   --input: #e2e8f0;
-  --ring: #F8D53A;
+  --ring: #f8d53a;
 
   /* Sidebar follows the 30% rule (Dark contrast) */
   --sidebar: #101619;
   --sidebar-foreground: #f3f6f7;
-  --sidebar-primary: #F8D53A;
+  --sidebar-primary: #f8d53a;
   --sidebar-primary-foreground: #101619;
   --sidebar-accent: #1f2937;
   --sidebar-accent-foreground: #f3f6f7;
   --sidebar-border: #1f2937;
-  --sidebar-ring: #F8D53A;
+  --sidebar-ring: #f8d53a;
 
   --chart-1: #101619;
-  --chart-2: #F8D53A;
+  --chart-2: #f8d53a;
   --chart-3: #475569;
   --chart-4: #94a3b8;
   --chart-5: #cbd5e1;
@@ -119,23 +121,23 @@
 
   --accent: #ceb02c;
   --accent-foreground: #101619;
+  --accent-shade: #242119;
 
   --destructive: #ef4444;
 
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.1);
-  --ring: #F8D53A;
+  --ring: #f8d53a;
 
   --sidebar: #0a0e10;
   --sidebar-foreground: #f3f6f7;
-  --sidebar-primary: #F8D53A;
+  --sidebar-primary: #f8d53a;
   --sidebar-primary-foreground: #101619;
   --sidebar-accent: #1a2023;
   --sidebar-accent-foreground: #f3f6f7;
   --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #F8D53A;
+  --sidebar-ring: #f8d53a;
 }
-
 
 @layer base {
   * {
@@ -151,7 +153,7 @@
   @apply text-4xl font-extrabold font-mono lg:text-5xl mb-4;
 }
 .ProseMirror h2 {
-  @apply text-3xl font-semibold mb-3;
+  @apply text-3xl font-semibold mb-3 ;
 }
 .ProseMirror h3 {
   @apply text-2xl font-semibold mb-2;
@@ -173,8 +175,12 @@
 }
 
 @keyframes embla-progress {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(100%, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
 }
 
 /* Custom Scrollbar 4px */

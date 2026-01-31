@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import {  Geist, Lora, Montserrat } from "next/font/google";
 import "../globals.css";
-import "@/styles/_variables.scss";
+// import "@/styles/_variables.scss";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header-with-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";

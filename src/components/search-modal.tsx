@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/command";
 
 import { LucideIcon, SearchIcon, Newspaper } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
 
 export type CommandItem = {
   id: string;
@@ -100,7 +100,7 @@ export function SearchModal({ children }: SearchModalProps) {
             value={query}
             onValueChange={setQuery}
           />
-          <CommandList className="max-h-[380px] min-h-[380px] px-2 md:px-0">
+          <CommandList className="max-h-[380px] min-h-[380px]  px-2 md:px-0">
             <CommandEmpty className="flex min-h-[280px] flex-col items-center justify-center">
               <SearchIcon className="text-muted-foreground mb-2 size-6" />
               <p className="text-muted-foreground mb-1 text-xs">
@@ -111,12 +111,12 @@ export function SearchModal({ children }: SearchModalProps) {
                     : "No news found"}
               </p>
             </CommandEmpty>
-            <CommandGroup heading={query ? "Results" : "Latest News"}>
+            <CommandGroup  heading={query ? "Results" : "Latest News"}>
               {results.map((item) => {
                 return (
                   <CommandItem
                     key={item.id}
-                    className="flex cursor-pointer items-center gap-3"
+                    className="flex cursor-pointer flex justify-between hover:bg-shade/10 items-center"
                     value={item.title}
                     onSelect={() => {
                       window.location.href = `/news/${item.slug}`; // Or use router.push
@@ -124,15 +124,15 @@ export function SearchModal({ children }: SearchModalProps) {
                     }}
                   >
                     {item.icon ? <item.icon className="size-5" /> : ""}
-                    <div className="flex flex-col px-2">
-                      <p className="max-w-[250px] truncate text-sm font-medium">
+                    <div className="flex flex-col min-w-10  md:basis-4/5 ">
+                      <p className="md:max-w-14 min-w-10    truncate text-sm font-medium">
                         {item.title}
                       </p>
-                      <p className="text-muted-foreground text-xs line-clamp-1">
-                        {item.description}
+                      <p className=" text-muted-foreground  text-xs line-clamp-1">
+                        {stripHtml(item.description)}
                       </p>
                     </div>
-                    <p className="text-muted-foreground ml-auto text-xs px-2">
+                    <p className="min-w-10 md:basis-1/5  text-end text-muted-foreground text-xs">
                       {item.category}
                     </p>
                   </CommandItem>

@@ -288,13 +288,14 @@ export function SimpleEditor({
   return (
     <div
       className={cn(
-        "border bg-muted/10 ",
+        "bg-muted/10 rounded-md ",
         isFullScreen &&
           "fixed inset-0 z-50 bg-background h-screen w-screen   overflow-hidden"
       )}
     >
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
+        className="rounded-t-md"
           ref={toolbarRef}
           style={{
             ...(isMobile

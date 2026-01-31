@@ -1,48 +1,66 @@
 "use client"
 
+import * as React from "react"
+import { useTheme } from "next-themes"
+
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button"
 
 // --- Icons ---
 import { MoonStarIcon } from "@/components/tiptap-icons/moon-star-icon"
 import { SunIcon } from "@/components/tiptap-icons/sun-icon"
-import { useEffect, useState } from "react"
+import { LaptopIcon } from "@/components/tiptap-icons/laptop-icon"
 
 export function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+  const { setTheme, theme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    const handleChange = () => setIsDarkMode(mediaQuery.matches)
-    mediaQuery.addEventListener("change", handleChange)
-    return () => mediaQuery.removeEventListener("change", handleChange)
+  React.useEffect(() => {
+    setMounted(true)
   }, [])
 
-  useEffect(() => {
-    const initialDarkMode =
-      !!document.querySelector('meta[name="color-scheme"][content="dark"]') ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    setIsDarkMode(initialDarkMode)
-  }, [])
+  if (!mounted) {
+    return (
+      <Button data-style="ghost" type="button">
+        <SunIcon className="tiptap-button-icon" />
+      </Button>
+    )
+  }
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDarkMode)
-  }, [isDarkMode])
-
-  const toggleDarkMode = () => setIsDarkMode((isDark) => !isDark)
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark")
+    } else if (theme === "dark") {
+      setTheme("system")
+    } else {
+      setTheme("light")
+    }
+  }
 
   return (
     <Button
       type="button"
-      onClick={toggleDarkMode}
-      aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
       data-style="ghost"
+      className="relative"
     >
-      {isDarkMode ? (
-        <MoonStarIcon className="tiptap-button-icon" />
-      ) : (
-        <SunIcon className="tiptap-button-icon" />
-      )}
+      <SunIcon
+        className={`tiptap-button-icon transition-all ${
+          theme === "light" ? "scale-100 rotate-0" : "scale-0 -rotate-90 absolute"
+        }`}
+      />
+      <MoonStarIcon
+        className={`tiptap-button-icon transition-all ${
+          theme === "dark" ? "scale-100 rotate-0" : "scale-0 rotate-90 absolute"
+        }`}
+      />
+      <LaptopIcon
+        className={`tiptap-button-icon transition-all ${
+          theme === "system" ? "scale-100 rotate-0" : "scale-0 rotate-90 absolute"
+        }`}
+      />
+      <span className="sr-only">Toggle theme</span>
     </Button>
   )
 }

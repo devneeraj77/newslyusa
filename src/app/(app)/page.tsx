@@ -321,7 +321,7 @@ export default function Home() {
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-2">
             <div className="top-4 left-4 z-20 flex justify-between items-center">
-              <span className="pl-2 p-1  my-3 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
+              <span className="pl-2 p-1  my-3 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
                 Best of the week
               </span>
             </div>
@@ -466,7 +466,7 @@ export default function Home() {
       <hr className="border m-4 md:mx-16 lg:mx-17  border-dashed" />
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-3 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
+          <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
             Editor's pick
           </p>
         </div>
@@ -548,7 +548,7 @@ export default function Home() {
       <section className="py-2 mx-auto container my-8">
         <div className="md:flex  gap-4">
           <div className="md:basis-1/2 ">
-            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
+            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
               Health News
             </p>
             {loadingHealth ? (
@@ -594,7 +594,7 @@ export default function Home() {
             )}
           </div>
           <div className="md:basis-1/2  ">
-            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
+            <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
               Sports News
             </p>
 
@@ -644,7 +644,7 @@ export default function Home() {
       </section>
       <section className=" py-2 mx-auto container my-2">
         <div className="flex">
-          <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
+          <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
             More News
           </p>
         </div>

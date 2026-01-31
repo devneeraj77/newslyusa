@@ -80,7 +80,7 @@ export default async function NewsPage({ params }: Props) {
                       <BreadcrumbLink href="/">Home</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
-                    <BreadcrumbItem className="text-destructive font-semibold">
+                    <BreadcrumbItem className="text-primary font-semibold">
                       <BreadcrumbLink href={`/${category}`}>
                         {post.categories.find((c) => c.slug === category)
                           ?.name || category}
@@ -99,11 +99,11 @@ export default async function NewsPage({ params }: Props) {
                 {post.title}
               </h1>
               <div className="flex items-end justify-between">
-                <div className="flex  pt-4 gap-2 items-center text-sm text-muted-foreground">
+                <div className="flex  md:pt-2  gap-2 items-center text-sm text-muted-foreground">
                   {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
 
-                  <div className=" h-10 w-10  flex justify-center items-center rounded-full bg-muted/50">
-                    <IconUserFilled size={20} className="text-secondary" />
+                  <div className=" h-9 w-9  flex justify-center items-center  rounded-full bg-muted/20">
+                    <IconUserFilled size={20} className="text-primary/10" />
                   </div>
                   <div className="">
                     <div className="flex font-mono text-sm font-bold items-center ">

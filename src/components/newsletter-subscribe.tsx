@@ -30,7 +30,8 @@ export function NewsletterSubscribe() {
       }
 
       toast.success(
-        data.message || "Subscribed successfully! Thank you for joining our newsletter.",
+        data.message ||
+          "Subscribed successfully! Thank you for joining our newsletter.",
       );
       setEmail("");
     } catch (error) {
@@ -45,22 +46,41 @@ export function NewsletterSubscribe() {
   };
 
   return (
-    <div className="w-full mmax-w-fit text-left   mx-auto    border-muted text-center">
-      
+    <div className="w-full mmax-w-fit text-left   mx-auto  text-center">
       <h3 className="text-xl font-bold mb-2">Subscribe to our newsletter</h3>
       <p className="text-muted-foreground text-xs mb-6">
         Get the latest news and updates delivered directly to your inbox.
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
         <Input
+          size="lg"
           type="email"
           placeholder="Enter your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="acitve:border rounded-lg hover:text-primary bg-background hover:text-accent hover:bg-accent-foreground focus:border "
+          className="
+    w-full
+    px-4 py-2
+    text-base
+    border border-gray-300
+    rounded-md
+    focus:outline-none
+    focus:ring-2 focus:ring-blue-500
+    focus:border-blue-500
+    placeholder-gray-400
+    transition
+    duration-200
+  "
         />
-        <Button type="submit" variant="default"  className="py-5  " disabled={isLoading}>
+
+        <Button
+          type="submit"
+          variant="default"
+          size={"lg"}
+          className=" bg-accent text-accent-foreground hover:bg-shade "
+          disabled={isLoading}
+        >
           {isLoading ? "Subscribing..." : "Subscribe"}
         </Button>
       </form>

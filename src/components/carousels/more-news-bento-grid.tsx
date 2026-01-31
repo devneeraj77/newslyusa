@@ -292,9 +292,16 @@ const NewsGrid = () => {
                   : newsData[0].title}
               </h2>
               <p className="text-popover-foreground text-sm mb-4 line-clamp-4 md:line-clamp-none">
-                {newsData[0].description
+                {(newsData[0].description
                   ? stripHtml(newsData[0].description)
-                  : stripHtml(newsData[0].content)}
+                  : stripHtml(newsData[0].content)
+                ).slice(0, 160) +
+                  ((newsData[0].description
+                    ? stripHtml(newsData[0].description)
+                    : stripHtml(newsData[0].content)
+                  ).length > 160
+                    ? "..."
+                    : "")}
               </p>
               <div className="flex items-center text-xs text-popover-foreground uppercase tracking-wider font-medium">
                 <span>{newsData[0].timestamp}</span>

@@ -71,7 +71,7 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
     });
 
     return (
-      <div className="md:p-6">
+      <div className="">
         <ArticleForm
           initialData={article}
           categories={categories}

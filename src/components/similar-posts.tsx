@@ -1,6 +1,7 @@
 import { Dot } from "lucide-react";
 import Link from "next/link";
 import db from "@/lib/prisma";
+import { Skeleton } from "./ui/skeleton";
 
 interface SimilarPostsProps {
   currentPostId: string;
@@ -24,20 +25,20 @@ function formatTimeAgo(dateString: string | Date) {
 export function SimilarPostsSkeleton() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="p-1 border-b border-dashed border-muted">
-        <div className="h-2.5 w-24 bg-muted animate-pulse  mb-1" />
+      <div className="p-1 border-b border-dashed border-muted/10">
+        <Skeleton className="h-2.5 w-24  animate-pulse  mb-1" />
       </div>
       <div className="flex flex-col gap-6">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="flex flex-col gap-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-2 mb-1">
-                <div className="h-3 w-16 bg-muted animate-pulse " />
-                <div className="h-3 w-12 bg-muted animate-pulse " />
+                <Skeleton className="h-3 w-16  animate-pulse " />
+                <Skeleton className="h-3 w-12  animate-pulse " />
               </div>
               <div className="space-y-1">
-                <div className="h-3 md:h-4 w-full bg-muted animate-pulse " />
-                <div className="h-3 md:h-4 w-3/4 bg-muted animate-pulse " />
+                <Skeleton className="h-3 md:h-4 w-full  animate-pulse " />
+                <Skeleton className="h-3 md:h-4 w-3/4  animate-pulse " />
               </div>
             </div>
           </div>
