@@ -134,7 +134,7 @@ export default async function NewsPage({ params }: Props) {
               </div>
             </header>
 
-            <div className="prose dark:prose-invert max-w-none">
+            <div className="prose dark:prose-invert max-w-none prose-p:font-sans prose-headings:font-mono prose-a:text-[#0000ff] prose-a:underline prose-a:font-medium  mt-6">
               <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
                 <Image
                   src={

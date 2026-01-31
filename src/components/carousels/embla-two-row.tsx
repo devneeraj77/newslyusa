@@ -102,12 +102,12 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
       </div>
 
       {/* Controls: Flexbox setup to match left/right layout */}
-      <div className="flex items-center justify-between   mt-8">
+      <div className="flex items-center justify-between px-2  mt-8">
         {/* Navigation Arrows on the Left */}
         <div className="flex  gap-3">
           <Button
             variant="outline"
-            size="icon"
+            size="icon-lg"
             onClick={onPrevButtonClick}
             disabled={prevBtnDisabled}
             className="hover:bg-primary active:bg-primary/90  active:text-primary-foreground hover:text-primary-foreground rounded-full justify-center flex items-center justify-center disabled:opacity-30  transition-colors"
@@ -116,10 +116,10 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
           </Button>
           <Button
             variant="outline"
-            size="icon"
+            size="icon-lg"
             onClick={onNextButtonClick}
             disabled={nextBtnDisabled}
-            className="hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground rounded-full justify-center flex items-center justify-center disabled:opacity-30 transition-colors"
+            className="hover:bg-primary  active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground rounded-full justify-center flex items-center justify-center disabled:opacity-30 transition-colors"
           >
             <ChevronRight size={44} />
           </Button>

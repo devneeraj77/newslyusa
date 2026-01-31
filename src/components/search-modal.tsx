@@ -86,7 +86,7 @@ export function SearchModal({ children }: SearchModalProps) {
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <ModalTrigger asChild>{children}</ModalTrigger>
-      <ModalContent className="p-1 rounded-lg">
+      <ModalContent className="p-1 border md:mt-40 rounded-lg">
         <ModalTitle className="sr-only">Search</ModalTitle>
         <Command
           className="bg-background md:bg-card rounded-md "
@@ -100,8 +100,8 @@ export function SearchModal({ children }: SearchModalProps) {
             value={query}
             onValueChange={setQuery}
           />
-          <CommandList className="max-h-[380px] min-h-[380px]  px-2 md:px-0">
-            <CommandEmpty className="flex min-h-[280px] flex-col items-center justify-center">
+          <CommandList className="md:max-h-[380px] md:min-h-[380px] max-h-[50vh] px-2 md:px-0">
+            <CommandEmpty className="flex md:min-h-[280px] min-h-[150px] flex-col items-center justify-center">
               <SearchIcon className="text-muted-foreground mb-2 size-6" />
               <p className="text-muted-foreground mb-1 text-xs">
                 {loading

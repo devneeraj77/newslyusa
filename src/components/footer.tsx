@@ -120,46 +120,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Products */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">
-              Products
-            </h3>
-            <ul className="flex flex-col gap-3 text-sm text-muted-foreground font-medium">
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-muted-foreground transition-colors"
-                >
-                  Swiftly
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-muted-foreground transition-colors"
-                >
-                  Rareblocks
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-muted-foreground transition-colors"
-                >
-                  ClarityUI
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-muted-foreground transition-colors"
-                >
-                  NewslyUSA
-                </a>
-              </li>
-            </ul>
-          </div>
+          
 
           {/* Legals */}
           <div className="flex flex-col gap-4">
@@ -197,6 +158,70 @@ export function Footer() {
                   className="hover:text-muted-foreground transition-colors"
                 >
                   Licensing
+                </a>
+              </li>
+            </ul>
+          </div>
+          {/* Categories */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">
+              Categories
+            </h3>
+            <ul className="flex flex-col gap-3 text-sm text-muted-foreground font-medium">
+              <li>
+                <a
+                  href="/us"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  US
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/politics"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Politics
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/health"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Health
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/travel"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Travel
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/sports"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Sports
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/tech-and-media"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Tech & Media
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/entertainment"
+                  className="hover:text-muted-foreground transition-colors"
+                >
+                  Entertainment
                 </a>
               </li>
             </ul>

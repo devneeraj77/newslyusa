@@ -560,7 +560,7 @@ export default function Home() {
                         {[...Array(2)].map((_, i) => (
                           <div
                             key={i}
-                            className="aspect-[4/3] relative  overflow-hidden"
+                            className="aspect-[5/3] relative  overflow-hidden"
                           >
                             <Skeleton className="h-full w-full" />
                             <div className="absolute inset-0 p-2 flex flex-col justify-end">
@@ -607,7 +607,7 @@ export default function Home() {
                         {[...Array(2)].map((_, i) => (
                           <div
                             key={i}
-                            className="aspect-[4/3] relative  overflow-hidden"
+                            className="aspect-[5/3] relative  overflow-hidden"
                           >
                             <Skeleton className="h-full w-full" />
                             <div className="absolute inset-0 p-2 flex flex-col justify-end">
@@ -655,33 +655,14 @@ export default function Home() {
         </div>
       </section>
       <section className="min-h-90 flex items-center">
-        <div className="border-y border border-dashed border-slate-200 w-full max-w-5xl mx-auto  sm:px-10">
-          <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
-            <p className="text-xl font-medium max-w-md text-primary">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-            </p>
-            <Link
-              href="/"
-              className="flex items-center gap-2 rounded py-3 px-8 bg-primary hover:bg-primary/90 transition text-white"
-            >
-              <span>Stay updated on daily life.</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-4.5"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+        <div className='border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16'>
+            <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
+                <p className="text-xl font-medium max-w-md text-slate-800">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo, tempora!</p>
+                <Link href="/" className="flex items-center gap-2 font-semibold rounded-md py-3 px-8 bg-accent hover:bg-shade text-primary  transition ">
+                    <span>Stay updated on daily life</span>
+                    <IconArrowRight/>
+                </Link>
+            </div>
         </div>
       </section>
     </main>

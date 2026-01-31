@@ -6,17 +6,19 @@ import { NewsHeadlineSkeleton } from "@/components/carousels/news-carousel";
 export default function Loading() {
   return (
     <main className="items-center justify-center m-2">
-      <section className="container mx-auto flex flex-col items-center justify-center py-2">
+      <section className="container mx-auto flex flex-col items-center justify-center px-1 py-2">
         <div className="grid grid-cols-1 xl:grid-cols-4 w-full gap-2 lg:gap-4">
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-2">
             <div className="top-4 left-4 z-20 flex justify-between items-center">
-              <Skeleton className="h-8 w-40 my-3 ml-2" />
+              <span className="pl-2 p-1 my-3 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transparent">
+                <Skeleton className="h-6 w-32 bg-transparent" />
+              </span>
             </div>
 
             {/* Featured Story Skeleton */}
             <div className="relative group overflow-hidden bg-foreground aspect-[16/10] md:aspect-[24/10]">
-              <div className="relative bg-black w-full h-full">
+              <div className="relative bg-black w-screen lg:w-5xl aspect-[16/10] md:aspect-[24/10]">
                 <Skeleton className="h-full w-full " />
                 <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                   <div className="flex gap-2 items-center">
@@ -34,10 +36,8 @@ export default function Loading() {
             </div>
 
             {/* Sub Headlines Skeleton */}
-            <div className="md:pt-2 h-44">
-              <div className="flex items-center mt-2  md:mb-4 border pl-4  border-l-4 border-primary">
-                <Skeleton className="h-8 w-32" />
-              </div>
+            <div className="md:pt-2 mt-4 h-44">
+              <Skeleton className="h-8 w-32 mb-4" />
               <div className="w-full">
                 <div className="flex gap-4 overflow-hidden">
                   {[...Array(3)].map((_, index) => (
@@ -75,25 +75,27 @@ export default function Loading() {
       {/* Editor's Pick Skeleton */}
       <section className="py-2 mx-auto container my-2">
         <div className="flex">
-          <Skeleton className="h-8 w-40 m-3 ml-2" />
+          <span className="pl-3 py-1 m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transparent">
+             <Skeleton className="h-6 w-32 bg-transparent" />
+          </span>
         </div>
         <div className="flex flex-col gap-4 lg:flex-row mx-auto items-center justify-between sm:items-start">
-          <div className="w-full">
-            <div className="flex overflow-hidden">
+          <div className="w-full overflow-hidden">
+            <div className="flex gap-4">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="m-2 py-2 min-w-[300px] flex-1">
                   <Skeleton className="aspect-[16/10] w-full " />
                   <div className="mt-2 space-y-2">
-                    <div className="flex items-center gap-2 px-2">
+                    <div className="flex items-center gap-2">
                       <Skeleton className="h-3 w-16" />
                       <Skeleton className="h-3 w-3 rounded-full" />
                       <Skeleton className="h-3 w-20" />
                     </div>
-                    <div className="px-2 space-y-1">
+                    <div className=" space-y-1">
                       <Skeleton className="h-4 w-full" />
                       <Skeleton className="h-4 w-2/3" />
                     </div>
-                    <div className="pt-4 px-2 flex justify-between items-center">
+                    <div className="pt-4 flex justify-between items-center">
                       <Skeleton className="h-3 w-20" />
                       <Skeleton className="h-4 w-4" />
                     </div>
@@ -106,10 +108,12 @@ export default function Loading() {
       </section>
 
       {/* Health & Sports Skeleton */}
-      <section className="py-2 mx-auto container my-8">
+      <section className="py-2 mx-auto border container my-8">
         <div className="md:flex gap-4">
           <div className="md:basis-1/2">
-            <Skeleton className="h-8 w-40 m-2 mb-4 block" />
+             <span className="pl-3 py-1 m-2 mb-4 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transparent">
+                 <Skeleton className="h-6 w-32 bg-transparent" />
+            </span>
             <div className="w-full p-3">
               <div className="overflow-hidden">
                 <div className="flex -ml-4">
@@ -118,7 +122,7 @@ export default function Loading() {
                       {[...Array(2)].map((_, i) => (
                         <div
                           key={i}
-                          className="aspect-[4/3] relative overflow-hidden"
+                          className="aspect-[5/3] relative overflow-hidden"
                         >
                           <Skeleton className="h-full w-full" />
                           <div className="absolute inset-0 p-2 flex flex-col justify-end">
@@ -149,7 +153,9 @@ export default function Loading() {
             </div>
           </div>
           <div className="md:basis-1/2">
-            <Skeleton className="h-8 w-40 m-2 mb-4 block" />
+             <span className="pl-3 py-1 m-2 mb-4 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transparent">
+                 <Skeleton className="h-6 w-32 bg-transparent" />
+            </span>
             <div className="w-full p-3">
               <div className="overflow-hidden">
                 <div className="flex -ml-4">
@@ -158,7 +164,7 @@ export default function Loading() {
                       {[...Array(2)].map((_, i) => (
                         <div
                           key={i}
-                          className="aspect-[4/3] relative overflow-hidden"
+                          className="aspect-[5/3] relative overflow-hidden"
                         >
                           <Skeleton className="h-full w-full" />
                           <div className="absolute inset-0 p-2 flex flex-col justify-end">
@@ -194,7 +200,9 @@ export default function Loading() {
       {/* More News Skeleton */}
       <section className="py-2 mx-auto container my-2">
         <div className="flex">
-          <Skeleton className="h-8 w-40 m-3 ml-2" />
+           <span className="pl-3 py-1 m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transparent">
+                 <Skeleton className="h-6 w-32 bg-transparent" />
+            </span>
         </div>
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

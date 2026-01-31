@@ -94,13 +94,13 @@ export default async function SimilarPosts({
             className="group flex flex-col gap-3"
           >
             <div className="flex flex-col">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-1 text-primary">
+              <div className="flex items-center gap-2 text-xs  uppercase tracking-wider mb-1 text-primary">
                 <span>{post.categories[0]?.name}</span>
                 <span className="text-muted-foreground font-normal flex items-center">
                   <Dot size={16} /> {formatTimeAgo(post.createdAt)}
                 </span>
               </div>
-              <h4 className="font-bold text-xs md:text-base group-hover:underline line-clamp-2 leading-tight">
+              <h4 className="font-semibold text-xs text-primary font-mono md:text-base group-hover:underline line-clamp-2 leading-tight">
                 {post.title}
               </h4>
             </div>
