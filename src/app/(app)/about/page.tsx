@@ -1,42 +1,26 @@
-"use client";
-
-import Image from "next/image";
-import {
-  MapPinIcon,
-  StarIcon,
-  Linkedin,
-  Twitter,
-  Mail,
-  ShieldCheck,
-  Zap,
-  Flag,
-} from "lucide-react";
+import { ShieldCheck, Zap, Flag } from "lucide-react";
 import { ProfileCard } from "@/components/ui/profile-card";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { Metadata } from "next";
 import DotGrid from "@/components/DotGrid";
 
-export default function About() {
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about Newsly USA, our mission, and the team bringing you unbiased, real-time journalism.",
+  alternates: {
+    canonical: `${baseUrl}/about`,
+  },
+};
+
+export default async function About() {
   return (
     <main className="min-h-screen text-foreground">
       {/* Header Banner */}
       <section className="relative w-full min-h-80 flex items-center justify-center overflow-hidden mb-12">
-        {/* <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop"
-            alt="Newsroom Background"
-            fill
-            className="object-cover brightness-[0.25]"
-            priority
-          />
-        </div> */}
-        <div className="absolute inset-0 w-full h-full">
-            <DotGrid
+        <DotGrid
              dotSize={2}
              gap={20}
              baseColor="#9ca3af" // muted-foreground color roughly
@@ -44,7 +28,6 @@ export default function About() {
              proximity={100}
              shockRadius={150}
             />
-        </div>
         <div className="container relative z-10 mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-mono font-bold tracking-tighter  mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             About NewslyUSA

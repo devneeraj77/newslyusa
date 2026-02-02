@@ -1,4 +1,3 @@
-"use client";
 import type { Metadata } from "next";
 import {  Geist, Lora, Montserrat } from "next/font/google";
 import "../globals.css";
@@ -25,6 +24,31 @@ const montserrat = Montserrat({
 });
 
 import { Toaster } from "@/components/ui/sonner";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Newsly USA",
+    template: "%s | Newsly USA",
+  },
+  description: "Stay updated on daily life with Newsly USA.",
+  openGraph: {
+    title: "Newsly USA",
+    description: "Stay updated on daily life with Newsly USA.",
+    url: process.env.NEXT_PUBLIC_URL || "https://newslyusa.com",
+    siteName: "Newsly USA",
+    locale: "en_US",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@newslyusa",
+    creator: "@newslyusa",
+  },
+};
 
 export default function RootLayout({
   children,

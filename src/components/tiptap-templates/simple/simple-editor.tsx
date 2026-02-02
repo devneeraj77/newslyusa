@@ -288,7 +288,7 @@ export function SimpleEditor({
   return (
     <div
       className={cn(
-        "bg-muted/10 rounded-md ",
+        " bg-muted/10  rounded-md ",
         isFullScreen &&
           "fixed inset-0 z-50 bg-background h-screen w-screen   overflow-hidden"
       )}

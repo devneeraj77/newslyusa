@@ -227,13 +227,13 @@ export default async function NewsPage({ searchParams }: Props) {
                 <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline">
                   {mainPost.title}
                 </h1>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                <p className="text-muted-foreground/80 text-sm leading-relaxed mb-4 line-clamp-3">
                   {stripHtml(mainPost.content).substring(0, 200)}...
                 </p>
                 <div className="flex items-center text-xs font-bold uppercase tracking-wider">
-                  <span className="text-popover-foreground">{mainPost.categories[0]?.name || "News"}</span>
+                  <span className="text-primary/70">{mainPost.categories[0]?.name || "News"}</span>
                   <Dot className="text-muted"/>
-                  <span className="text-popover-foreground font-normal">
+                  <span className="text-muted-foreground/70 font-normal">
                      {formatTimeAgo(mainPost.createdAt)}
                   </span>
                 </div>
@@ -257,9 +257,9 @@ export default async function NewsPage({ searchParams }: Props) {
                     {post.title}
                   </h3>
                   <div className="flex items-center text-[11px] font-bold uppercase tracking-wide">
-                    <span className="text-popover-foreground">{post.categories[0]?.name || "News"}</span>
+                    <span className="text-primary/70">{post.categories[0]?.name || "News"}</span>
                     <Dot className="text-muted"/>
-                    <span className="text-popover-foreground font-normal">
+                    <span className="text-muted-foreground/70 font-normal">
                         {formatTimeAgo(post.createdAt)}
                     </span>
                   </div>
@@ -288,7 +288,7 @@ export default async function NewsPage({ searchParams }: Props) {
                     </div>
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                        <span className="text-primary">
+                        <span className="text-primary/70">
                           {post.categories[0]?.name}
                         </span>
                         <Dot size={14} />

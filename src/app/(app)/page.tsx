@@ -12,7 +12,9 @@ import {
   IconArrowUpRight,
   IconTrendingUp,
 } from "@tabler/icons-react";
-import NewsHeadlines, { NewsHeadlineItem } from "@/components/carousels/news-carousel";
+import NewsHeadlines, {
+  NewsHeadlineItem,
+} from "@/components/carousels/news-carousel";
 import EmblaTwoRow from "@/components/carousels/embla-two-row";
 import MoreNewsBentoGrid from "@/components/carousels/more-news-bento-grid";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -24,7 +26,9 @@ import NewsHighlightCard, {
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { slugify } from "@/lib/utils";
+import { motion } from "framer-motion";
+
+const MotionLink = motion.create(Link);
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
@@ -341,18 +345,20 @@ export default function Home() {
                   </div>
 
                   <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-20% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
-                    <div className="flex flex-wrap items-center  text-xs md:text-sm ">
-                      <span className="font-semibold text-primary-foreground">
+                    <div className="flex flex-wrap py-2 gap-2 items-center  text-xs md:text-sm ">
+                      <Badge variant={"default"} className="">
                         {featuredPost.category}
-                      </span>
-                      <Dot className="text-primary-foreground/80" size={24} />
-                      <span>{formatTimeAgo(featuredPost.createdAt)}</span>
+                      </Badge>
+                      {/* <Dot className="text-primary" size={24} /> */}
+                      <Badge variant={"default"} className="">
+                        {formatTimeAgo(featuredPost.createdAt)}
+                      </Badge>
                     </div>
                     <h1 className="text-xl md:text-3xl lg:text-4xl font-bold lg:w-2xl font-mono leading-tight mb-4 max-w-4xl drop-shadow-md">
                       {featuredPost.title}
                     </h1>
                     <div className="flex justify-between">
-                      <div className="basis-2/3 flex h-auto flex-wrap gap-3">
+                      <div className="basis-2/3 flex h-auto text-primary/70 flex-wrap gap-3">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
                           : []
@@ -361,23 +367,41 @@ export default function Home() {
                             key={tag.id}
                             className="inline-flex items-center text-xs"
                           >
-                            <Badge className="truncate test-xs bg-primary-foreground/20">
-                            
+                            <Badge className="truncate text-xs text-primary bg-secondary/10  hover:bg-muted/20 hover:text-primary/90 cursor-pointer">
                               <span className="">#</span>
                               {tag.name}
                             </Badge>
                           </span>
                         ))}
                       </div>
-                      <div className="group opacity-100">
+                      <motion.div
+                        initial={{ y: -100, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 800,
+                          damping: 150,
+                          duration: 2,
+                        
+                        }}
+                        className="group opacity-100"
+                      >
                         {/* <Link href={featuredPost.title} className="p-2 pl-4 px-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold">Read Article <IconArrowUpRight className="" size={24}/></Link>  */}
-                        <Link
+                        <MotionLink
                           href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                          className="p-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold"
+                          className="p-2 flex w-fit gap-2 items-center  bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-full font-bold"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 800,
+                            damping: 150,
+                          }}
                         >
                           <IconArrowUpRight className="" size={24} />
-                        </Link>
-                      </div>
+                        </MotionLink>
+                      </motion.div>
                     </div>{" "}
                   </div>
                 </>
@@ -403,26 +427,20 @@ export default function Home() {
             {/* Sub Headlines */}
             <div className="md:pt-2 mt-4  h-44">
               {loadingHeadlines ? (
-                 <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-8 w-32" />
               ) : headlines.length > 0 ? (
                 <div className="flex items-center justify-start my-4  mt-2  md:mb-4 gap-1 border-primary">
-                  <TextShimmer
-                    as="h2"
-                    className="text-xl  tracking-tight"
-                  >
-                     Top headlines
+                  <TextShimmer as="h2" className="text-xl  tracking-tight">
+                    Top headlines
                   </TextShimmer>
-                  <IconTrendingUp className="text-primary/80" size={24}/>
+                  <IconTrendingUp className="text-primary/80" size={24} />
                 </div>
               ) : (
                 <div className="flex items-center justify-star gap-1 mt-2 md:mb-4 border-destructive">
-                  <TextShimmer
-                    as="h2"
-                    className="text-xl  tracking-tight"
-                  >
-                     No headlines for yet
+                  <TextShimmer as="h2" className="text-xl  tracking-tight">
+                    No headlines for yet
                   </TextShimmer>
-                  <IconTrendingUp className="text-primary/80" size={24}/>
+                  <IconTrendingUp className="text-primary/80" size={24} />
                 </div>
               )}
               {(loadingHeadlines || headlines.length > 0) && (
@@ -474,7 +492,7 @@ export default function Home() {
           <div className="w-full">
             {loadingEditorsPick ? (
               <EmblaCarouselAutoplay
-                slides={[...Array(3)].map((_, i) => (
+                slides={[...Array(4)].map((_, i) => (
                   <div key={i} className="m-2 py-2">
                     <Skeleton className="aspect-[16/10] w-full " />
                     <div className="mt-2 space-y-2">
@@ -524,16 +542,16 @@ export default function Home() {
                           <Dot className="" size={24} />
                           <span>{formatTimeAgo(news.createdAt)}</span>
                         </div>
-                        <h4 className="text-sm sm:text-md text-primary font-semibold  line-clamp-2 mt-1">
+                        <h4 className="text-sm sm:text-md  text-primary font-semibold decoration-1 group-hover:underline underline-offset-4 mb-3 decoration-shade line-clamp-2 mt-1">
                           {news.title}
                         </h4>
                       </div>
-                      <div className="text-sm  pt-4 flex justify-between items-center text-muted-foreground hover:text-primary transition-colors">
+                      <div className="text-sm  pt-4 flex justify-between hover:text-shade items-center text-muted-foreground hover:text-primary transition-colors">
                         <p>Read More</p>
-                        <div className=" left-0 bottom-4  opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <div className=" left-0 bottom-4  hover:text-shade opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                           <IconArrowUpRight
                             size={24}
-                            className=" text-muted-foreground"
+                            className="hover:text-shade transition-colors"
                           />
                         </div>
                       </div>
@@ -655,14 +673,20 @@ export default function Home() {
         </div>
       </section>
       <section className="min-h-90 flex items-center">
-        <div className='border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16'>
-            <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
-                <p className="text-xl font-medium max-w-md text-slate-800">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo, tempora!</p>
-                <Link href="/" className="flex items-center gap-2 font-semibold rounded-md py-3 px-8 bg-accent hover:bg-shade text-primary  transition ">
-                    <span>Stay updated on daily life</span>
-                    <IconArrowRight/>
-                </Link>
-            </div>
+        <div className="border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16">
+          <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
+            <p className="text-xl font-medium max-w-md bg-linear-to-r from-muted to-muted-foreground bg-clip-text  font-extrabold text-transparent ">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Explicabo, tempora!
+            </p>
+            <Link
+              href="/"
+              className="flex items-center gap-2 font-semibold rounded-md py-3 px-8 bg-accent text-accent-foreground hover:text-primary hover:bg-shade  transition "
+            >
+              <span>Stay updated on daily life</span>
+              <IconArrowRight />
+            </Link>
+          </div>
         </div>
       </section>
     </main>

@@ -82,7 +82,7 @@ export default async function SimilarPosts({
   return (
     <div className="flex flex-col  gap-6">
       <div className="p-1 border-b border-dashed border-muted">
-        <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+        <p className="text-[10px] text-left text-primary mb-1 uppercase tracking-widest font-bold">
           Similar Posts
         </p>
       </div>
@@ -94,10 +94,10 @@ export default async function SimilarPosts({
             className="group flex flex-col gap-3"
           >
             <div className="flex flex-col">
-              <div className="flex items-center gap-2 text-xs  uppercase tracking-wider mb-1 text-primary">
+              <div className="flex items-center  text-xs uppercase tracking-wider mb-1 text-muted-foreground">
                 <span>{post.categories[0]?.name}</span>
                 <span className="text-muted-foreground font-normal flex items-center">
-                  <Dot size={16} /> {formatTimeAgo(post.createdAt)}
+                  <Dot size={16} />{formatTimeAgo(post.createdAt)}
                 </span>
               </div>
               <h4 className="font-semibold text-xs text-primary font-mono md:text-base group-hover:underline line-clamp-2 leading-tight">

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import type { Admin, Category, Post, Tag } from "@prisma/client";
 import db from "@/lib/prisma";
-import { blogSanitizer, slugify } from "@/lib/utils";
+import { blogSanitizer, slugify, stripHtml } from "@/lib/utils";
 
 type Props = {
   params: Promise<{ slug: string; category: string }>;
@@ -28,10 +28,59 @@ type PostWithDetails = Post & {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, category } = await params;
+
+  const post = await db.post.findUnique({
+    where: { slug },
+    include: { author: true, tags: true, categories: true },
+  });
+
+  if (!post) {
+    return {
+      title: "Article Not Found",
+      description: "The article you are looking for does not exist.",
+    };
+  }
+
+  const description = stripHtml(post.content || "").substring(0, 160);
+  const keywords = post.tags.map((tag) => tag.name).join(", ");
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+  const categorySlug = post.categories[0]?.slug || category;
+  const canonicalUrl = `${baseUrl}/${categorySlug}/${post.slug}`;
 
   return {
-    title: `News - ${slug}`,
+    title: post.title,
+    description,
+    keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: post.title,
+      description,
+      url: canonicalUrl,
+      type: "article",
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: post.author?.name ? [post.author.name] : undefined,
+      images: post.image
+        ? [
+            {
+              url: post.image,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@newslyusa",
+      title: post.title,
+      description,
+      images: post.image ? [post.image] : undefined,
+    },
   };
 }
 
@@ -106,15 +155,15 @@ export default async function NewsPage({ params }: Props) {
                     <IconUserFilled size={20} className="text-primary/10" />
                   </div>
                   <div className="">
-                    <div className="flex font-mono text-sm font-bold items-center ">
+                    <div className="flex font-sans text-sm text-primary font-semibold items-center ">
                       {post.author?.name && (
-                        <span className="font-bold text-sm">
+                        <span className=" text-sm">
                           {post.author.name}
                         </span>
                       )}
                     </div>
                     <time
-                      className="text-xs font-medium text-muted-foreground"
+                      className="text-xs  uppercase tracking-wider mb-1 text-primary/70 "
                       dateTime={post.createdAt.toISOString()}
                     >
                       {new Date(post.createdAt).toLocaleString("en-US", {
@@ -134,7 +183,7 @@ export default async function NewsPage({ params }: Props) {
               </div>
             </header>
 
-            <div className="prose dark:prose-invert max-w-none prose-p:font-sans prose-headings:font-mono prose-a:text-[#0000ff] prose-a:underline prose-a:font-medium  mt-6">
+            <div className="prose dark:prose-invert max-w-none prose-p:font-sans prose-headings:font-mono prose-a:text-muted-link list-disc marker:text-primary [&>li>p]:text-green-800 prose-a:underline prose-a:font-medium  mt-6">
               <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
                 <Image
                   src={

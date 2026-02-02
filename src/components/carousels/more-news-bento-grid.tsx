@@ -286,7 +286,7 @@ const NewsGrid = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 group"
           >
             <div className="md:col-span-1 order-2 md:order-1">
-              <h2 className="text-primary text-xl md:text-3xl font-mono font-bold leading-tight decoration-1 group-hover:underline underline-offset-4 mb-3">
+              <h2 className="text-primary text-xl md:text-3xl font-mono font-bold leading-tight decoration-3 group-hover:underline underline-offset-4 mb-3 decoration-shade ">
                 {newsData[0].title.length > 150
                   ? `${newsData[0].title.slice(0, 150)}...`
                   : newsData[0].title}
@@ -330,7 +330,7 @@ const NewsGrid = () => {
                 href={`/${news.categorySlug || "news"}/${news.slug}`}
                 className="group"
               >
-                <div className="relative aspect-video mb-3 overflow-hidden  group-hover:underline underline-offset-4">
+                <div className="relative aspect-video mb-3 overflow-hidden  group-hover:underline underline-offset-4 ">
                   <Image
                     src={
                       news.image ||
@@ -342,7 +342,7 @@ const NewsGrid = () => {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <h4 className="font-bold font-mono text-sm leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2 line-clamp-2">
+                <h4 className="font-bold font-mono text-sm leading-snug group-hover:underline underline-offset-4  transition-colors mb-2 line-clamp-3 decoration-shade group-hover:decoration-2">
                   {news.title}
                 </h4>
                 <div className="flex items-center text-[10px] text-popover-foreground uppercase font-medium">
@@ -373,7 +373,7 @@ const NewsGrid = () => {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-2 decoration-shade  transition-colors mb-2">
               {newsData[1].title}
             </h3>
             <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
@@ -402,7 +402,7 @@ const NewsGrid = () => {
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary  font-bold leading-snug group-hover:underline underline-offset-4 decoration-2 decoration-shade  transition-colors mb-2">
               {newsData[2].title}
             </h3>
             <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
@@ -431,9 +431,9 @@ const NewsGrid = () => {
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 className="text-lg font-mono text-primary font-bold leading-snug group-hover:underline underline-offset-4 decoration-1 transition-colors mb-2">
+            <h3 className="text-lg font-mono text-primary font-bold leading-snug group-hover:underline underline-offset-4 decoration-2 decoration-shade group-hover:decoration-2 transition-colors mb-2">
               {newsData[3].title}
-            </h3>
+            </h3> 
             <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
               <span>{newsData[3].timestamp}</span>
               <Dot className="text-primary" size={24} />

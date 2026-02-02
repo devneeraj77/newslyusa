@@ -33,12 +33,29 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag).replace(/-/g, ' ');
+  const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");
   // Simple capitalization for title
-  const title = decodedTag.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  
+  const title = decodedTag
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  const description = `Read the latest news and updates about ${title} on Newsly USA.`;
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+  const canonicalUrl = `${baseUrl}/tags/${tag}`;
+
   return {
-    title: `News - ${title}`,
+    title,
+    description,
+    keywords: `${title}, news, updates, trends, Newsly USA`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${title} - Newsly USA`,
+      description,
+      url: canonicalUrl,
+      type: "website",
+    },
   };
 }
 

@@ -1,72 +1,33 @@
-"use client";
+import React from "react";
 
-import React, { useState } from "react";
-import DotGrid from "@/components/DotGrid";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Send, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import Image from "next/image";
-import { toast } from "sonner";
+import { Metadata } from "next";
+import DotGrid from "@/components/DotGrid";
+
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with Newsly USA. Send us a message, news tip, or inquiry.",
+  alternates: {
+    canonical: `${baseUrl}/contact`,
+  },
+};
 
 export default function ContactPage() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      subject: formData.get("subject"),
-      message: formData.get("message"),
-    };
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to send message");
-      }
-
-      toast.success(result.message || "Message sent successfully!");
-      (e.target as HTMLFormElement).reset();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <main className="min-h-screen">
       {/* Header Banner */}
@@ -94,111 +55,32 @@ export default function ContactPage() {
       {/* Content */}
       <section className="container mx-auto py-12 px-4 -mt-20 relative z-20">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Contact Form */}
-          <Card className="lg:col-span-2 shadow-xl border-0">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold">
-                Send us a message
-              </CardTitle>
-              <CardDescription>
-                Fill out the form below and we'll get back to you as soon as
-                possible.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-sm font-medium">
-                      First Name
-                    </Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      placeholder="John"
-                      required
-                      className="bg-background/50"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-sm font-medium">
-                      Last Name
-                    </Label>
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      placeholder="Doe"
-                      required
-                      className="bg-background/50"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="john.doe@example.com"
-                    required
-                    className="bg-background/50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-sm font-medium">
-                    Subject
-                  </Label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    placeholder="How can we help?"
-                    required
-                    className="bg-background/50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message" className="text-sm font-medium">
-                    Message
-                  </Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Your message..."
-                    required
-                    className="min-h-[150px] bg-background/50 resize-y"
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isLoading}>
-                  <Send className="w-4 h-4 mr-2" />
-                  {isLoading ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <DotGrid 
+             dotSize={2}
+             gap={20}
+             baseColor="#9ca3af" // muted-foreground color roughly
+             activeColor="#22c55e" // primary/green color
+             proximity={100}
+             shockRadius={150}
+            />
 
           {/* Contact Info */}
-          <div className="space-y-6 text-black">
-            <Card className="shadow-lg border-0 text-black">
+          <div className="space-y-6">
+            <Card className="shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="text-xl">Contact Information</CardTitle>
-                <CardDescription className="text-primary">
+                <CardDescription>
                   Reach out to us directly through these channels.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <div className="p-6 pt-0 space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-medium mb-1">Visit Us</h4>
-                    <p className="text-sm text-primary leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       123 News Avenue, Suite 400
                       <br />
                       New York, NY 10001
@@ -207,32 +89,32 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="p-2 bg-primary-foreground/10 rounded-lg">
+                  <div className="p-2 bg-primary/10 rounded-lg">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-medium mb-1">Call Us</h4>
-                    <p className="text-sm text-primary">
+                    <p className="text-sm text-muted-foreground">
                       +1 (555) 123-4567
                     </p>
-                    <p className="text-xs text-primary mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Mon-Fri, 9am-6pm EST
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="p-2 bg-primary-foreground/10 rounded-lg">
+                  <div className="p-2 bg-primary/10 rounded-lg">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-medium mb-1">Email Us</h4>
-                    <p className="text-sm text-primary">
+                    <p className="text-sm text-muted-foreground">
                       contact@newslyusa.com
                     </p>
                   </div>
                 </div>
-              </CardContent>
+              </div>
             </Card>
 
             

@@ -1,5 +1,5 @@
 "use client";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Header } from "@/components/admin/header";
 
@@ -11,10 +11,10 @@ export default function AdminNewsLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full">
+      <SidebarInset>
         <Header />
         {children}
-      </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

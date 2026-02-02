@@ -1,0 +1,32 @@
+# NewslyUSA
+
+NewslyUSA is a comprehensive news platform delivering the latest updates across various categories including Technology, Politics, Business, Health, and more.
+
+## Site Structure
+
+- **Home**: https://newslyusa.com/
+- **News Feed**: https://newslyusa.com/news
+- **Categories**: https://newslyusa.com/[category-slug]
+- **Articles**: https://newslyusa.com/[category-slug]/[article-slug]
+- **Tags**: https://newslyusa.com/tags/[tag-name]
+
+## Post Recommendations
+
+- **Trending / Viral**: https://newslyusa.com/news (Section: "Trending Last Month")
+- **Top Stories**: https://newslyusa.com/news (Sidebar: "Top Stories")
+
+## Main Sections
+
+- **Technology**: Latest in tech, AI, gadgets, and software.
+- **Politics**: Global and local political news and analysis.
+- **Business**: Market trends, finance, and corporate news.
+- **Health**: Medical breakthroughs, wellness, and health tips.
+- **Entertainment**: Movies, music, celebrity news, and more.
+
+## API / RSS
+
+- **Sitemap**: https://newslyusa.com/sitemap.xml
+
+## About
+
+NewslyUSA aims to provide unbiased, timely, and accurate news coverage to keep you informed about the world around you.

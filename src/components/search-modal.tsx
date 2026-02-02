@@ -86,7 +86,7 @@ export function SearchModal({ children }: SearchModalProps) {
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <ModalTrigger asChild>{children}</ModalTrigger>
-      <ModalContent className="p-1 border md:mt-40 rounded-lg">
+      <ModalContent className="p-1 border mt-40 md:mt-0 rounded-lg">
         <ModalTitle className="sr-only">Search</ModalTitle>
         <Command
           className="bg-background md:bg-card rounded-md "
@@ -101,16 +101,6 @@ export function SearchModal({ children }: SearchModalProps) {
             onValueChange={setQuery}
           />
           <CommandList className="md:max-h-[380px] md:min-h-[380px] max-h-[50vh] px-2 md:px-0">
-            <CommandEmpty className="flex md:min-h-[280px] min-h-[150px] flex-col items-center justify-center">
-              <SearchIcon className="text-muted-foreground mb-2 size-6" />
-              <p className="text-muted-foreground mb-1 text-xs">
-                {loading
-                  ? "Searching..."
-                  : query
-                    ? `No results found for "${query}"`
-                    : "No news found"}
-              </p>
-            </CommandEmpty>
             <CommandGroup  heading={query ? "Results" : "Latest News"}>
               {results.map((item) => {
                 return (
@@ -125,20 +115,31 @@ export function SearchModal({ children }: SearchModalProps) {
                   >
                     {item.icon ? <item.icon className="size-5" /> : ""}
                     <div className="flex flex-col min-w-10  md:basis-4/5 ">
-                      <p className="md:max-w-14 min-w-10    truncate text-sm font-medium">
+                      <p className="md:max-w-100 min-w-10    truncate text-sm font-medium">
                         {item.title}
                       </p>
                       <p className=" text-muted-foreground  text-xs line-clamp-1">
                         {stripHtml(item.description)}
                       </p>
                     </div>
-                    <p className="min-w-10 md:basis-1/5  text-end text-muted-foreground text-xs">
+                    <p className="min-w-10 md:basis-1/6  text-end text-muted-foreground text-xs">
                       {item.category}
                     </p>
                   </CommandItem>
                 );
               })}
             </CommandGroup>
+            <CommandEmpty className="flex md:min-h-[280px] min-h-[150px] flex-col items-center justify-center">
+              <SearchIcon className="text-muted-foreground mb-2 size-6" />
+              <p className="text-muted-foreground mb-1 text-xs">
+                {loading
+                  ? "Searching..."
+                  : query
+                    ? `No results found for "${query}"`
+                    : "No news found"}
+              </p>
+            </CommandEmpty>
+            
           </CommandList>
         </Command>
       </ModalContent>

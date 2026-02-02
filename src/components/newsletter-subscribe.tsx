@@ -79,7 +79,7 @@ export function NewsletterSubscribe() {
           type="submit"
           variant="default"
           size={"lg"}
-          className=" bg-accent text-accent-foreground hover:bg-shade "
+          className=" bg-accent text-accent-foreground hover:text-primary hover:bg-shade "
           disabled={isLoading}
         >
           {isLoading ? "Subscribing..." : "Subscribe"}

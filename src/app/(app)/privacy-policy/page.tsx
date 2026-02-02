@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import DotGrid from "@/components/DotGrid";
 import { Shield, Lock, Eye, FileText, Server, UserCheck } from "lucide-react";
 import {
@@ -10,6 +7,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Metadata } from "next";
+
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Read the Privacy Policy of Newsly USA. We value your privacy and are committed to protecting your personal information.",
+  alternates: {
+    canonical: `${baseUrl}/privacy-policy`,
+  },
+};
 
 export default function PrivacyPolicy() {
   return (

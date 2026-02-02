@@ -644,6 +644,7 @@ export default function ArticleForm({
             
             /> */}
             <SimpleEditor
+            
               content={formData.content}
               onChange={handleContentChange}
               placeholder="Write your article content here..."

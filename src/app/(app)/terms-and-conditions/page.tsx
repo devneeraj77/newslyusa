@@ -1,7 +1,6 @@
-"use client";
-
 import React from "react";
 import DotGrid from "@/components/DotGrid";
+
 import { Scale, Gavel, AlertCircle, FileText, Copyright, CheckCircle } from "lucide-react";
 import {
   Card,
@@ -10,21 +9,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Metadata } from "next";
 
-export default function TermsAndConditions() {
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+
+export const metadata: Metadata = {
+  title: "Terms and Conditions",
+  description: "Read the Terms and Conditions of Newsly USA. Understand the rules and regulations for using our website.",
+  alternates: {
+    canonical: `${baseUrl}/terms-and-conditions`,
+  },
+};
+
+export default async function TermsAndConditions() {
   return (
     <main className="min-h-screen text-foreground">
       {/* Header Banner */}
       <section className="relative w-full min-h-80 flex items-center justify-center overflow-hidden mb-12">
         <div className="absolute inset-0 w-full h-full">
-          <DotGrid
-            dotSize={2}
-            gap={20}
-            baseColor="#9ca3af"
-            activeColor="#22c55e"
-            proximity={100}
-            shockRadius={150}
-          />
+            <DotGrid 
+             dotSize={2}
+             gap={20}
+             baseColor="#9ca3af" // muted-foreground color roughly
+             activeColor="#22c55e" // primary/green color
+             proximity={100}
+             shockRadius={150}
+            />
         </div>
         <div className="container relative z-10 mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-mono font-bold tracking-tighter mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">

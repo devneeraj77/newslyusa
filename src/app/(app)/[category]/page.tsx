@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { IconTrendingUp } from "@tabler/icons-react";
+import { Metadata } from "next";
 
 function formatTimeAgo(dateString: string | Date) {
   const date = new Date(dateString);
@@ -59,11 +60,27 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const decodedCategory = decodeURIComponent(category);
+  const title = `${decodedCategory} News`;
+  const description = `Read the latest ${decodedCategory} news, trends, and updates on Newsly USA.`;
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
+  const canonicalUrl = `${baseUrl}/${category}`;
+
   return {
-    title: `News - ${decodedCategory}`,
+    title,
+    description,
+    keywords: `${decodedCategory}, news, updates, trends, Newsly USA`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${title} | Newsly USA`,
+      description,
+      url: canonicalUrl,
+      type: "website",
+    },
   };
 }
 
@@ -243,15 +260,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   {mainPost.title}
                 </h1>
 
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                <p className="text-muted-foreground/80 text-sm leading-relaxed mb-4 line-clamp-3">
                   {stripHtml(mainPost.content).substring(0, 200)}...
                 </p>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                  <span className="text-primary">
+                <div className="flex items-center  text-xs font-bold uppercase tracking-wider">
+                  <span className="text-primary/70">
                     {mainPost.categories[0]?.name || categoryData.name}
                   </span>
-                  <span className="text-gray-400 font-normal">
-                    · {formatTimeAgo(mainPost.createdAt)}
+                  <Dot/>
+                  <span className="text-primary/70 font-normal">
+                     {formatTimeAgo(mainPost.createdAt)}
                   </span>
                 </div>
               </Link>
@@ -281,10 +299,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
-                    <span className="text-primary">
+                    <span className="text-primary/70">
                       {post.categories[0]?.name || categoryData.name}
                     </span>
-                    <span className="text-gray-400 font-normal">
+                    <span className="text-muted-foreground/70 font-normal">
                       · {formatTimeAgo(post.createdAt)}
                     </span>
                   </div>
