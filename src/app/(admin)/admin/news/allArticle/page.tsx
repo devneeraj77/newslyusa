@@ -41,10 +41,10 @@ function ArticlesTableSkeleton() {
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="overflow-scroll">
           {Array.from({ length: 10 }).map((_, i) => (
             <TableRow key={i}>
-              <TableCell className="font-medium md:max-w-xs">
+              <TableCell className="font-medium lg:max-w-xs">
                  <Skeleton className="h-4 w-[250px] mb-2" />
                  <Skeleton className="h-3 w-[150px]" />
               </TableCell>
