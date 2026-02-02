@@ -25,7 +25,7 @@ interface AllArticlesPageProps {
 
 function ArticlesTableSkeleton() {
   return (
-    <div className="rounded-md border   overflow-hidden ">
+    <div className="overflow-hidden ">
       <Table>
         <TableHeader>
           <TableRow>
@@ -137,7 +137,7 @@ async function ArticlesTable({
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="border overflow-scroll">
+          <TableBody className="overflow-scroll">
             {posts.length === 0 ? (
               <TableRow>
                 <TableCell
