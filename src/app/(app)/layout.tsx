@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import {  Geist, Lora, Montserrat } from "next/font/google";
+import { Geist, Lora, Montserrat } from "next/font/google";
 import "../globals.css";
 // import "@/styles/_variables.scss";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -20,10 +20,12 @@ const lora = Lora({
 const montserrat = Montserrat({
   variable: "--font-mon-sans",
   subsets: ["latin"],
-  weight: "400"
+  weight: "400",
 });
 
 import { Toaster } from "@/components/ui/sonner";
+import { PushNotificationManager } from "@/components/push-notification-manager";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: {
@@ -61,19 +63,22 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         className={`${geistSans.variable} ${lora.variable} antialiased smooth-scroll bg-background text-foreground min-h-screen bg-primary-foreground`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          
-          {children}
-          <SpeedInsights />
-          <Footer/>
-          <Toaster />
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+
+            {children}
+            <SpeedInsights />
+            <Footer />
+            <PushNotificationManager />
+            <Toaster />
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

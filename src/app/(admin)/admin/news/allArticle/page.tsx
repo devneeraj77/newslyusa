@@ -10,13 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, X } from "lucide-react";
-import ArticleActions from "./article-actions";
+import NotifyPopover from "./notify-popover";
 import ArticleStatusToggle from "./article-status-toggle";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchInput } from "@/components/ui/search-input";
 import { Prisma } from "@prisma/client";
+import ArticleActions from "./article-actions";
 
 
 interface AllArticlesPageProps {
@@ -134,6 +135,8 @@ async function ArticlesTable({
               <TableHead>Categories</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Updated At</TableHead>
+              <TableHead>Notify</TableHead>
+
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -195,6 +198,9 @@ async function ArticlesTable({
                   </TableCell>
                   <TableCell>
                     {new Date(post.updatedAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <NotifyPopover articleId={post.id} articleTitle={post.title} slug={post.slug} />
                   </TableCell>
                   <TableCell className="text-right">
                     <ArticleActions article={post} />

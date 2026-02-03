@@ -95,6 +95,7 @@
     "svg-dotted-map": "^2.0.1",
     "tailwind-merge": "^3.4.0",
     "vaul": "^1.1.2",
+    "web-push": "^3.6.7",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -106,6 +107,7 @@
     "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/web-push": "^3.6.4",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "^17.2.3",
     "prisma": "6.19",
