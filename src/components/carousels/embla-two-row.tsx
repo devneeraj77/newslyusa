@@ -81,7 +81,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
                       loading="lazy"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 flex flex-col justify-end">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 flex flex-col justify-end">
                       <div className="flex items-center text-xs text-zinc-300 mb-2">
                         <span className="text-primar/70 font-medium">
                           {item.category}
@@ -89,7 +89,7 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
                         <Dot size={16} />
                         <span>{item.timestamp}</span>
                       </div>
-                      <h3 className="decoration-2 group-hover:underline underline-offset-2 mb-3 decoration-shade font-mono text-md font-bold line-clamp-2 leading-tight">
+                      <h3 className="decoration-2 group-hover:underline text-white hover:text-primary-foreground underline-offset-2 mb-3 decoration-shade font-mono text-md font-bold line-clamp-2 leading-tight">
                         {item.title}
                       </h3>
                     </div>

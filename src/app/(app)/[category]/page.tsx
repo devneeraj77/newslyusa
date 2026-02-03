@@ -134,15 +134,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const remainingPosts = posts.slice(1);
 
   const now = new Date();
-  const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(now.getDate() - 30);
 
-  const viralPosts = await db.post.findMany({
+  const lastMonthPosts = await db.post.findMany({
     where: {
       published: true,
       createdAt: {
-        gte: startOfLastMonth,
-        lt: startOfCurrentMonth,
+        gte: thirtyDaysAgo,
+        lte: now,
       },
       categoryIds: {
         has: categoryData.id,
@@ -192,7 +192,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const excludedIds = [
     ...posts.map((p) => p.id),
-    ...viralPosts.map((p) => p.id),
+    ...lastMonthPosts.map((p) => p.id),
     ...topStories.map((p) => p.id),
     ...editorsPicks.map((p) => p.id),
   ];
@@ -256,7 +256,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline">
+                <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline decoration-3 decoration-shade underline-offset-2">
                   {mainPost.title}
                 </h1>
 
@@ -295,7 +295,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       className="object-cover"
                     />
                   </div>
-                  <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline mb-2 line-clamp-2">
+                  <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline decoration-2 decoration-shade underline-offset-2 mb-2 line-clamp-2">
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
@@ -310,8 +310,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               ))}
             </div>
           </div>
-          <div className=" py-8 my-10">
-            {viralPosts.length > 0 ? (
+          <section>
+            <div className=" py-8 my-10">
+            {lastMonthPosts.length > 0 ? (
               <>
                 <div className="flex gap-1">
                   <TextShimmer as="h3" className="text-xl font-bold mb-6">
@@ -320,7 +321,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <IconTrendingUp size={24}/>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {viralPosts.map((post) => (
+                  {lastMonthPosts.map((post) => (
                     <Link
                       key={post.id}
                       href={`/${category}/${post.slug}`}
@@ -345,7 +346,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                           <Dot size={14} />
                           <span>{formatTimeAgo(post.createdAt)}</span>
                         </div>
-                        <h4 className="font-bold text-sm leading-tight group-hover:underline line-clamp-2">
+                        <h4 className="font-bold text-sm leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
                           {post.title}
                         </h4>
                       </div>
@@ -364,6 +365,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               </div>
             )}
           </div>
+          </section>
         </div>
 
         <aside className="w-full xl:min-h-250 lg:w-64 shrink-0">
@@ -389,7 +391,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       0{index + 1}
                     </span>
                     <div className="space-y-1">
-                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:underline font-montserrat">
+                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:underline decoration-1 decoration-shade underline-offset-2 font-montserrat">
                         {story.title}
                       </h4>
                       <p className="text-[10px] text-muted-foreground italic">

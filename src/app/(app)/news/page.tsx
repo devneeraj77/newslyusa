@@ -7,7 +7,7 @@ import { stripHtml } from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Dog, Dot } from "lucide-react";
+import { Dot } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +16,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { IconTrendingUp } from "@tabler/icons-react";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,7 @@ export default async function NewsPage({ searchParams }: Props) {
     posts = await db.post.findMany({
       where: {
         published: true,
+        categoryIds: { isEmpty: true }
       },
       orderBy: {
         createdAt: "desc",
@@ -92,9 +94,7 @@ export default async function NewsPage({ searchParams }: Props) {
     });
   } catch (error) {
     console.error("Failed to fetch posts from DB, using mock data:", error);
-    posts = [
-        // Mock data logic remains similar if needed, or just empty array
-    ] as unknown as PostWithRelations[];
+    posts = [] as unknown as PostWithRelations[];
   }
 
   if (posts.length === 0) {
@@ -109,16 +109,17 @@ export default async function NewsPage({ searchParams }: Props) {
   const remainingPosts = posts.slice(1);
 
   const now = new Date();
-  const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(now.getDate() - 30);
 
-  const viralPosts = await db.post.findMany({
+  const lastMonthPosts = await db.post.findMany({
     where: {
       published: true,
       createdAt: {
-        gte: startOfLastMonth,
-        lt: startOfCurrentMonth,
+        gte: thirtyDaysAgo,
+        lte: now,
       },
+      categoryIds: { isEmpty: true },
       id: {
         notIn: posts.map((post) => post.id),
       },
@@ -135,6 +136,7 @@ export default async function NewsPage({ searchParams }: Props) {
   const topStories = await db.post.findMany({
     where: {
       published: true,
+      categoryIds: { isEmpty: true },
       isTopStory: true,
     },
     orderBy: {
@@ -150,6 +152,7 @@ export default async function NewsPage({ searchParams }: Props) {
   const editorsPicks = await db.post.findMany({
     where: {
       published: true,
+      categoryIds: { isEmpty: true },
       isEditorsPick: true,
     },
     orderBy: {
@@ -164,7 +167,7 @@ export default async function NewsPage({ searchParams }: Props) {
 
   const excludedIds = [
     ...posts.map((p) => p.id),
-    ...viralPosts.map((p) => p.id),
+    ...lastMonthPosts.map((p) => p.id),
     ...topStories.map((p) => p.id),
     ...editorsPicks.map((p) => p.id),
   ];
@@ -224,7 +227,7 @@ export default async function NewsPage({ searchParams }: Props) {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline">
+                <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline decoration-3 decoration-shade underline-offset-2">
                   {mainPost.title}
                 </h1>
                 <p className="text-muted-foreground/80 text-sm leading-relaxed mb-4 line-clamp-3">
@@ -232,8 +235,8 @@ export default async function NewsPage({ searchParams }: Props) {
                 </p>
                 <div className="flex items-center text-xs font-bold uppercase tracking-wider">
                   <span className="text-primary/70">{mainPost.categories[0]?.name || "News"}</span>
-                  <Dot className="text-muted"/>
-                  <span className="text-muted-foreground/70 font-normal">
+                  <Dot />
+                  <span className="text-primary/70 font-normal">
                      {formatTimeAgo(mainPost.createdAt)}
                   </span>
                 </div>
@@ -253,14 +256,13 @@ export default async function NewsPage({ searchParams }: Props) {
                       className="object-cover"
                     />
                   </div>
-                  <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline mb-2 line-clamp-2">
+                  <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline decoration-2 decoration-shade underline-offset-2 mb-2 line-clamp-2">
                     {post.title}
                   </h3>
-                  <div className="flex items-center text-[11px] font-bold uppercase tracking-wide">
+                  <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
                     <span className="text-primary/70">{post.categories[0]?.name || "News"}</span>
-                    <Dot className="text-muted"/>
                     <span className="text-muted-foreground/70 font-normal">
-                        {formatTimeAgo(post.createdAt)}
+                       · {formatTimeAgo(post.createdAt)}
                     </span>
                   </div>
                 </Link>
@@ -268,52 +270,69 @@ export default async function NewsPage({ searchParams }: Props) {
             </div>
           </div>
 
-          <div className=" py-8 my-10">
-            <h3 className="text-xl font-bold mb-6">Trending Last Month</h3>
-            {viralPosts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {viralPosts.map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/${post.categories[0]?.slug || "news"}/${post.slug}`}
-                    className="group flex flex-col gap-2"
-                  >
-                    <div className="relative aspect-video w-full overflow-hidden ">
-                      <Image
-                        src={post.image || "https://placehold.co/600x400/00000/ffffff/png"}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                        <span className="text-primary/70">
-                          {post.categories[0]?.name}
-                        </span>
-                        <Dot size={14} />
-                        <span>{formatTimeAgo(post.createdAt)}</span>
+          <section>
+            <div className=" py-8 my-10">
+            {lastMonthPosts.length > 0 ? (
+              <>
+                <div className="flex gap-1">
+                  <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                  Trending Last Month
+                </TextShimmer>
+                <IconTrendingUp size={24}/>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {lastMonthPosts.map((post) => (
+                    <Link
+                      key={post.id}
+                      href={`/${post.categories[0]?.slug || "news"}/${post.slug}`}
+                      className="group flex flex-col gap-2"
+                    >
+                      <div className="relative aspect-video w-full overflow-hidden ">
+                        <Image
+                          src={
+                            post.image ||
+                            "https://placehold.co/600x400/00000/ffffff/png"
+                          }
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                       </div>
-                      <h4 className="font-bold text-sm leading-tight group-hover:underline line-clamp-2">
-                        {post.title}
-                      </h4>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                          <span className="text-primary">
+                            {post.categories[0]?.name}
+                          </span>
+                          <Dot size={14} />
+                          <span>{formatTimeAgo(post.createdAt)}</span>
+                        </div>
+                        <h4 className="font-bold text-sm leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
+                          {post.title}
+                        </h4>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="py-10 text-center">
-                <p className="text-muted-foreground">No post available</p>
+                <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                  No trending last month
+                </TextShimmer>
+                <p className="text-muted-foreground">
+                  Check back later for more updates!
+                </p>
               </div>
             )}
           </div>
+          </section>
         </div>
 
         {/* 3. Sidebar */}
-        <aside className="w-full lg:w-64 shrink-0">
+        <aside className="w-full xl:min-h-250 lg:w-64 shrink-0">
           <div className="sticky top-4 space-y-6">
              {/* Header */}
-             <div className="p-1 border-b border-muted">
+             <div className="p-1 border-b border-dashed border-muted">
               <p className="text-[10px] text-left flex items-center text-muted-foreground mb-1 uppercase tracking-widest font-bold">
                 Top Stories <IconTrendingUp  />
               </p>
@@ -333,7 +352,7 @@ export default async function NewsPage({ searchParams }: Props) {
                       0{index + 1}
                     </span>
                     <div className="space-y-1">
-                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:underline font-montserrat">
+                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:underline decoration-1 decoration-shade underline-offset-2 font-montserrat">
                         {story.title}
                       </h4>
                       <p className="text-[10px] text-muted-foreground italic">

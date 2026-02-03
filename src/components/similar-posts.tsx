@@ -100,7 +100,7 @@ export default async function SimilarPosts({
                   <Dot size={16} />{formatTimeAgo(post.createdAt)}
                 </span>
               </div>
-              <h4 className="font-semibold text-xs text-primary font-mono md:text-base group-hover:underline line-clamp-2 leading-tight">
+              <h4 className="font-semibold text-xs text-primary font-mono md:text-base decoration-2 decoration-shade underline-offset-2 group-hover:underline line-clamp-2 leading-tight">
                 {post.title}
               </h4>
             </div>

@@ -47,6 +47,7 @@ export default async function CategoryArticlesPagination({
 
   const whereClause: any = {
     published: true,
+    categoryIds: { isEmpty: true },
     id: {
       notIn: excludedIds,
     },
