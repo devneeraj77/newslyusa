@@ -147,8 +147,8 @@ export default async function NewsPage({ params }: Props) {
               <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-4">
                 {post.title}
               </h1>
-              <div className="flex items-end justify-between">
-                <div className="flex  md:pt-2  gap-2 items-center text-sm text-muted-foreground">
+              <div className="flex items-end  justify-between">
+                <div className="flex  md:pt-4  gap-2 items-center text-sm text-muted-foreground">
                   {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
 
                   <div className=" h-9 w-9  flex justify-center items-center  rounded-full bg-muted/20">
@@ -183,8 +183,8 @@ export default async function NewsPage({ params }: Props) {
               </div>
             </header>
 
-            <div className="prose dark:prose-invert max-w-none prose-p:font-sans prose-headings:font-mono prose-a:text-muted-link list-disc marker:text-primary [&>li>p]:text-green-800 prose-a:underline prose-a:font-medium  mt-6">
-              <div className="relative aspect-[17/12]  md:aspect-[17/7] w-full overflow-hidden ">
+            <div className="prose dark:prose-invert max-w-none prose-p:font-sans prose-headings:font-mono prose-a:text-muted-link list-disc marker:text-primary [&>li>p]:text-green-800 prose-a:underline prose-a:font-medium ">
+              <div className="relative aspect-video  md:aspect-[17/9]  w-full overflow-hidden ">
                 <Image
                   src={
                     post.image ||
@@ -192,7 +192,7 @@ export default async function NewsPage({ params }: Props) {
                   }
                   alt={post.title}
                   fill
-                  className="object-cover transition-transform duration-300  group-hover:scale-105"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
               {blogSanitizer(post.content || "")}

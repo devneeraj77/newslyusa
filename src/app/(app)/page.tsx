@@ -26,9 +26,7 @@ import NewsHighlightCard, {
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
 
-const MotionLink = motion.create(Link);
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
@@ -320,45 +318,45 @@ export default function Home() {
 
   return (
     <main className="items-center justify-center  m-2 ">
-      <section className="container mx-auto  flex flex-col items-center justify-center px-1 py-2">
-        <div className=" grid grid-cols-1 xl:grid-cols-4 w-full gap-2 lg:gap-4">
+      <section className="container mx-auto flex flex-col items-center justify-center px-1 py-2">
+        <div className="grid grid-cols-1 xl:grid-cols-4 w-full gap-3 lg:gap-6">
           {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-2">
-            <div className="top-4 left-4 z-20 flex justify-between items-center">
-              <span className="pl-2 p-1  my-3 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
+          <div className="xl:col-span-3 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="pl-2 p-1 my-2 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
                 Best of the week
               </span>
             </div>
+
             {/* Featured Story */}
-            <div className="relative group overflow-hidden bg-foreground aspect-[16/10] md:aspect-[24/10]">
+            <div className="relative overflow-hidden  border border-border/40 bg-foreground/5">
               {featuredPost ? (
                 <>
-                  <div className="aspect-[16/10] md:aspect-[24/10] relative w-full overflow-hidden">
+                  <div className="relative aspect-[16/10] md:aspect-[24/10] w-full overflow-hidden">
                     <Image
                       src={featuredPost.image}
                       alt={featuredPost.title}
                       fill
                       priority
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      fetchPriority="high"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
+                      className="object-cover transition-transform duration-700 hover:scale-[1.02]"
                     />
-                    <div className="absolute inset-0 " />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-20% from-black/50 to-transparent p-4 md:p-8 text-white z-20">
-                    <div className="flex flex-wrap py-2 gap-2 items-center  text-xs md:text-sm ">
-                      <Badge variant={"default"} className="">
-                        {featuredPost.category}
-                      </Badge>
-                      {/* <Dot className="text-primary" size={24} /> */}
-                      <Badge variant={"default"} className="">
+                  <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 text-white">
+                    <div className="flex flex-wrap gap-2 items-center text-xs md:text-sm">
+                      <Badge variant={"default"}>{featuredPost.category}</Badge>
+                      <Badge variant={"default"}>
                         {formatTimeAgo(featuredPost.createdAt)}
                       </Badge>
                     </div>
-                    <h1 className="text-xl md:text-3xl lg:text-4xl font-bold lg:w-2xl font-mono leading-tight mb-4 max-w-4xl drop-shadow-md">
+                    <h1 className="text-xl md:text-3xl lg:text-4xl font-mono font-bold lg:w-2xl leading-tight mb-4 max-w-4xl drop-shadow-md">
                       {featuredPost.title}
                     </h1>
-                    <div className="flex justify-between">
-                      <div className="basis-2/3 flex h-auto text-primary/70 flex-wrap gap-3">
+                    <div className="flex items-end justify-between gap-4">
+                      <div className="basis-2/3 flex h-auto text-primary/70 flex-wrap gap-2">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
                           : []
@@ -367,47 +365,26 @@ export default function Home() {
                             key={tag.id}
                             className="inline-flex items-center text-xs"
                           >
-                            <Badge className="truncate text-xs text-primary bg-secondary/10  hover:bg-muted/20 hover:text-primary/90 cursor-pointer">
-                              <span className="">#</span>
+                            <Badge className="truncate text-xs text-primary bg-secondary/10 hover:bg-muted/20 hover:text-primary/90 cursor-pointer">
+                              <span>#</span>
                               {tag.name}
                             </Badge>
                           </span>
                         ))}
                       </div>
-                      <motion.div
-                        initial={{ y: -100, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 800,
-                          damping: 150,
-                          duration: 2,
-                        
-                        }}
-                        className="group opacity-100"
+                      <Link
+                        href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
+                        className="p-2 flex w-fit items-center bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-full font-bold transition-transform duration-200 hover:-translate-y-0.5"
+                        aria-label={`Read ${featuredPost.title}`}
                       >
-                        {/* <Link href={featuredPost.title} className="p-2 pl-4 px-2 flex w-fit gap-2 items-center hover:bg-foreground bg-background text-black hover:text-white  rounded-full font-bold">Read Article <IconArrowUpRight className="" size={24}/></Link>  */}
-                        <MotionLink
-                          href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                          className="p-2 flex w-fit gap-2 items-center  bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-full font-bold"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 800,
-                            damping: 150,
-                          }}
-                        >
-                          <IconArrowUpRight className="" size={24} />
-                        </MotionLink>
-                      </motion.div>
-                    </div>{" "}
+                        <IconArrowUpRight size={24} />
+                      </Link>
+                    </div>
                   </div>
                 </>
               ) : (
-                <div className="relative bg-black w-screen lg:w-5xl aspect-[16/10] md:aspect-[24/10]">
-                  <Skeleton className="h-full w-full " />
+                <div className="relative aspect-[16/10] md:aspect-[24/10]">
+                  <Skeleton className="h-full w-full" />
                   <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 space-y-4">
                     <div className="flex gap-2 items-center">
                       <Skeleton className="h-4 w-24 bg-white/20" />
@@ -425,19 +402,19 @@ export default function Home() {
             </div>
 
             {/* Sub Headlines */}
-            <div className="md:pt-2 mt-4  h-44">
+            <div className="md:pt-2 mt-2 min-h-[11rem]">
               {loadingHeadlines ? (
                 <Skeleton className="h-8 w-32" />
               ) : headlines.length > 0 ? (
-                <div className="flex items-center justify-start my-4  mt-2  md:mb-4 gap-1 border-primary">
-                  <TextShimmer as="h2" className="text-xl  tracking-tight">
+                <div className="flex items-center justify-start my-4 mt-2 md:mb-4 gap-1 border-primary">
+                  <TextShimmer as="h2" className="text-xl tracking-tight">
                     Top headlines
                   </TextShimmer>
                   <IconTrendingUp className="text-primary/80" size={24} />
                 </div>
               ) : (
                 <div className="flex items-center justify-star gap-1 mt-2 md:mb-4 border-destructive">
-                  <TextShimmer as="h2" className="text-xl  tracking-tight">
+                  <TextShimmer as="h2" className="text-xl tracking-tight">
                     No headlines for yet
                   </TextShimmer>
                   <IconTrendingUp className="text-primary/80" size={24} />
@@ -455,17 +432,16 @@ export default function Home() {
           {/* Sidebar Area */}
           <div className="xl:col-span-1 space-y-2">
             <hr className="md:hidden mb-2" />
-            <div className="flex items-center justify-between py-2 pt-4 ">
+            <div className="flex items-center justify-between py-2 pt-4">
               <span className="font-bold text-lg pl-2">Highlights</span>
               <button className="flex md:pr-0 pr-2 items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1">
                 View all <ChevronRight size={16} />
               </button>
             </div>
 
-            <div className="flex flex-col pr-2 gap-1 lg:max-h-154 overflow-y-scroll">
+            <div className="flex flex-col pr-2 gap-1 max-h-[520px] overflow-y-auto">
               {loadingHighlights
-                ? // Loading skeleton for highlights
-                  [...Array(6)].map((_, i) => (
+                ? [...Array(6)].map((_, i) => (
                     <NewsHighlightCardSkeleton key={i} />
                   ))
                 : highlightNews
@@ -474,10 +450,6 @@ export default function Home() {
                       <NewsHighlightCard key={news.id} news={news} />
                     ))}
             </div>
-            {/* Ad Placeholder or Extra Widget can go here */}
-            {/* <div className="w-full h-64 bg-muted/30 rounded-lg flex items-center justify-center border border-dashed text-muted-foreground text-sm">
-              Advertisement / Widget
-            </div> */}
           </div>
         </div>
       </section>
