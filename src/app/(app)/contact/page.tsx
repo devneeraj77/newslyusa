@@ -16,6 +16,7 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import { Metadata } from "next";
 import DotGrid from "@/components/DotGrid";
+import { ContactForm } from "@/components/contact-form";
 
 const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
 
@@ -55,18 +56,11 @@ export default function ContactPage() {
       {/* Content */}
       <section className="container mx-auto py-12 px-4 -mt-20 relative z-20">
         <div className="grid lg:grid-cols-3 gap-8">
-          <DotGrid 
-             dotSize={2}
-             gap={20}
-             baseColor="#9ca3af" // muted-foreground color roughly
-             activeColor="#22c55e" // primary/green color
-             proximity={100}
-             shockRadius={150}
-            />
-
+          {/* create a contact form with name, email, subject and message fields */}
+          <ContactForm />
           {/* Contact Info */}
           <div className="space-y-6">
-            <Card className="shadow-lg border-0">
+            <Card className=" border-0">
               <CardHeader>
                 <CardTitle className="text-xl">Contact Information</CardTitle>
                 <CardDescription>
@@ -130,7 +124,7 @@ export default function ContactPage() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
               <div className="text-white">
                 <h3 className="text-2xl font-bold mb-2">Have Questions?</h3>
                 <p className="text-white/90">

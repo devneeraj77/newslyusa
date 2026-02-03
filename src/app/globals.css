@@ -179,6 +179,9 @@
 .ProseMirror p {
   @apply font-extrabold;
 }
+.ProseMirror  {
+  @apply font-mono;
+}
 
 @keyframes embla-progress {
   0% {

@@ -115,7 +115,7 @@ export const HeadingDropdownMenu = forwardRef<
                       <HeadingButton
                         editor={editor}
                         level={level}
-                        text={`Heading ${level}`}
+                        text={level === 0 ? "Paragraph" : `Heading ${level}`}
                         showTooltip={false}
                         onClick={() => setIsOpen(false)}
                       />

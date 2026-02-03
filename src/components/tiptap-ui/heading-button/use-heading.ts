@@ -24,8 +24,9 @@ import { HeadingThreeIcon } from "@/components/tiptap-icons/heading-three-icon"
 import { HeadingFourIcon } from "@/components/tiptap-icons/heading-four-icon"
 import { HeadingFiveIcon } from "@/components/tiptap-icons/heading-five-icon"
 import { HeadingSixIcon } from "@/components/tiptap-icons/heading-six-icon"
+import { ParagraphIcon } from "@/components/tiptap-icons/paragraph-icon"
 
-export type Level = 1 | 2 | 3 | 4 | 5 | 6
+export type Level = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 /**
  * Configuration for the heading functionality
@@ -51,6 +52,7 @@ export interface UseHeadingConfig {
 }
 
 export const headingIcons = {
+  0: ParagraphIcon,
   1: HeadingOneIcon,
   2: HeadingTwoIcon,
   3: HeadingThreeIcon,
@@ -60,6 +62,7 @@ export const headingIcons = {
 }
 
 export const HEADING_SHORTCUT_KEYS: Record<Level, string> = {
+  0: "ctrl+alt+0",
   1: "ctrl+alt+1",
   2: "ctrl+alt+2",
   3: "ctrl+alt+3",
@@ -77,6 +80,26 @@ export function canToggle(
   turnInto: boolean = true
 ): boolean {
   if (!editor || !editor.isEditable) return false
+  
+  // Special check for paragraph (0)
+  if (level === 0) {
+      if (!turnInto) return editor.can().setNode("paragraph")
+      // Check convertible types same as heading
+      if (
+        !selectionWithinConvertibleTypes(editor, [
+          "paragraph",
+          "heading",
+          "bulletList",
+          "orderedList",
+          "taskList",
+          "blockquote",
+          "codeBlock",
+        ])
+      )
+        return false
+      return editor.can().setNode("paragraph") || editor.can().clearNodes()
+  }
+
   if (
     !isNodeInSchema("heading", editor) ||
     isNodeTypeSelected(editor, ["image"])
@@ -120,7 +143,11 @@ export function isHeadingActive(
   if (!editor || !editor.isEditable) return false
 
   if (Array.isArray(level)) {
-    return level.some((l) => editor.isActive("heading", { level: l }))
+    return level.some((l) => isHeadingActive(editor, l))
+  }
+
+  if (level === 0) {
+    return editor.isActive("paragraph")
   }
 
   return level
@@ -140,7 +167,7 @@ export function toggleHeading(
   const levels = Array.isArray(level) ? level : [level]
   const toggleLevel = levels.find((l) => canToggle(editor, l))
 
-  if (!toggleLevel) return false
+  if (toggleLevel === undefined) return false
 
   try {
     const view = editor.view
@@ -203,8 +230,13 @@ export function toggleHeading(
         .clearNodes()
     }
 
+    if (toggleLevel === 0) {
+        chain.setNode("paragraph").run()
+        return true
+    }
+
     const isActive = levels.some((l) =>
-      editor.isActive("heading", { level: l })
+      l !== 0 && editor.isActive("heading", { level: l })
     )
 
     const toggle = isActive
@@ -232,7 +264,12 @@ export function shouldShowButton(props: {
   const { editor, level, hideWhenUnavailable } = props
 
   if (!editor || !editor.isEditable) return false
-  if (!isNodeInSchema("heading", editor)) return false
+  
+  // If checking for paragraph (0), we don't need heading in schema
+  const levels = Array.isArray(level) ? level : [level]
+  const hasHeadingCheck = levels.some(l => l !== 0)
+
+  if (hasHeadingCheck && !isNodeInSchema("heading", editor)) return false
 
   if (hideWhenUnavailable && !editor.isActive("code")) {
     if (Array.isArray(level)) {
@@ -334,7 +371,7 @@ export function useHeading(config: UseHeadingConfig) {
     isActive,
     handleToggle,
     canToggle: canToggleState,
-    label: `Heading ${level}`,
+    label: level === 0 ? "Paragraph" : `Heading ${level}`,
     shortcutKeys: HEADING_SHORTCUT_KEYS[level],
     Icon: headingIcons[level],
   }

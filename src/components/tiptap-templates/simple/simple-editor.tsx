@@ -108,7 +108,7 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={[2, 3, 4, 5, 6]} portal={isMobile} />
+        <HeadingDropdownMenu levels={[ 2, 3, 4, 5, 6, 0]} portal={isMobile} />
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
           portal={isMobile}
