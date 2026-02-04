@@ -352,7 +352,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-6 text-white z-10">
+                  <div className="absolute bottom-0 left-0 w-full p-3 md:p-6 text-white z-10">
                     <div className="flex flex-wrap gap-3 items-center mb-2">
                       <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground border-none px-3 py-1">
                         {featuredPost.category}
