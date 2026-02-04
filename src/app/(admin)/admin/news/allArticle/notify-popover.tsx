@@ -15,12 +15,14 @@ interface NotifyPopoverProps {
   articleId: string;
   articleTitle: string;
   slug: string;
+  articleImage?: string | null;
 }
 
 export default function NotifyPopover({
   articleId,
   articleTitle,
   slug,
+  articleImage,
 }: NotifyPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +35,12 @@ export default function NotifyPopover({
       // Assuming article detail page is at /news/[slug]
       const url = `/news/${slug}`;
       
-      const result = await sendNotification(articleTitle, url); 
+      const result = await sendNotification(
+        articleTitle,
+        url,
+        undefined,
+        articleImage ?? undefined
+      ); 
       
       if (result.success) {
         toast.success("Notification sent successfully", {

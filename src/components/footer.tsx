@@ -232,7 +232,7 @@ export function Footer() {
       <div className="max-w-7xl border-dashed mx-auto border-t border-muted/45 mt-8 mb-8"></div>
       
       <div className="p-2  text-xs text-center mb-4">
-        <p className="italic"> <strong className="text-primary">**Disclaimer:**</strong> We strive to provide you with accurate and clear news
+        <p className="italic"><strong className="text-primary">**Disclaimer:**</strong> We strive to provide you with accurate and clear news
         content on our website. While we work diligently to ensure the quality
         and relevance of our information, we kindly acknowledge that we cannot
         guarantee that all content is always complete or up to date. We

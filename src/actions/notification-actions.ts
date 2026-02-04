@@ -50,7 +50,7 @@ export async function subscribeUser(sub: PushSubscription, userId?: string) {
   }
 }
 
-export async function sendNotification(message: string, url: string = "/", title: string = "New Article Published!") {
+export async function sendNotification(message: string, url: string = "/", title: string = "New Article Published!", image?: string) {
   try {
     const subscriptions = await prisma.pushSubscription.findMany();
 
@@ -58,6 +58,7 @@ export async function sendNotification(message: string, url: string = "/", title
       title: title,
       body: message,
       url: url,
+      image: image,
     });
 
     const results = await Promise.allSettled(

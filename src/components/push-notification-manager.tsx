@@ -170,7 +170,7 @@ export function PushNotificationManager() {
         </DialogContent>
       </Dialog>
 
-      <div className="fixed bottom-4 right-4 z-50">
+      {/* <div className="fixed bottom-4 right-4 z-50">
           {subscription ? (
               <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-background" onClick={unsubscribeFromPush} title="Disable notifications">
                   <BellOff className="h-4 w-4" />
@@ -180,7 +180,7 @@ export function PushNotificationManager() {
                   <Bell className="h-4 w-4" />
               </Button>
           )}
-      </div>
+      </div> */}
     </>
   );
 }

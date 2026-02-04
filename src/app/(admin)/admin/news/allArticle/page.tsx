@@ -190,7 +190,7 @@ async function ArticlesTable({
                       }
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="max-w-xs md:max-w-24 truncate">
                     {post.categories.map((c) => c.name).join(", ") || "-"}
                   </TableCell>
                   <TableCell>
@@ -200,7 +200,12 @@ async function ArticlesTable({
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    <NotifyPopover articleId={post.id} articleTitle={post.title} slug={post.slug} />
+                    <NotifyPopover
+                      articleId={post.id}
+                      articleTitle={post.title}
+                      slug={post.slug}
+                      articleImage={post.image}
+                    />
                   </TableCell>
                   <TableCell className="text-right">
                     <ArticleActions article={post} />

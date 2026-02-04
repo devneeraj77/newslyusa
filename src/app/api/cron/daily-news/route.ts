@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     const url = `/news/${topPost.slug}`;
 
     // 3. Send notification
-    const result = await sendNotification(message, url, notificationTitle);
+    const result = await sendNotification(message, url, notificationTitle, topPost.image ?? undefined);
 
     return NextResponse.json({ 
       success: true, 

@@ -345,39 +345,51 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 text-white">
-                    <div className="flex flex-wrap gap-2 items-center text-xs md:text-sm">
-                      <Badge variant={"default"}>{featuredPost.category}</Badge>
-                      <Badge variant={"default"}>
-                        {formatTimeAgo(featuredPost.createdAt)}
+                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-6 text-white z-10">
+                    <div className="flex flex-wrap gap-3 items-center mb-4">
+                      <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground border-none px-3 py-1">
+                        {featuredPost.category}
                       </Badge>
+                      <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-white/90 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        {formatTimeAgo(featuredPost.createdAt)}
+                      </div>
                     </div>
-                    <h1 className="text-xl md:text-3xl lg:text-4xl font-mono font-bold lg:w-2xl leading-tight mb-4 max-w-4xl drop-shadow-md">
+
+                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-mono font-bold tracking-tight leading-tight mb-6 max-w-4xl drop-shadow-lg text-white">
                       {featuredPost.title}
                     </h1>
+
                     <div className="flex items-end justify-between gap-4">
-                      <div className="basis-2/3 flex h-auto text-primary/70 flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 max-w-2xl">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
                           : []
-                        ).map((tag) => (
-                          <span
-                            key={tag.id}
-                            className="inline-flex items-center text-xs"
-                          >
-                            <Badge className="truncate text-xs text-primary bg-secondary/10 hover:bg-muted/20 hover:text-primary/90 cursor-pointer">
-                              <span>#</span>
-                              {tag.name}
+                        )
+                          .slice(0, 3)
+                          .map((tag) => (
+                            <Badge
+                              key={tag.id}
+                              variant="outline"
+                              className="text-xs border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                            >
+                              #{tag.name}
                             </Badge>
-                          </span>
-                        ))}
+                          ))}
                       </div>
+
                       <Link
                         href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                        className="p-2 flex w-fit items-center bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground rounded-full font-bold transition-transform duration-200 hover:-translate-y-0.5"
+                        className="group  flex items-center gap-2 bg-white text-black hover:bg-gray-100 rounded-full pl-4 pr-1.5 py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
                         aria-label={`Read ${featuredPost.title}`}
                       >
-                        <IconArrowUpRight size={24} />
+                        <span className="text-sm">Read Article</span>
+                        <div className="bg-black text-white p-1.5 rounded-full group-hover:rotate-45 transition-transform duration-300">
+                          <IconArrowUpRight size={16} />
+                        </div>
                       </Link>
                     </div>
                   </div>
@@ -428,7 +440,6 @@ export default function Home() {
               )}
             </div>
           </div>
-
           {/* Sidebar Area */}
           <div className="xl:col-span-1 space-y-2">
             <hr className="md:hidden mb-2" />
@@ -501,7 +512,7 @@ export default function Home() {
                             "https://placehold.co/600x400/00000/ffffff/png"
                           }
                           fill
-                          unoptimized={!news.image}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform duration-300  hover:scale-105"
                           alt={news.title}
                         />

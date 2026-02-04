@@ -16,8 +16,9 @@ self.addEventListener('push', function(event) {
 
     const options = {
       body: data.body,
-      icon: '/next.svg', // Default icon
-      badge: '/next.svg', // Default badge
+      icon: data.icon || '/next.svg', // Default icon
+      badge: data.badge || '/next.svg', // Default badge
+      image: data.image || '/https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=843&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Default image
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
