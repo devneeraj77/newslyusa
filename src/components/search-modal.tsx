@@ -106,7 +106,7 @@ export function SearchModal({ children }: SearchModalProps) {
                 return (
                   <CommandItem
                     key={item.id}
-                    className="flex cursor-pointer flex justify-between hover:bg-shade/10 items-center"
+                    className="flex cursor-pointer  flex justify-between hover:bg-shade/10 items-center"
                     value={item.title}
                     onSelect={() => {
                       window.location.href = `/news/${item.slug}`; // Or use router.push
@@ -114,15 +114,15 @@ export function SearchModal({ children }: SearchModalProps) {
                     }}
                   >
                     {item.icon ? <item.icon className="size-5" /> : ""}
-                    <div className="flex flex-col min-w-10  md:basis-4/5 ">
-                      <p className="md:max-w-100 min-w-10    truncate text-sm font-medium">
+                    <div className="flex flex-col min-w-10 p-1 md:basis-4/5 ">
+                      <p className="md:max-w-100 min-w-10   text-primary truncate text-sm font-medium">
                         {item.title}
                       </p>
                       <p className=" text-muted-foreground  text-xs line-clamp-1">
                         {stripHtml(item.description)}
                       </p>
                     </div>
-                    <p className="min-w-10 md:basis-1/6  text-end text-muted-foreground text-xs">
+                    <p className="min-w-10 md:basis-1/6  pr-2 text-end text-muted-foreground text-xs">
                       {item.category}
                     </p>
                   </CommandItem>

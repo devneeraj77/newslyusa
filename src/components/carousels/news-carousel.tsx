@@ -29,21 +29,22 @@ export const NewsHeadlineSkeleton = () => (
   </div>
 );
 
-function formatTimeAgo(dateString: string) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+// function formatTimeAgo(dateString: string) {
+//   const date = new Date(dateString);
+//   const now = new Date();
+//   const diffInMs = now.getTime() - date.getTime();
+//   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
 
-  if (diffInHours < 24) {
-    return `${Math.max(0, diffInHours)}h ago`;
-  }
+//   if (diffInHours < 24) {
+//     return `${Math.max(0, diffInHours)}h ago`;
+//   }
 
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}d ago`;
-}
+//   const diffInDays = Math.floor(diffInHours / 24);
+//   return `${diffInDays}d ago`;
+// }
 
 export interface NewsHeadlineItem {
+  id?: string;
   category: string;
   time: string;
   title: string;

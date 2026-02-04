@@ -10,6 +10,7 @@ import {
   IconArrowNarrowRight,
   IconArrowRight,
   IconArrowUpRight,
+  IconHash,
   IconTrendingUp,
 } from "@tabler/icons-react";
 import NewsHeadlines, {
@@ -26,6 +27,7 @@ import NewsHighlightCard, {
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { formatTimeAgo } from "@/lib/utils";
 
 
 const OPTIONS: EmblaOptionsType = { loop: true };
@@ -93,19 +95,19 @@ const MOCK_NEWS_DATA = [
   },
 ];
 
-function formatTimeAgo(dateString: string) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+// function formatTimeAgo(dateString: string) {
+//   const date = new Date(dateString);
+//   const now = new Date();
+//   const diffInMs = now.getTime() - date.getTime();
+//   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
 
-  if (diffInHours < 24) {
-    return `${Math.max(0, diffInHours)}H AGO`;
-  }
+//   if (diffInHours < 24) {
+//     return `${Math.max(0, diffInHours)}H AGO`;
+//   }
 
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}D AGO`;
-}
+//   const diffInDays = Math.floor(diffInHours / 24);
+//   return `${diffInDays}D AGO`;
+// }
 
 export default function Home() {
   const [highlightNews, setHighlightNews] = useState<NewsItem[]>([]);
@@ -131,6 +133,7 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json();
           const mappedData = data.map((item: any) => ({
+            id: item.id,
             category: item.categories[0]?.name || "News",
             time: formatTimeAgo(item.createdAt),
             title: item.title,
@@ -316,6 +319,10 @@ export default function Home() {
     console.log("Animation complete!");
   };
 
+  const filteredHeadlines = headlines.filter(
+    (h) => h.id !== featuredPost?.id
+  );
+
   return (
     <main className="items-center justify-center  m-2 ">
       <section className="container mx-auto flex flex-col items-center justify-center px-1 py-2">
@@ -346,7 +353,7 @@ export default function Home() {
                   </div>
 
                   <div className="absolute bottom-0 left-0 w-full p-6 md:p-6 text-white z-10">
-                    <div className="flex flex-wrap gap-3 items-center mb-4">
+                    <div className="flex flex-wrap gap-3 items-center mb-2">
                       <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground border-none px-3 py-1">
                         {featuredPost.category}
                       </Badge>
@@ -359,11 +366,11 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-mono font-bold tracking-tight leading-tight mb-6 max-w-4xl drop-shadow-lg text-white">
+                    <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-mono font-bold tracking-tight leading-tight  md:mb-2 max-w-4xl drop-shadow-lg text-white">
                       {featuredPost.title}
                     </h1>
 
-                    <div className="flex items-end justify-between gap-4">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex flex-wrap gap-2 max-w-2xl">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
@@ -373,22 +380,23 @@ export default function Home() {
                           .map((tag) => (
                             <Badge
                               key={tag.id}
-                              variant="outline"
-                              className="text-xs border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                              variant="ghost"
+                              className=" bg-white/5 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
                             >
-                              #{tag.name}
+                              <IconHash size={22} />
+                              {tag.name}
                             </Badge>
                           ))}
                       </div>
 
                       <Link
                         href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                        className="group  flex items-center gap-2 bg-white text-black hover:bg-gray-100 rounded-full pl-4 pr-1.5 py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
+                        className="group  flex items-center gap-2 md:bg-white text-black hover:bg-gray-100 rounded-full pl-4 md:pr-1.5 py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
                         aria-label={`Read ${featuredPost.title}`}
                       >
-                        <span className="text-sm">Read Article</span>
-                        <div className="bg-black text-white p-1.5 rounded-full group-hover:rotate-45 transition-transform duration-300">
-                          <IconArrowUpRight size={16} />
+                        <span className="text-sm hidden md:block">Read Article</span>
+                        <div className="text-primary bg-secondary md:bg-black md:text-white p-3 md:p-1.5 rounded-full group-hover:rotate-45 transition-transform duration-300">
+                          <IconArrowUpRight  size={20} />
                         </div>
                       </Link>
                     </div>
@@ -417,7 +425,7 @@ export default function Home() {
             <div className="md:pt-2 mt-2 min-h-[11rem]">
               {loadingHeadlines ? (
                 <Skeleton className="h-8 w-32" />
-              ) : headlines.length > 0 ? (
+              ) : filteredHeadlines.length > 0 ? (
                 <div className="flex items-center justify-start my-4 mt-2 md:mb-4 gap-1 border-primary">
                   <TextShimmer as="h2" className="text-xl tracking-tight">
                     Top headlines
@@ -432,9 +440,9 @@ export default function Home() {
                   <IconTrendingUp className="text-primary/80" size={24} />
                 </div>
               )}
-              {(loadingHeadlines || headlines.length > 0) && (
+              {(loadingHeadlines || filteredHeadlines.length > 0) && (
                 <NewsHeadlines
-                  headlines={headlines}
+                  headlines={filteredHeadlines}
                   isLoading={loadingHeadlines}
                 />
               )}
@@ -450,9 +458,9 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="flex flex-col pr-2 gap-1 max-h-[520px] overflow-y-auto">
+            <div className="flex flex-col pr-2 gap-1  overflow-y-auto">
               {loadingHighlights
-                ? [...Array(6)].map((_, i) => (
+                ? [...Array(5)].map((_, i) => (
                     <NewsHighlightCardSkeleton key={i} />
                   ))
                 : highlightNews
