@@ -8,7 +8,7 @@ export async function loginWithCredentials(values: { email: string; password: st
     await signIn("credentials", {
       email: values.email,
       password: values.password,
-      redirectTo: "/admin",
+      redirectTo: "/dashboard",
     })
   } catch (error) {
     if (error instanceof AuthError) {
@@ -26,7 +26,7 @@ export async function loginWithCredentials(values: { email: string; password: st
 export async function loginWithProvider(providerId: string, callbackUrl?: string) {
   try {
     await signIn(providerId, {
-      redirectTo: callbackUrl || "/admin",
+      redirectTo: callbackUrl || "/dashboard",
     })
   } catch (error) {
     if (error instanceof AuthError) {

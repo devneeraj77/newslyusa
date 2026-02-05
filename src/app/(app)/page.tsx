@@ -336,7 +336,7 @@ export default function Home() {
             </div>
 
             {/* Featured Story */}
-            <div className="relative overflow-hidden  border border-border/40 bg-foreground/5">
+            <div className="relative overflow-hidden bg-foreground/5">
               {featuredPost ? (
                 <>
                   <div className="relative aspect-[16/10] md:aspect-[24/10] w-full overflow-hidden">
@@ -352,7 +352,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full p-6 md:p-6 text-white z-10">
+                  <div className="absolute bottom-0 left-0 w-full p-3 md:p-6 text-white z-10">
                     <div className="flex flex-wrap gap-3 items-center mb-2">
                       <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground border-none px-3 py-1">
                         {featuredPost.category}
@@ -370,7 +370,7 @@ export default function Home() {
                       {featuredPost.title}
                     </h1>
 
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-end justify-between gap-4">
                       <div className="flex flex-wrap gap-2 max-w-2xl">
                         {(featuredPost.tags && featuredPost.tags.length > 0
                           ? featuredPost.tags
@@ -388,10 +388,9 @@ export default function Home() {
                             </Badge>
                           ))}
                       </div>
-
                       <Link
                         href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                        className="group  flex items-center gap-2 md:bg-white text-black hover:bg-gray-100 rounded-full pl-4 md:pr-1.5 py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
+                        className="group  flex items-center gap-2 md:bg-white text-black hover:bg-gray-100 rounded-full pl-4 md:pr-1.5 md:py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
                         aria-label={`Read ${featuredPost.title}`}
                       >
                         <span className="text-sm hidden md:block">Read Article</span>

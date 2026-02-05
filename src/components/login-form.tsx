@@ -67,8 +67,6 @@ export function LoginForm({
       if (result?.error) {
         toast.error(result.error);
       }
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(null);
     }
@@ -78,8 +76,6 @@ export function LoginForm({
     setIsLoading(providerId);
     try {
       await loginWithProvider(providerId, callbackUrl);
-    } catch (error) {
-      toast.error("Something went wrong with provider login.");
     } finally {
       setIsLoading(null);
     }
