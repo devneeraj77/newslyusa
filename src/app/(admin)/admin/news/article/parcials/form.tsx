@@ -39,6 +39,7 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Badge } from "@/components/ui/badge";
+import { SeoStatusCard } from "./seo-status-card";
 
 const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
   ssr: false,
@@ -377,7 +378,7 @@ export default function ArticleForm({
             <div className="space-y-2 ">
               <Label htmlFor="title">Title</Label>
               <Input
-                size="lg"
+                
                 id="title"
                 name="title"
                 placeholder="Article Title"
@@ -391,7 +392,6 @@ export default function ArticleForm({
               <Label htmlFor="slug">Slug</Label>
               <div className="relative">
                 <Input
-                  size="lg"
                   className="py-4"
                   id="slug"
                   name="slug"
@@ -436,64 +436,6 @@ export default function ArticleForm({
                 rows={3} // Changed to 3 rows for a shorter description
               />
             </div>
-
-            <div className="space-y-2">
-              <Label>Featured Image</Label>
-              <div className="flex flex-col gap-4">
-                {formData.image && (
-                  <div className="relative bg-red-100 aspect-[17/5]  overflow-hidden ">
-                    <Image
-                      src={formData.image}
-                      alt="Article cover"
-                      fill
-                      className="object-cover"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute right-2 top-2 h-8 w-8"
-                      onClick={handleRemoveImage}
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
-                  </div>
-                )}
-                <div className={formData.image ? "hidden" : "block"}>
-                  {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
-                    <CldUploadWidget
-                      uploadPreset={
-                        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-                      }
-                      onSuccess={handleImageUpload}
-                    >
-                      {({ open }) => {
-                        return (
-                          <div
-                            onClick={() => open()}
-                            className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center rounded-md  border border-dashed bg-muted/20 transition-colors hover:bg-muted/30"
-                          >
-                            <ImageIcon className="h-10 w-10 text-muted-foreground" />
-                            <span className="mt-2 text-sm text-muted-foreground">
-                              Upload Featured Image
-                            </span>
-                          </div>
-                        );
-                      }}
-                    </CldUploadWidget>
-                  ) : (
-                    <div className="flex aspect-[17/5] flex-col items-center justify-center rounded-md border border-dashed bg-muted/20 text-destructive">
-                      <span className="text-sm">
-                        Missing Cloudinary Upload Preset
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
             <div className="space-y-2" ref={categoriesRef}>
               <Label>Categories</Label>
               <div className="border rounded-md overflow-hidden relative">
@@ -554,7 +496,7 @@ export default function ArticleForm({
               )}
             </div>
 
-            <div className="space-y-2" ref={tagsRef}>
+            <div className="space-y-2  h-22" ref={tagsRef}>
               <Label>Tags</Label>
               <div className="border rounded-md overflow-hidden relative">
                 <Command shouldFilter={false}>
@@ -632,9 +574,68 @@ export default function ArticleForm({
                 </div>
               )}
             </div>
+            <div className="space-y-2">
+              <Label>Featured Image</Label>
+              <div className="flex flex-col  gap-4">
+                {formData.image && (
+                  <div className="relative bg-red-100 aspect-[17/7]  rounded-xl overflow-hidden ">
+                    <Image
+                      src={formData.image}
+                      alt="Article cover"
+                      fill
+                      className="object-cover"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute right-2 top-2 h-8 w-8"
+                      onClick={handleRemoveImage}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+                <div className={formData.image ? "hidden" : "block"}>
+                  {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
+                    <CldUploadWidget
+                      uploadPreset={
+                        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+                      }
+                      onSuccess={handleImageUpload}
+                    >
+                      {({ open }) => {
+                        return (
+                          <div
+                            onClick={() => open()}
+                            className="flex aspect-[17/5]  cursor-pointer flex-col items-center justify-center rounded-md  border border-dashed bg-muted/20 transition-colors hover:bg-muted/30"
+                          >
+                            <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                            <span className="mt-2 text-sm text-muted-foreground">
+                              Upload Featured Image
+                            </span>
+                          </div>
+                        );
+                      }}
+                    </CldUploadWidget>
+                  ) : (
+                    <div className="flex aspect-[17/5] flex-col items-center justify-center rounded-md border border-dashed bg-muted/20 text-destructive">
+                      <span className="text-sm">
+                        Missing Cloudinary Upload Preset
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className=" bg-shade/5 rounded-lg overflow-hidden">
+              <SeoStatusCard data={formData} />
+            </div>
           </div>
         </div>
-        <div>
+        <div className="">
           <div className="space-y-2  ">
             <Label htmlFor="content">Content</Label>
             {/* <TiptapEditor
@@ -644,7 +645,6 @@ export default function ArticleForm({
             
             /> */}
             <SimpleEditor
-            
               content={formData.content}
               onChange={handleContentChange}
               placeholder="Write your article content here..."

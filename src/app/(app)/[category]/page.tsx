@@ -63,6 +63,22 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const decodedCategory = decodeURIComponent(category);
+
+  const categoryData = await db.category.findFirst({
+    where: {
+      OR: [
+        { name: { equals: decodedCategory, mode: "insensitive" } },
+        { slug: { equals: decodedCategory, mode: "insensitive" } },
+      ],
+    },
+  });
+
+  if (!categoryData) {
+    return {
+      title: "Category Not Found",
+    };
+  }
+
   const title = `${decodedCategory} News`;
   const description = `Read the latest ${decodedCategory} news, trends, and updates on Newsly USA.`;
   const baseUrl = process.env.NEXT_PUBLIC_URL || "https://newslyusa.com";
@@ -100,7 +116,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   });
 
   if (!categoryData) {
-    redirect("/news");
+    return (
+      <div className="container mx-auto flex justify-center items-center flex-col min-h-120 py-12 text-center">
+        <h1 className="text-2xl font-bold">Category Not Found</h1>
+        <p className="text-muted-foreground">
+          The category you are looking for does not exist or has been removed.
+        </p>
+      </div>
+    );
   }
 
   const posts = await db.post.findMany({

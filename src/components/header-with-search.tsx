@@ -62,7 +62,7 @@ export function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-3 sx:px-2 lg:p-0 ">
+      <nav className="mx-auto flex h-16 w-full container  items-center justify-between px-3  ">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           {/* Logo Placeholder */}

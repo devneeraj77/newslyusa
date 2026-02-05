@@ -52,9 +52,7 @@ export function NewsletterSubscribe() {
         Get the latest news and updates delivered directly to your inbox.
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-        <Input
-          size="lg"
-          
+        <Input          
           type="email"
           placeholder="Enter your email address"
           value={email}

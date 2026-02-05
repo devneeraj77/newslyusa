@@ -30,12 +30,29 @@ type PostWithDetails = Post & {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, category } = await params;
 
+  const decodedCategory = decodeURIComponent(category);
+
+  const categoryData = await db.category.findFirst({
+    where: {
+      OR: [
+        { name: { equals: decodedCategory, mode: "insensitive" } },
+        { slug: { equals: decodedCategory, mode: "insensitive" } },
+      ],
+    },
+  });
+
+  if (!categoryData) {
+    return {
+      title: "Category Not Found",
+    };
+  }
+
   const post = await db.post.findUnique({
     where: { slug },
     include: { author: true, tags: true, categories: true },
   });
 
-  if (!post) {
+  if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
     return {
       title: "Article Not Found",
       description: "The article you are looking for does not exist.",
@@ -87,6 +104,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function NewsPage({ params }: Props) {
   const { slug, category } = await params;
 
+  const decodedCategory = decodeURIComponent(category);
+
+  const categoryData = await db.category.findFirst({
+    where: {
+      OR: [
+        { name: { equals: decodedCategory, mode: "insensitive" } },
+        { slug: { equals: decodedCategory, mode: "insensitive" } },
+      ],
+    },
+  });
+
+  if (!categoryData) {
+    return (
+      <div className="container mx-auto flex justify-center items-center flex-col min-h-125 py-12 text-center">
+        <h1 className="text-2xl font-bold">Category Not Found</h1>
+        <p className="text-muted-foreground">
+          The category you are looking for does not exist or has been removed.
+        </p>
+      </div>
+    );
+  }
+
   // Safely attempt to fetch the post
   let post: PostWithDetails | null = null;
   try {
@@ -104,7 +143,7 @@ export default async function NewsPage({ params }: Props) {
     console.error("Error fetching post:", error);
   }
 
-  if (!post) {
+  if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
     return (
       <div className="container mx-auto flex justify-center items-center flex-col min-h-125 py-12 text-center">
         <h1 className="text-2xl font-bold">Article Not Found</h1>
