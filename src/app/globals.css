@@ -5,6 +5,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 @theme inline {
   --font-sans: var(--font-mon-sans);
   --font-mono: var(--font-lora-mono);
@@ -74,7 +75,7 @@
   --accent-foreground: #101619;
   --accent-shade: #e0a800;
 
-  --muted: #64748b;
+  --muted: #e7e7e7;
   --muted-foreground: #475569;
   --muted-link: #1e40af;
 
@@ -145,6 +146,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    
   }
   body {
     @apply bg-background text-foreground;

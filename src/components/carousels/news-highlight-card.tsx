@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dot } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatDateForArticle, formatDateToMDY } from "@/lib/utils";
 
 export interface CategoryItem {
   id: string;
@@ -131,32 +132,32 @@ interface NewsHighlightCardProps {
 }
 
 const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
-  const timeAgo = news.createdAt ? formatTimeAgo(news.createdAt) : news.timestamp;
+  const timeAgo = news.createdAt ? formatDateToMDY(news.createdAt) : news.timestamp;
 
   return (
     <Link
       href={`/${news.categorySlug || news.category || "news"}/${news.slug}`}
-      className="group flex gap-2 p-2 w-full hover:bg-muted/10 transition-colors cursor-pointer "
+      className="group flex gap-4 p-3 w-full hover:bg-muted/50 -xl transition-all duration-300 cursor-pointer border border-transparent hover:border-border/40"
     >
-      <div className="flex flex-col justify-between flex-1 min-w-0">
-        <h4 className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+      <div className="flex flex-col justify-between flex-1 min-w-0 py-0.5">
+        <h4 className="text-[15px] font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors font-sans tracking-tight">
           {news.title}
         </h4>
-        <div className="flex items-center  mt-2 text-xs text-muted-foreground">
-          <span className="font-semibold text-primary/80">
+        <div className="flex items-center mt-2.5 text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
+          <span className="text-muted-foreground/70">
             {news.category}
           </span>
-          <Dot className="text-primary" size={18} />
-          <span>{timeAgo}</span>
+          <Dot className="text-muted-foreground/40" size={20} />
+          <span className="text-muted-foreground/70">{timeAgo}</span>
         </div>
       </div>
-      <div className="relative h-16 w-24 shrink-0 overflow-hidden  bg-muted">
+      <div className="relative h-20 w-28 shrink-0 overflow-hidden -lg bg-muted shadow-sm ring-1 ring-border/10">
         <Image
           src={news.image}
           alt={news.title}
           fill
-          sizes="(max-width: 768px) 96px, 96px"
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
+          sizes="(max-width: 768px) 112px, 112px"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
     </Link>
@@ -165,16 +166,16 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
 
 export const NewsHighlightCardSkeleton = () => {
   return (
-    <div className="flex  gap-6 p-3 animate-pulse min-h-[5.5rem]">
-      <div className="flex-1 space-y-3">
-        <Skeleton className="h-4 w-full bg-muted-foreground/20 " />
-        <Skeleton className="h-3 w-5/6 bg-muted-foreground/20 " />
-        <div className="flex gap-2 items-center mt-2">
-           <Skeleton className="h-3 w-16 bg-muted-foreground/20 " />
-           <Skeleton className="h-3 w-16 bg-muted-foreground/20 " />
+    <div className="flex gap-4 p-3 animate-pulse min-h-[6.5rem]">
+      <div className="flex-1 space-y-2.5 py-1">
+        <Skeleton className="h-4 w-full bg-muted-foreground/10 " />
+        <Skeleton className="h-4 w-5/6 bg-muted-foreground/10 " />
+        <div className="flex gap-2 items-center mt-3">
+           <Skeleton className="h-3 w-16 bg-muted-foreground/10 " />
+           <Skeleton className="h-3 w-12 bg-muted-foreground/10 " />
         </div>
       </div>
-      <Skeleton className="h-16 w-24 bg-muted-foreground/20 -md shrink-0" />
+      <Skeleton className="h-20 w-28 bg-muted-foreground/10 -lg shrink-0" />
     </div>
   );
 };

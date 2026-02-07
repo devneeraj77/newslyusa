@@ -26,54 +26,62 @@ interface AllArticlesPageProps {
 
 function ArticlesTableSkeleton() {
   return (
-    <div className="overflow-hidden ">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Editor's Pick</TableHead>
-             <TableHead>
-                Top Story <span className="text-xs">(0/5)</span>
-              </TableHead>
-            <TableHead>Categories</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Updated At</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="overflow-scroll">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <TableRow key={i}>
-              <TableCell className="font-medium lg:max-w-xs">
-                 <Skeleton className="h-4 w-[250px] mb-2" />
-                 <Skeleton className="h-3 w-[150px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-5 w-[80px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-5 w-[40px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-5 w-[40px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-[100px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-[80px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-[80px]" />
-              </TableCell>
-              <TableCell className="text-right">
-                <Skeleton className="h-8 w-8 ml-auto" />
-              </TableCell>
+    <div className="mb-4 h-120 overflow-hidden w-full">
+      <div className="overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Editor's Pick</TableHead>
+              <TableHead>Top Story</TableHead>
+              <TableHead>Categories</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Updated At</TableHead>
+              <TableHead>Notify</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell className="lg:max-w-xs w-full">
+                  <Skeleton className="h-5 w-3/4 mb-2" />
+                  <Skeleton className="h-3 w-1/2" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-5 w-20" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-10 rounded-full" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-10 rounded-full" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2 items-center">
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                    <Skeleton className="h-8 w-8 rounded-md" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
@@ -121,7 +129,8 @@ async function ArticlesTable({
   ]);
 
   return (
-    <>
+  <>
+  <div className="mb-4  h-120 overflow-x-hidden">
       <div className="overflow-hidden">
         <Table>
           <TableHeader>
@@ -134,7 +143,7 @@ async function ArticlesTable({
               </TableHead>
               <TableHead>Categories</TableHead>
               <TableHead>Created At</TableHead>
-              <TableHead>Updated At</TableHead>
+              <TableHead className="hidden md:flex-1">Updated At</TableHead>
               <TableHead>Notify</TableHead>
 
               <TableHead className="text-right">Actions</TableHead>
@@ -144,7 +153,7 @@ async function ArticlesTable({
             {posts.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center h-40 text-muted-foreground"
                 >
                   No articles found.
@@ -196,7 +205,7 @@ async function ArticlesTable({
                   <TableCell>
                     {new Date(post.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:flex-1">
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
@@ -217,6 +226,7 @@ async function ArticlesTable({
         </Table>
       </div>
 
+    </div>
       <div className="mt-8">
         <PaginationWithLinks
           currentPage={currentPage}
@@ -224,7 +234,7 @@ async function ArticlesTable({
           pageSize={pageSize}
         />
       </div>
-    </>
+  </>
   );
 }
 

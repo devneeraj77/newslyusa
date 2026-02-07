@@ -14,7 +14,7 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
 function ContactMessagesTableSkeleton() {
   return (
-    <div className="rounded-md border overflow-hidden">
+    <div className=" border overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>

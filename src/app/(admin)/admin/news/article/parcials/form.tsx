@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -167,6 +167,7 @@ export default function ArticleForm({
     createdAt: "",
     categoryIds: initialCategoryIds,
     tagIds: initialTagIds,
+    sendNotification: true,
   });
 
   useEffect(() => {
@@ -178,106 +179,78 @@ export default function ArticleForm({
     }
   }, [initialData]);
 
-  const slugCheckTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [slugMessage, setSlugMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
 
-  const slugify = (text: string) => {
+  const slugify = useCallback((text: string) => {
     return text
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
-  };
+  }, []);
 
-  const handleChange = (
+  const handleChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
-      const newData = { ...prev, [name]: value };
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-      if (name === "title" || name === "slug") {
-        if (slugCheckTimeoutRef.current) {
-          clearTimeout(slugCheckTimeoutRef.current);
+    if (name === "title") {
+      setFormData((prev) => ({ ...prev, slug: slugify(value) }));
+    }
+
+    if (name === "title" || name === "slug") {
+      setSlugMessage(null);
+    }
+  }, [slugify]);
+
+  useEffect(() => {
+    if (!formData.slug.trim()) return;
+
+    const checkSlug = async () => {
+      setIsCheckingSlug(true);
+      try {
+        const res = await checkSlugUnique(formData.slug, initialData?.id || "");
+        if (res.isUnique) {
+          setSlugMessage({ type: "success", text: "Slug is available" });
+        } else {
+          setSlugMessage({ type: "error", text: "Slug is already taken" });
         }
-        setSlugMessage(null);
+      } catch (error) {
+        console.error("Slug check failed", error);
+      } finally {
+        setIsCheckingSlug(false);
       }
+    };
 
-      if (name === "title") {
-        const generatedSlug = slugify(value);
-        newData.slug = generatedSlug;
+    const timer = setTimeout(checkSlug, 800);
+    return () => clearTimeout(timer);
+  }, [formData.slug, initialData?.id]);
 
-        if (value.trim()) {
-          slugCheckTimeoutRef.current = setTimeout(async () => {
-            setIsCheckingSlug(true);
-            try {
-              const res = await checkSlugUnique(
-                generatedSlug,
-                initialData?.id || "",
-              );
+  const filteredCategories = useMemo(() => {
+    return categories.filter((category) =>
+      category.name.toLowerCase().includes(categorySearchTerm.toLowerCase()),
+    );
+  }, [categories, categorySearchTerm]);
 
-              if (!res.isUnique) {
-                let counter = 1;
-                let uniqueSlug = generatedSlug;
-                let isUnique = false;
-                while (!isUnique && counter < 10) {
-                  uniqueSlug = `${generatedSlug}-${counter}`;
-                  const res2 = await checkSlugUnique(
-                    uniqueSlug,
-                    initialData?.id || "",
-                  );
-                  if (res2.isUnique) isUnique = true;
-                  else counter++;
-                }
-                setFormData((prev) => ({ ...prev, slug: uniqueSlug }));
-              }
-              setSlugMessage({ type: "success", text: "Slug is available" });
-            } catch (error) {
-              console.error("Slug check failed", error);
-            } finally {
-              setIsCheckingSlug(false);
-            }
-          }, 800);
-        }
-      } else if (name === "slug") {
-        if (value.trim()) {
-          slugCheckTimeoutRef.current = setTimeout(async () => {
-            setIsCheckingSlug(true);
-            try {
-              const res = await checkSlugUnique(value, initialData?.id || "");
+  const filteredTags = useMemo(() => {
+    return availableTags.filter((tag) =>
+      tag.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [availableTags, searchTerm]);
 
-              if (res.isUnique) {
-                setSlugMessage({ type: "success", text: "Slug is available" });
-              } else {
-                setSlugMessage({
-                  type: "error",
-                  text: "Slug is already taken",
-                });
-              }
-            } catch (error) {
-              console.error("Slug check failed", error);
-            } finally {
-              setIsCheckingSlug(false);
-            }
-          }, 800);
-        }
-      }
-      return newData;
-    });
-  };
-
-  const handleContentChange = (content: string) => {
+  const handleContentChange = useCallback((content: string) => {
     setFormData((prev) => ({ ...prev, content }));
-  };
+  }, []);
 
-  const handleSwitchChange = (checked: boolean) => {
+  const handleSwitchChange = useCallback((checked: boolean) => {
     setFormData((prev) => ({ ...prev, published: checked }));
-  };
+  }, []);
 
-  const handleCategoryChange = (
+  const handleCategoryChange = useCallback((
     checked: boolean | string,
     categoryId: string,
   ) => {
@@ -292,9 +265,9 @@ export default function ArticleForm({
         };
       }
     });
-  };
+  }, []);
 
-  const handleTagChange = (checked: boolean | string, tagId: string) => {
+  const handleTagChange = useCallback((checked: boolean | string, tagId: string) => {
     setFormData((prev) => {
       const currentIds = prev.tagIds;
       if (checked) {
@@ -303,7 +276,7 @@ export default function ArticleForm({
         return { ...prev, tagIds: currentIds.filter((id) => id !== tagId) };
       }
     });
-  };
+  }, []);
 
   const handleImageUpload = useCallback((result: any) => {
     if (result.event === "success") {
@@ -315,15 +288,20 @@ export default function ArticleForm({
     setFormData((prev) => ({ ...prev, image: "" }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    const toastId = toast.loading(
+      initialData ? "Updating article..." : "Creating article...",
+    );
 
     try {
       const payload = {
         ...formData,
         // Optional: Ensure date is in ISO string or passed as string
-        createdAt: formData.createdAt,
+        createdAt: formData.createdAt || undefined,
+        image: formData.image || undefined,
         id: initialData?.id,
       };
 
@@ -338,6 +316,7 @@ export default function ArticleForm({
         initialData
           ? "Article updated successfully"
           : "Article created successfully",
+        { id: toastId },
       );
 
       // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
@@ -355,16 +334,17 @@ export default function ArticleForm({
           createdAt: "",
           categoryIds: [],
           tagIds: [],
+          sendNotification: true,
         });
       }
 
       router.push("/admin/news/allArticle");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message, { id: toastId });
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, initialData, router]);
 
   return (
     <div className=" mx-auto p-4 md:p-8 bg-background ">
@@ -454,12 +434,7 @@ export default function ArticleForm({
                   >
                     <CommandEmpty>No category found.</CommandEmpty>
                     <CommandGroup>
-                      {categories
-                        .filter((category) =>
-                          category.name
-                            .toLowerCase()
-                            .includes(categorySearchTerm.toLowerCase()),
-                        )
+                      {filteredCategories
                         .map((category) => (
                           <CommandItem
                             key={category.id}
@@ -533,12 +508,7 @@ export default function ArticleForm({
                   >
                     <CommandEmpty>No tag found.</CommandEmpty>
                     <CommandGroup>
-                      {availableTags
-                        .filter((tag) =>
-                          tag.name
-                            .toLowerCase()
-                            .includes(searchTerm.toLowerCase()),
-                        )
+                      {filteredTags
                         .map((tag) => (
                           <CommandItem
                             key={tag.id}
@@ -583,6 +553,7 @@ export default function ArticleForm({
                       src={formData.image}
                       alt="Article cover"
                       fill
+                      sizes="(max-width: 768px) 100vw, 600px"
                       className="object-cover"
                     />
                     <Button
@@ -657,6 +628,16 @@ export default function ArticleForm({
               onCheckedChange={handleSwitchChange}
             />
             <Label htmlFor="published">Published</Label>
+          </div>
+          <div className="flex items-center space-x-2 pt-4">
+            <Switch
+              id="sendNotification"
+              checked={formData.sendNotification}
+              onCheckedChange={(checked) =>
+                setFormData((prev) => ({ ...prev, sendNotification: checked }))
+              }
+            />
+            <Label htmlFor="sendNotification">Send Push Notification to all devices</Label>
           </div>
           <div className="pt-4 max-w-sm">
             <Label htmlFor="createdAt">Publish Date (Optional)</Label>

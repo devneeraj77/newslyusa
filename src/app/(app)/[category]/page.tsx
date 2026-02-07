@@ -2,7 +2,7 @@ import db from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { stripHtml } from "@/lib/utils";
+import { formatDateForArticle, formatDateForGrid, formatDateForSidebar, stripHtml } from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -117,9 +117,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   if (!categoryData) {
     return (
-      <div className="container mx-auto flex justify-center items-center flex-col min-h-120 py-12 text-center">
+      <div className="container mx-auto flex justify-center items-center flex-col min-h-srcreen py-12 text-center">
         <h1 className="text-2xl font-bold">Category Not Found</h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-2 max-w-md px-10  text-sm leading-relaxed">
           The category you are looking for does not exist or has been removed.
         </p>
       </div>
@@ -145,7 +145,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   if (posts.length === 0) {
     return (
-      <main className="container mx-auto px-4 py-12 min-h-120 flex justify-center items-center">
+      <main className="container mx-auto flex justify-center items-center px-10 flex-col min-h-150 py-12 text-center">
         <p className="text-center text-muted-foreground">
           No news found in this category.
         </p>
@@ -194,6 +194,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     take: 5,
     include: {
       categories: true,
+      author: true,
       tags: true,
     },
   });
@@ -208,6 +209,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     },
     take: 5,
     include: {
+      author: true,
       categories: true,
       tags: true,
     },
@@ -266,7 +268,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <div className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* 1. Main Featured Article (Latest Post) */}
-            <div className="flex flex-col">
+            <div className="flex flex-col  border-dashed  border-b md:border-b-0 pb-4">
               <Link href={`/${category}/${mainPost.slug}`} className="group">
                 <div className="relative aspect-[17/8] w-full overflow-hidden mb-4">
                   <Image
@@ -276,10 +278,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     }
                     alt={mainPost.title}
                     fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <h1 className="text-3xl font-mono font-black leading-tight mb-3 group-hover:underline decoration-3 decoration-shade underline-offset-2">
+                <h1 className="text-xl md:text-3xl font-mono font-black leading-tight mb-3 group-hover:underline decoration-3 decoration-shade underline-offset-2">
                   {mainPost.title}
                 </h1>
 
@@ -292,7 +296,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   </span>
                   <Dot/>
                   <span className="text-primary/70 font-normal">
-                     {formatTimeAgo(mainPost.createdAt)}
+                     {formatDateForArticle(mainPost.createdAt)}
                   </span>
                 </div>
               </Link>
@@ -314,11 +318,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       }
                       alt={post.title}
                       fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
                       unoptimized={!post.image}
                       className="object-cover"
                     />
                   </div>
-                  <h3 className="font-bold font-mono text-[15px] leading-snug group-hover:underline decoration-2 decoration-shade underline-offset-2 mb-2 line-clamp-2">
+                  <h3 className="font-semibold font-mono text-sm md:text-base leading-snug group-hover:underline decoration-2 decoration-shade underline-offset-2 mb-2 line-clamp-2">
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
@@ -326,7 +331,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       {post.categories[0]?.name || categoryData.name}
                     </span>
                     <span className="text-muted-foreground/70 font-normal">
-                      · {formatTimeAgo(post.createdAt)}
+                      · {formatDateForGrid(post.createdAt)}
                     </span>
                   </div>
                 </Link>
@@ -358,6 +363,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                           }
                           alt={post.title}
                           fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
@@ -367,9 +373,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                             {post.categories[0]?.name}
                           </span>
                           <Dot size={14} />
-                          <span>{formatTimeAgo(post.createdAt)}</span>
+                          <span>{formatDateForSidebar(post.createdAt)}</span>
                         </div>
-                        <h4 className="font-bold text-sm leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
+                        <h4 className="font-semibold font-mono text-lg leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
                           {post.title}
                         </h4>
                       </div>
@@ -414,11 +420,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       0{index + 1}
                     </span>
                     <div className="space-y-1">
-                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:underline decoration-1 decoration-shade underline-offset-2 font-montserrat">
+                      <h4 className="font-mono text-sm sm:text-base font-semibold leading-tight line-clamp-2 group-hover:underline decoration-1 decoration-shade underline-offset-2 font-montserrat">
                         {story.title}
                       </h4>
                       <p className="text-[10px] text-muted-foreground italic">
-                        {formatTimeAgo(story.createdAt)}
+                          {formatDateForSidebar(story.createdAt)}
                       </p>
                     </div>
                   </div>
@@ -426,60 +432,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               ))}
             </div>
 
-            {/* Editor's Pick */}
-            {/* {editorsPicks.length > 0 && (
-              <>
-                <div className="p-1 border-b border-muted mt-8">
-                  <p className="text-[10px] text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
-                    Editor&apos;s Pick
-                  </p>
-                </div>
-                <div className="flex flex-col gap-4 mt-4">
-                  {editorsPicks.map((story) => (
-                    <Link
-                      key={story.id}
-                      href={`/${story.categories[0]?.slug || "news"}/${story.slug}`}
-                      className="group cursor-pointer flex gap-3"
-                    >
-                      <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-md bg-muted">
-                        <Image
-                          src={story.image || "/api/placeholder/100/100"}
-                          alt={story.title}
-                          fill
-                          className="object-cover transition-transform group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-xs font-semibold leading-tight line-clamp-2 group-hover:underline font-montserrat">
-                          {story.title}
-                        </h4>
-                        <p className="text-[10px] text-muted-foreground">
-                          {formatTimeAgo(story.createdAt)}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )} */}
-
-            {/* Minimal Newsletter Sign-up */}
-            {/* <div className="p-4 mt-8  bg-muted/10 border border-muted/20">
-              <p className="text-xs font-bold mb-2">The Newsly Pulse</p>
-              <p className="text-[10px] text-muted-foreground mb-3">
-                The day's top 3 stories in your inbox.
-              </p>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="bg-background border border-muted p-2 text-[10px] focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <button className="bg-primary text-primary-foreground py-2 text-[10px] font-bold uppercase tracking-wider hover:bg-opacity-90 transition-all">
-                  Subscribe
-                </button>
-              </div>
-            </div> */}
+            {/*  */}
           </div>
         </aside>
       </section>

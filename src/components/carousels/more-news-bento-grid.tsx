@@ -317,6 +317,7 @@ const NewsGrid = () => {
                 }
                 alt={newsData[0].title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
                 className="object-cover "
               />
             </div>
@@ -339,6 +340,7 @@ const NewsGrid = () => {
                     alt={news.title}
                     unoptimized={!news.image}
                     fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
@@ -370,6 +372,7 @@ const NewsGrid = () => {
                 }
                 alt={newsData[1].title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 300px"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
@@ -399,6 +402,7 @@ const NewsGrid = () => {
                 alt={newsData[2].title}
                 unoptimized={!newsData[2].image}
                 fill
+                sizes="100vw"
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
@@ -427,6 +431,7 @@ const NewsGrid = () => {
                 }
                 alt={newsData[3].title}
                 fill
+                sizes="100vw"
                 unoptimized={!newsData[3].image}
                 className=" object-cover transition-transform duration-500 group-hover:scale-105"
               />

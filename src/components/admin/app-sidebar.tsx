@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import {
   DropdownMenu,
@@ -66,21 +67,22 @@ const items = links
 
 export function AppSidebar() {
   const { data: session } = useSession()
+  const { isMobile } = useSidebar()
   const user = session?.user
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="duration-[800ms] ease-in-out">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Command size={24} />
+                  <Command className="size-4" />
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Newsly Admin</span>
-                  <span className="">v1.0.0</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Newsly Admin</span>
+                  <span className="truncate text-xs">v1.0.0</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -94,7 +96,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -115,7 +117,7 @@ export function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                  <div className="h-8 w-8 rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                     {user?.image ? (
                       <Image
                         src={user.image}
@@ -141,7 +143,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-[--radix-dropdown-menu-trigger-width]  min-w-56 rounded-lg"
-                side="bottom"
+                side={isMobile ? "bottom" : "right"}
                 align="end"
                 sideOffset={4}
               >

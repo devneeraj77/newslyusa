@@ -1,8 +1,8 @@
-"use server"
+"use server";
 import Link from "next/link";
 import Image from "next/image";
 import db from "@/lib/prisma";
-import { stripHtml } from "@/lib/utils";
+import { formatDateForGrid, stripHtml } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -10,23 +10,9 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-  PaginationEllipsis
+  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Dot } from "lucide-react";
-
-function formatTimeAgo(dateString: string | Date) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-  
-  if (diffInHours < 24) {
-      return `${Math.max(0, diffInHours)}h ago`;
-  }
-  
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}d ago`;
-}
 
 interface CategoryArticlesPaginationProps {
   categoryId?: string;
@@ -83,37 +69,43 @@ export default async function CategoryArticlesPagination({
   const getPageUrl = (p: number) => `/${categorySlug}?page=${p}`;
 
   return (
-    <div  className="w-full py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div className="w-full py-8">
+      <div className="grid group grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mb-12">
         {posts.map((post) => (
-          <Link 
-            key={post.id} 
-            href={categoryId ? `/${categorySlug}/${post.slug}` : `/${post.categories[0]?.slug || "news"}/${post.slug}`} 
-            className="group flex flex-col h-full   overflow-hidden "
+          <Link
+            key={post.id}
+            href={
+              categoryId
+                ? `/${categorySlug}/${post.slug}`
+                : `/${post.categories[0]?.slug || "news"}/${post.slug}`
+            }
+            className="group flex flex-col h-full"
           >
-            <div className="relative aspect-[17/6] w-full overflow-hidden">
+            <div className="relative aspect-[4/2] w-full overflow-hidden  bg-muted mb-4 shadow-sm">
               <Image
-                src={post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"}
+                src={
+                  post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
+                }
                 alt={post.title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <div className="py-4 flex flex-col flex-grow">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-2">
-                 <span className="text-primary truncate">{post.categories[0]?.name}</span>
-                 <span className="text-muted-foreground items-center font-normal flex whitespace-nowrap">
-                   <Dot size={24}/> {formatTimeAgo(post.createdAt)}
-                 </span>
+            <div className="flex flex-col flex-grow gap-3">
+              <div className="flex items-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                <span className="text-primary truncate">
+                  {post.categories[0]?.name}
+                </span>
+                <Dot className="text-muted-foreground/40" size={20} />
+                <span>{formatDateForGrid(post.createdAt)}</span>
               </div>
-              <h3 className="font-bold text-lg mb-2 group-hover:underline line-clamp-2">
+              <h3 className="font-semibold font-mono text-2xl leading-tight group-hover:underline decoration-2 decoration-shade transition-colors line-clamp-2">
                 {post.title}
               </h3>
-              {/* <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-grow">
-                {stripHtml(post.content).length > 120
-                  ? `${stripHtml(post.content).slice(0, 60)}...`
-                  : stripHtml(post.content)}
-              </p> */}
+              <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
+                {stripHtml(post.content || "").slice(0, 100)}...
+              </p>
             </div>
           </Link>
         ))}
@@ -127,14 +119,19 @@ export default async function CategoryArticlesPagination({
                 href={page > 1 ? getPageUrl(page - 1) : "#"}
                 aria-disabled={page <= 1}
                 tabIndex={page <= 1 ? -1 : undefined}
-                className={page <= 1 ? "pointer-events-none opacity-50" : undefined}
+                className={
+                  page <= 1 ? "pointer-events-none opacity-50" : undefined
+                }
               />
             </PaginationItem>
 
             {totalPages <= 5 ? (
               Array.from({ length: totalPages }).map((_, i) => (
                 <PaginationItem key={i + 1}>
-                  <PaginationLink href={getPageUrl(i + 1)} isActive={page === i + 1}>
+                  <PaginationLink
+                    href={getPageUrl(i + 1)}
+                    isActive={page === i + 1}
+                  >
                     {i + 1}
                   </PaginationLink>
                 </PaginationItem>
@@ -199,7 +196,11 @@ export default async function CategoryArticlesPagination({
                 href={page < totalPages ? getPageUrl(page + 1) : "#"}
                 aria-disabled={page >= totalPages}
                 tabIndex={page >= totalPages ? -1 : undefined}
-                className={page >= totalPages ? "pointer-events-none opacity-50" : undefined}
+                className={
+                  page >= totalPages
+                    ? "pointer-events-none opacity-50"
+                    : undefined
+                }
               />
             </PaginationItem>
           </PaginationContent>

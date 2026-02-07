@@ -47,7 +47,7 @@ export function formatDateToMDY(date: string | Date) {
   const d = new Date(date);
   if (isNaN(d.getTime())) return "";
   return d.toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
     day: "numeric",
     year: "numeric",
   });

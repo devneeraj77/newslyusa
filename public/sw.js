@@ -1,43 +1,70 @@
-self.addEventListener('push', function(event) {
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('push', function (event) {
   if (event.data) {
-    const data = event.data.json();
-    
+    let data = {};
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = { title: 'New Article', body: event.data.text() };
+    }
+
     // Broadcast to window clients
-    event.waitUntil(
-      self.clients.matchAll({type: 'window'}).then(clients => {
-        clients.forEach(client => {
-          client.postMessage({
-            type: 'PUSH_NOTIFICATION',
-            payload: data
-          });
+    const broadcastPromise = self.clients.matchAll({ type: 'window' }).then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({
+          type: 'PUSH_NOTIFICATION',
+          payload: data,
         });
-      })
-    );
+      });
+    });
 
     const options = {
       body: data.body,
-      icon: data.icon || '/next.svg', // Default icon
-      badge: data.badge || '/next.svg', // Default badge
-      image: data.image || '/next.svg', // Default image
+      icon: data.icon || '/next.svg', // Fallback to next.svg if empty
+      badge: data.badge || '/next.svg',
+      image: data.image || data.featuredImage || undefined, // Ensure empty strings don't break it
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
-        primaryKey: '2',
-        url: data.url || '/'
+        url: data.url || '/',
       },
-      actions: [
-        {action: 'explore', title: 'View Article'}
-      ]
+      actions: data.url ? [{ action: 'explore', title: 'View Article' }] : [],
     };
-    event.waitUntil(
-      self.registration.showNotification(data.title, options)
-    );
+
+    event.waitUntil(Promise.all([broadcastPromise, self.registration.showNotification(data.title || 'New Update', options)]));
   }
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   event.notification.close();
+  const urlToOpen = event.notification.data.url || '/';
+  const fullUrlToOpen = new URL(urlToOpen, self.location.origin).href;
+
   event.waitUntil(
-    clients.openWindow(event.notification.data.url)
+    self.clients
+      .matchAll({
+        type: 'window',
+        includeUncontrolled: true,
+      })
+      .then(function (windowClients) {
+        // Check if there is already a window/tab open with the target URL
+        for (var i = 0; i < windowClients.length; i++) {
+          var client = windowClients[i];
+          if (client.url === fullUrlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // If no window is open, open a new one
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(fullUrlToOpen);
+        }
+      }),
   );
 });

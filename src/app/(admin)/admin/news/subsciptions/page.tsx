@@ -14,7 +14,7 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
 function SubscriptionsTableSkeleton() {
   return (
-    <div className="rounded-md border overflow-hidden">
+    <div className="  overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>

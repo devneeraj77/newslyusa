@@ -164,7 +164,7 @@ export default function Home() {
       setLoading(true);
       try {
         const fetchUrl = `/api/news/category?slug=${category.toLowerCase()}`;
-        console.log(`Fetching category news from: ${fetchUrl}`);
+        // console.log(`Fetching category news from: ${fetchUrl}`);
         const response = await fetch(fetchUrl);
 
         if (!response.ok) {
@@ -176,7 +176,7 @@ export default function Home() {
         }
 
         const data = await response.json();
-        console.log(`Received data for ${category}:`, data);
+        // console.log(`Received data for ${category}:`, data);
 
         if (data.length > 0) {
           const transformed = data.map((post: any) => ({
@@ -191,9 +191,9 @@ export default function Home() {
           }));
           setter(transformed);
         } else {
-          console.log(
-            `No data received for ${category}. Setting to empty array.`,
-          );
+          // console.log(
+          //   `No data received for ${category}. Setting to empty array.`,
+          // );
           setter([]); // Set to empty array if no data
         }
       } catch (error) {
@@ -326,9 +326,9 @@ export default function Home() {
   return (
     <main className="items-center justify-center  m-2 ">
       <section className="container mx-auto flex flex-col items-center justify-center px-1 py-2">
-        <div className="grid grid-cols-1 xl:grid-cols-4 w-full gap-3 lg:gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-7 w-full gap-3 ">
           {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-4">
+          <div className="xl:col-span-5 space-y-4 lg:space-y-6">
             <div className="flex items-center justify-between">
               <span className="pl-2 p-1 my-2 block border-l-2 border-primary w-fit bg-linear-to-r/decreasing from-muted-foreground/10 to-transperant">
                 Best of the week
@@ -448,7 +448,7 @@ export default function Home() {
             </div>
           </div>
           {/* Sidebar Area */}
-          <div className="xl:col-span-1 space-y-2">
+          <div className="xl:col-span-2 space-y-2">
             <hr className="md:hidden mb-2" />
             <div className="flex items-center justify-between py-2 pt-4">
               <span className="font-bold text-lg pl-2">Highlights</span>
@@ -518,7 +518,10 @@ export default function Home() {
                             news.image ||
                             "https://placehold.co/600x400/00000/ffffff/png"
                           }
+                          loading="eager"
                           fill
+                          fetchPriority={i < 2 ? "high" : "auto"}
+                          priority={i < 2}
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform duration-300  hover:scale-105"
                           alt={news.title}

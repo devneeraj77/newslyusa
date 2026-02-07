@@ -117,9 +117,9 @@ export default async function NewsPage({ params }: Props) {
 
   if (!categoryData) {
     return (
-      <div className="container mx-auto flex justify-center items-center flex-col min-h-125 py-12 text-center">
+      <div className="container mx-auto flex justify-center items-center flex-col min-h-150 py-12 text-center">
         <h1 className="text-2xl font-bold">Category Not Found</h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-2 max-w-md px-10 text-sm leading-relaxed">
           The category you are looking for does not exist or has been removed.
         </p>
       </div>
@@ -145,9 +145,9 @@ export default async function NewsPage({ params }: Props) {
 
   if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
     return (
-      <div className="container mx-auto flex justify-center items-center flex-col min-h-125 py-12 text-center">
+      <div className="container mx-auto flex justify-center items-center px-10 flex-col min-h-150 py-12 text-center">
         <h1 className="text-2xl font-bold">Article Not Found</h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-2 max-w-md px-10 text-sm leading-relaxed">
           The article you are looking for does not exist or has been removed.
         </p>
       </div>
@@ -231,6 +231,8 @@ export default async function NewsPage({ params }: Props) {
                   }
                   alt={post.title}
                   fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 75vw, 850px"
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
