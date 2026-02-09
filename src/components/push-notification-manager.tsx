@@ -152,7 +152,7 @@ export function PushNotificationManager() {
   return (
     <>
       <Dialog open={showPrompt} onOpenChange={setShowPrompt}>
-        <DialogContent>
+        <DialogContent className="rounded-none bg-background">
           <DialogHeader>
             <DialogTitle>Enable Notifications</DialogTitle>
             <DialogDescription>
@@ -160,10 +160,10 @@ export function PushNotificationManager() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="space-x-2 sm:gap-0">
-            <Button variant="outline" onClick={handleDismiss}>
+            <Button className="rounded-none" variant="outline" onClick={handleDismiss}>
               Maybe Later
             </Button>
-            <Button onClick={subscribeToPush}>
+            <Button className="rounded-none" onClick={subscribeToPush}>
               Allow Notifications
             </Button>
           </DialogFooter>

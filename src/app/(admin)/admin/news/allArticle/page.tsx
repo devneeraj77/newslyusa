@@ -209,12 +209,14 @@ async function ArticlesTable({
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    <NotifyPopover
-                      articleId={post.id}
-                      articleTitle={post.title}
-                      slug={post.slug}
-                      articleImage={post.image}
-                    />
+                    <div className={!post.published ? "opacity-50 pointer-events-none" : ""}>
+                      <NotifyPopover
+                        articleId={post.id}
+                        articleTitle={post.title}
+                        slug={post.slug}
+                        articleImage={post.image}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <ArticleActions article={post} />

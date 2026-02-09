@@ -346,7 +346,7 @@ export default function Home() {
                       fill
                       priority
                       fetchPriority="high"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
+                      sizes="(max-width: 1279px) 100vw, 1100px"
                       className="object-cover transition-transform duration-700 hover:scale-[1.02]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
@@ -359,8 +359,8 @@ export default function Home() {
                       </Badge>
                       <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-white/90 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                         <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
                         </span>
                         {formatTimeAgo(featuredPost.createdAt)}
                       </div>
@@ -518,7 +518,6 @@ export default function Home() {
                             news.image ||
                             "https://placehold.co/600x400/00000/ffffff/png"
                           }
-                          loading="eager"
                           fill
                           fetchPriority={i < 2 ? "high" : "auto"}
                           priority={i < 2}
@@ -668,7 +667,7 @@ export default function Home() {
       <section className="min-h-90 flex items-center">
         <div className="border-y border-dashed border-slate-200 w-full max-w-5xl mx-auto px-10 sm:px-16">
           <div className="flex flex-col md:flex-row text-center md:text-left items-center justify-between gap-8 px-3 md:px-10 border-x border-dashed border-slate-200 py-16 sm:py-20 -mt-10 -mb-10 w-full">
-            <p className="text-xl font-medium max-w-md bg-linear-to-r from-muted to-muted-foreground bg-clip-text  font-extrabold text-transparent ">
+            <p className="text-xl font-medium max-w-md text-foreground font-extrabold ">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit.
               Explicabo, tempora!
             </p>

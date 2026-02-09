@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles, Settings, Bell, User } from "lucide-react";
+import { Grid2x2Plus, Menu, Newspaper, Search, Sparkle, LucideIcon, Cpu, BriefcaseBusiness, Speech, HeartPlus, TicketsPlane, Sparkles, Settings, Bell, User, Info, Phone, ChevronDown, Layers } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -25,6 +25,7 @@ export function Header() {
   const [open, setOpen] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
   const [lastScrollY, setLastScrollY] = React.useState(0);
+  const [isCategoriesOpen, setIsCategoriesOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -66,7 +67,7 @@ export function Header() {
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl group">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground transition-transform group-hover:scale-105 shadow-sm">
+            <div className="w-8 h-8 bg-primary  flex items-center justify-center text-primary-foreground transition-transform group-hover:scale-105 shadow-sm">
                <Grid2x2Plus className="w-5 h-5" />
             </div>
             <span className="font-mono tracking-tight hidden sm:inline-block">NewslyUSA</span>
@@ -127,7 +128,7 @@ export function Header() {
               <SheetHeader className="px-1 text-left">
                 <SheetTitle asChild>
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl" onClick={() => setOpen(false)}>
-                        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground">
+                        <div className="w-8 h-8 bg-primary  flex items-center justify-center text-primary-foreground">
                         <Grid2x2Plus className="w-5 h-5" />
                         </div>
                         <span className="font-mono tracking-tight">NewslyUSA</span>
@@ -139,20 +140,60 @@ export function Header() {
               </SheetHeader>
               <div className="flex flex-col gap-4 py-4 h-full">
                  <div className="flex flex-col gap-1 px-1">
-                    {links.map((link) => (
                     <Link
-                        key={link.label}
-                        href={link.href}
+                        href="/about"
                         onClick={() => setOpen(false)}
                         className={cn(
-                            "flex items-center gap-3  px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                            pathname.startsWith(link.href) ? "bg-accent/10 text-accent-foreground" : "text-muted-foreground"
+                            "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                            pathname.startsWith("/about") ? "bg-accent/10 text-accent-foreground" : "text-muted-foreground"
                         )}
                     >
-                        <link.icon className="h-4 w-4" />
-                        {link.label}
+                        <Info className="h-4 w-4" />
+                        About
                     </Link>
-                    ))}
+                    <Link
+                        href="/contact"
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                            "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                            pathname.startsWith("/contact") ? "bg-accent/10 text-accent-foreground" : "text-muted-foreground"
+                        )}
+                    >
+                        <Phone className="h-4 w-4" />
+                        Contact
+                    </Link>
+
+                    <div className="px-3 py-2.5 text-sm font-medium text-muted-foreground">
+                        <button 
+                            onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                            className="flex items-center justify-between w-full hover:text-foreground transition-colors"
+                        >
+                            <span className="flex items-center gap-3">
+                                <Layers className="h-4 w-4" />
+                                Categories
+                            </span>
+                            <ChevronDown className={cn("h-4 w-4 transition-transform", isCategoriesOpen && "rotate-180")} />
+                        </button>
+                    </div>
+
+                    {isCategoriesOpen && (
+                        <div className="flex flex-col gap-1 px-1 pl-4 border-l ml-6 my-1">
+                            {links.map((link) => (
+                                <Link
+                                    key={link.label}
+                                    href={link.href}
+                                    onClick={() => setOpen(false)}
+                                    className={cn(
+                                        "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
+                                        pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    <link.icon className="h-4 w-4" />
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                  </div>
                  
                  <div className="mt-auto pb-8 px-1 flex flex-col gap-4">

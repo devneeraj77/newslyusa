@@ -144,11 +144,11 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
           {news.title}
         </h4>
         <div className="flex items-center mt-2.5 text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
-          <span className="text-muted-foreground/70">
+          <span className="text-muted-foreground">
             {news.category}
           </span>
-          <Dot className="text-muted-foreground/40" size={20} />
-          <span className="text-muted-foreground/70">{timeAgo}</span>
+          <Dot className="text-muted-foreground" size={20} />
+          <span className="text-muted-foreground">{timeAgo}</span>
         </div>
       </div>
       <div className="relative h-20 w-28 shrink-0 overflow-hidden -lg bg-muted shadow-sm ring-1 ring-border/10">
