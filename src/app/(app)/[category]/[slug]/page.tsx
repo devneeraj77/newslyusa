@@ -2,7 +2,7 @@ import { IconUserFilled } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import { PostShare } from "@/components/post-share";
 import SimilarPosts, { SimilarPostsSkeleton } from "@/components/similar-posts";
 import {
@@ -27,12 +27,9 @@ type PostWithDetails = Post & {
   tags: Tag[];
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, category } = await params;
-
+const getCategory = cache(async (category: string) => {
   const decodedCategory = decodeURIComponent(category);
-
-  const categoryData = await db.category.findFirst({
+  return db.category.findFirst({
     where: {
       OR: [
         { name: { equals: decodedCategory, mode: "insensitive" } },
@@ -40,6 +37,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ],
     },
   });
+});
+
+const getPost = cache(async (slug: string) => {
+  return db.post.findUnique({
+    where: { slug },
+    include: { author: true, tags: true, categories: true },
+  });
+});
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug, category } = await params;
+
+  const categoryData = await getCategory(category);
 
   if (!categoryData) {
     return {
@@ -47,10 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const post = await db.post.findUnique({
-    where: { slug },
-    include: { author: true, tags: true, categories: true },
-  });
+  const post = await getPost(slug);
 
   if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
     return {
@@ -104,16 +111,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function NewsPage({ params }: Props) {
   const { slug, category } = await params;
 
-  const decodedCategory = decodeURIComponent(category);
-
-  const categoryData = await db.category.findFirst({
-    where: {
-      OR: [
-        { name: { equals: decodedCategory, mode: "insensitive" } },
-        { slug: { equals: decodedCategory, mode: "insensitive" } },
-      ],
-    },
-  });
+  const categoryData = await getCategory(category);
 
   if (!categoryData) {
     return (
@@ -127,21 +125,7 @@ export default async function NewsPage({ params }: Props) {
   }
 
   // Safely attempt to fetch the post
-  let post: PostWithDetails | null = null;
-  try {
-    post = await db.post.findUnique({
-      where: {
-        slug: slug,
-      },
-      include: {
-        author: true,
-        categories: true,
-        tags: true,
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching post:", error);
-  }
+  const post = await getPost(slug);
 
   if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
     return (
@@ -183,40 +167,33 @@ export default async function NewsPage({ params }: Props) {
                   </BreadcrumbList>
                 </Breadcrumb>
               </div>
-              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-4">
+              <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-5xl font-mono font-bold mt-6 md:mt-8">
                 {post.title}
               </h1>
-              <div className="flex items-end  justify-between">
-                <div className="flex  md:pt-4  gap-2 items-center text-sm text-muted-foreground">
-                  {/* <Image src={"https://placehold.co/400/png"}   alt={post.author.name} width={30} height={10} className="border rounded-full"/> */}
-
-                  <div className=" h-9 w-9  flex justify-center items-center  rounded-full bg-muted/20">
-                    <IconUserFilled size={20} className="text-primary/10" />
+              <div className="flex flex-row sm:items-center justify-between gap-4 py-5  border-border/50 ">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <IconUserFilled size={20} />
                   </div>
-                  <div className="">
-                    <div className="flex font-sans text-sm text-primary font-semibold items-center ">
-                      {post.author?.name && (
-                        <span className=" text-sm">
-                          {post.author.name}
-                        </span>
-                      )}
-                    </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-foreground">
+                      {post.author?.name || "Newsly Team"}
+                    </span>
                     <time
-                      className="text-xs  uppercase tracking-wider mb-1 text-primary/70 "
+                      className="text-xs text-muted-foreground font-medium"
                       dateTime={post.createdAt.toISOString()}
                     >
-                      {new Date(post.createdAt).toLocaleString("en-US", {
-                        month: "short",
+                      {new Date(post.createdAt).toLocaleDateString("en-US", {
+                        month: "long",
                         day: "numeric",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
                         timeZoneName: "short",
+                        year: "numeric",
+                        
                       })}
                     </time>
                   </div>
                 </div>
-                <div>
+                <div className="flex items-center gap-2">
                   <PostShare title={post.title} />
                 </div>
               </div>
@@ -233,7 +210,7 @@ export default async function NewsPage({ params }: Props) {
                   fill
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 75vw, 850px"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover"
                 />
               </div>
               {blogSanitizer(post.content || "")}

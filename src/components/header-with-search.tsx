@@ -63,7 +63,7 @@ export function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between  px-2 md:px-1">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl group">
@@ -97,7 +97,7 @@ export function Header() {
           <SearchModal>
               <Button
                 variant="outline"
-                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-3 xl:text-muted-foreground"
+                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-3 hover:text-muted-foreground"
               >
                 <Search className="h-4 w-4 xl:mr-2" />
                 <span className="hidden xl:inline-flex">Search news...</span>

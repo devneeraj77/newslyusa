@@ -155,8 +155,7 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
         <Image
           src={news.image}
           alt={news.title}
-          width={400}
-          height={225}
+          fill
           loading="lazy"
           sizes="(max-width: 768px) 112px, 112px"
           className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -86,15 +86,15 @@ export function SearchModal({ children }: SearchModalProps) {
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <ModalTrigger asChild>{children}</ModalTrigger>
-      <ModalContent className="p-1 border mt-40 md:mt-0 rounded-lg">
+      <ModalContent className="p-1 rounded-none  border mt-40 md:mt-0">
         <ModalTitle className="sr-only">Search</ModalTitle>
         <Command
-          className="bg-background md:bg-card rounded-md "
+          className="bg-background rounded-none  md:bg-card "
           shouldFilter={false}
         >
           <CommandInput
             className={cn(
-              "placeholder:text-muted-foreground flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+              "placeholder:text-muted-foreground flex h-12 w-full  bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
             )}
             placeholder="Search news..."
             value={query}
