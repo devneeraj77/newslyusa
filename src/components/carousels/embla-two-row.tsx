@@ -76,9 +76,10 @@ const EmblaTwoRow: React.FC<PropType> = (props) => {
                     <Image
                       src={item.image}
                       alt={item.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      width={600}
+                      height={360}
                       loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 flex flex-col justify-end">

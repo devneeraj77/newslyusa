@@ -40,6 +40,7 @@ import { toast } from "sonner";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Badge } from "@/components/ui/badge";
 import { SeoStatusCard } from "./seo-status-card";
+import { sendNotification } from "@/actions/notification-actions";
 
 const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
   ssr: false,
@@ -312,12 +313,36 @@ export default function ArticleForm({
         throw new Error(res.message || "Something went wrong");
       }
 
-      toast.success(
-        initialData
-          ? "Article updated successfully"
-          : "Article created successfully",
-        { id: toastId },
-      );
+      if (formData.sendNotification && formData.published) {
+        try {
+          const url = `/news/${formData.slug}`;
+          const result = await sendNotification(
+            formData.title,
+            url,
+            formData.description || undefined,
+            formData.image || undefined
+          );
+
+          if (result.success) {
+            toast.success("Article saved & Notification sent", {
+              id: toastId,
+              description: `Sent to ${result.count} devices.`,
+            });
+          } else {
+            toast.warning(`Article saved but notification failed: ${result.error}`, { id: toastId });
+          }
+        } catch (error) {
+          console.error(error);
+          toast.warning("Article saved but failed to send notification", { id: toastId });
+        }
+      } else {
+        toast.success(
+          initialData
+            ? "Article updated successfully"
+            : "Article created successfully",
+          { id: toastId },
+        );
+      }
 
       // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
       // router.refresh();

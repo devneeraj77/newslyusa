@@ -343,9 +343,12 @@ export default function Home() {
                     <Image
                       src={featuredPost.image}
                       alt={featuredPost.title}
-                      fill
+                      width={1200}
+                      height={800}
+                      loading="eager"
                       priority
                       fetchPriority="high"
+        
                       sizes="(max-width: 1279px) 100vw, 1100px"
                       className="object-cover transition-transform duration-700 hover:scale-[1.02]"
                     />
@@ -366,7 +369,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-mono font-bold tracking-tight leading-tight  md:mb-2 max-w-4xl drop-shadow-lg text-white">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl  md:max-w-xl font-mono font-bold tracking-tight leading-tight  md:mb-2 max-w-4xl drop-shadow-lg text-white">
                       {featuredPost.title}
                     </h1>
 
@@ -390,11 +393,11 @@ export default function Home() {
                       </div>
                       <Link
                         href={`/${featuredPost.categorySlug}/${featuredPost.slug}`}
-                        className="group  flex items-center gap-2 md:bg-white text-black hover:bg-gray-100 rounded-full pl-4 md:pr-1.5 md:py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
+                        className="group  flex items-center gap-2 bg-transparent lg:bg-white text-black hover:bg-gray-100 rounded-full lg:pl-4 lg:pr-1.5 lg:py-1.5 font-semibold transition-all duration-300 shadow-xl hover:-translate-y-0.5"
                         aria-label={`Read ${featuredPost.title}`}
                       >
                         <span className="text-sm hidden md:block">Read Article</span>
-                        <div className="text-primary bg-secondary md:bg-black md:text-white p-3 md:p-1.5 rounded-full group-hover:rotate-45 transition-transform duration-300">
+                        <div className="text-primary bg-secondary lg:bg-black md:text-white p-3 md:p-1.5 rounded-full group-hover:rotate-45 transition-transform duration-300">
                           <IconArrowUpRight  size={20} />
                         </div>
                       </Link>
