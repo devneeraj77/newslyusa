@@ -40,8 +40,8 @@ const getCategory = cache(async (category: string) => {
 });
 
 const getPost = cache(async (slug: string) => {
-  return db.post.findUnique({
-    where: { slug },
+  return db.post.findFirst({
+    where: { slug, published: true },
     include: { author: true, tags: true, categories: true },
   });
 });
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = await getPost(slug);
 
-  if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
+  if (!post || !post.categoryIds.includes(categoryData.id)) {
     return {
       title: "Article Not Found",
       description: "The article you are looking for does not exist.",
@@ -127,7 +127,7 @@ export default async function NewsPage({ params }: Props) {
   // Safely attempt to fetch the post
   const post = await getPost(slug);
 
-  if (!post || !post.published || !post.categoryIds.includes(categoryData.id)) {
+  if (!post || !post.categoryIds.includes(categoryData.id)) {
     return (
       <div className="container mx-auto flex justify-center items-center px-10 flex-col min-h-150 py-12 text-center">
         <h1 className="text-2xl font-bold">Article Not Found</h1>
@@ -172,7 +172,7 @@ export default async function NewsPage({ params }: Props) {
               </h1>
               <div className="flex flex-row sm:items-center justify-between gap-4 py-5  border-border/50 ">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <div className="h-10 w-10  bg-primary/10 flex items-center justify-center text-primary">
                     <IconUserFilled size={20} />
                   </div>
                   <div className="flex flex-col">

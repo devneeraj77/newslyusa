@@ -34,7 +34,7 @@ export default function EmblaCarouselAutoplay({
   const rafId = React.useRef(0);
 
   const plugin = React.useRef(
-    Autoplay({ delay: autoplayDelay, stopOnInteraction: false })
+    Autoplay({ delay: autoplayDelay, stopOnInteraction: false }),
   );
 
   const onAutoplayButtonClick = React.useCallback(
@@ -50,7 +50,7 @@ export default function EmblaCarouselAutoplay({
       resetOrStop();
       callback();
     },
-    [api]
+    [api],
   );
 
   React.useEffect(() => {
@@ -104,12 +104,7 @@ export default function EmblaCarouselAutoplay({
   };
 
   return (
-    <div
-      className={cn(
-        "w-full text-accent flex flex-col gap-6",
-        className
-      )}
-    >
+    <div className={cn("w-full text-accent flex flex-col gap-6", className)}>
       <Carousel
         setApi={setApi}
         plugins={[plugin.current]}
@@ -125,12 +120,10 @@ export default function EmblaCarouselAutoplay({
               key={index}
               className={cn(
                 "pl-4 basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4",
-                itemClassName
+                itemClassName,
               )}
             >
-              <div className="h-full w-full">
-                {slide}
-              </div>
+              <div className="h-full w-full">{slide}</div>
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -139,7 +132,6 @@ export default function EmblaCarouselAutoplay({
         <div className="flex items-center justify-between mt-4 mb-8  px-4">
           <div className="flex gap-2">
             <Button
-            
               variant="outline"
               size="icon-lg"
               className="rounded-full text-primary hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground"
@@ -150,7 +142,7 @@ export default function EmblaCarouselAutoplay({
             <Button
               variant="outline"
               size="icon-lg"
-              className="rounded-full text-primary hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground" 
+              className="rounded-full text-primary hover:bg-primary active:bg-primary/90 active:text-primary-foreground hover:text-primary-foreground"
               onClick={() => onAutoplayButtonClick(() => api?.scrollNext())}
             >
               <ChevronRight className="h-5 w-5" />
@@ -161,7 +153,7 @@ export default function EmblaCarouselAutoplay({
           <div
             className={cn(
               "flex-1 max-w-[150px] mx-8 h-[2px] bg-muted-foreground/10 rounded-full overflow-hidden transition-opacity duration-300",
-              isPlaying ? "opacity-100" : "opacity-0"
+              isPlaying ? "opacity-100" : "opacity-0",
             )}
           >
             <div
@@ -170,7 +162,6 @@ export default function EmblaCarouselAutoplay({
               style={{ width: "0%" }}
             />
           </div>
-
           <Button
             variant="ghost"
             className="rounded-full rounded-full bg-transparent  aactive:focus:bg-shade  bg-accent text-accent-foreground hover:bg-shade active:bg-shade active:text-accent-foreground px-8"

@@ -97,7 +97,7 @@ export function Header() {
           <SearchModal>
               <Button
                 variant="outline"
-                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-3 hover:text-muted-foreground"
+                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-4 text-sm text-muted-foreground hover:text-primary focus:text-primary focus:ring-1 focus:ring-primary focus:ring-offset-1 focus:ring-offset-background transition-colors"
               >
                 <Search className="h-4 w-4 xl:mr-2" />
                 <span className="hidden xl:inline-flex">Search news...</span>

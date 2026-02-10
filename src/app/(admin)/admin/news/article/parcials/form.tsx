@@ -315,7 +315,8 @@ export default function ArticleForm({
 
       if (formData.sendNotification && formData.published) {
         try {
-          const url = `/news/${formData.slug}`;
+          const category = categories.find(c => c.id === formData.categoryIds[0]);
+          const url = `/${category?.name.toLowerCase() || "news"}/${formData.slug}`;
           const result = await sendNotification(
             formData.title,
             url,

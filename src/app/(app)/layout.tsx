@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Lora, Montserrat } from "next/font/google";
+import { Geist, Inter, Lora, Montserrat } from "next/font/google";
 import "../globals.css";
 // import "@/styles/_variables.scss";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -8,7 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import DotGrid from "@/components/DotGrid";
 import { Footer } from "@/components/footer";
 
-const geistSans = Geist({
+const geistSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -71,7 +71,6 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-
             {children}
             <SpeedInsights />
             <Footer />

@@ -151,7 +151,7 @@ const NewsHighlightCard: React.FC<NewsHighlightCardProps> = ({ news }) => {
           <span className="text-muted-foreground">{timeAgo}</span>
         </div>
       </div>
-      <div className="relative h-20 w-28 shrink-0 overflow-hidden -lg bg-muted shadow-sm ring-1 ring-border/10">
+      <div className="relative h-20 w-28  shrink-0 overflow-hidden -lg bg-muted shadow-sm ring-1 ring-border/10">
         <Image
           src={news.image}
           alt={news.title}
