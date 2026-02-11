@@ -50,6 +50,7 @@ const TiptapEditor = dynamic(() => import("@/components/ui/tiptap-editor"), {
 interface Category {
   id: string;
   name: string;
+  slug: string;
 }
 
 interface Tag {
@@ -68,6 +69,7 @@ interface ArticleFormProps {
     published: boolean;
     createdAt?: string | Date;
     categories?: Category[];
+    categorySlug?: string; // For notification URL construction
     tags?: Tag[];
     categoryIds?: string[]; // Fallback
     tagIds?: string[]; // Fallback
@@ -166,6 +168,7 @@ export default function ArticleForm({
     image: initialData?.image || "",
     published: initialData?.published || false,
     createdAt: "",
+    categorySlug: initialData?.categorySlug || "news", // For notification URL construction
     categoryIds: initialCategoryIds,
     tagIds: initialTagIds,
     sendNotification: true,
@@ -193,20 +196,21 @@ export default function ArticleForm({
       .replace(/(^-|-$)+/g, "");
   }, []);
 
-  const handleChange = useCallback((
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name === "title") {
-      setFormData((prev) => ({ ...prev, slug: slugify(value) }));
-    }
+      if (name === "title") {
+        setFormData((prev) => ({ ...prev, slug: slugify(value) }));
+      }
 
-    if (name === "title" || name === "slug") {
-      setSlugMessage(null);
-    }
-  }, [slugify]);
+      if (name === "title" || name === "slug") {
+        setSlugMessage(null);
+      }
+    },
+    [slugify],
+  );
 
   useEffect(() => {
     if (!formData.slug.trim()) return;
@@ -251,33 +255,36 @@ export default function ArticleForm({
     setFormData((prev) => ({ ...prev, published: checked }));
   }, []);
 
-  const handleCategoryChange = useCallback((
-    checked: boolean | string,
-    categoryId: string,
-  ) => {
-    setFormData((prev) => {
-      const currentIds = prev.categoryIds;
-      if (checked) {
-        return { ...prev, categoryIds: [...currentIds, categoryId] };
-      } else {
-        return {
-          ...prev,
-          categoryIds: currentIds.filter((id) => id !== categoryId),
-        };
-      }
-    });
-  }, []);
+  const handleCategoryChange = useCallback(
+    (checked: boolean | string, categoryId: string) => {
+      setFormData((prev) => {
+        const currentIds = prev.categoryIds;
+        if (checked) {
+          return { ...prev, categoryIds: [...currentIds, categoryId] };
+        } else {
+          return {
+            ...prev,
+            categoryIds: currentIds.filter((id) => id !== categoryId),
+          };
+        }
+      });
+    },
+    [],
+  );
 
-  const handleTagChange = useCallback((checked: boolean | string, tagId: string) => {
-    setFormData((prev) => {
-      const currentIds = prev.tagIds;
-      if (checked) {
-        return { ...prev, tagIds: [...currentIds, tagId] };
-      } else {
-        return { ...prev, tagIds: currentIds.filter((id) => id !== tagId) };
-      }
-    });
-  }, []);
+  const handleTagChange = useCallback(
+    (checked: boolean | string, tagId: string) => {
+      setFormData((prev) => {
+        const currentIds = prev.tagIds;
+        if (checked) {
+          return { ...prev, tagIds: [...currentIds, tagId] };
+        } else {
+          return { ...prev, tagIds: currentIds.filter((id) => id !== tagId) };
+        }
+      });
+    },
+    [],
+  );
 
   const handleImageUpload = useCallback((result: any) => {
     if (result.event === "success") {
@@ -289,88 +296,99 @@ export default function ArticleForm({
     setFormData((prev) => ({ ...prev, image: "" }));
   };
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setLoading(true);
 
-    const toastId = toast.loading(
-      initialData ? "Updating article..." : "Creating article...",
-    );
+      const toastId = toast.loading(
+        initialData ? "Updating article..." : "Creating article...",
+      );
 
-    try {
-      const payload = {
-        ...formData,
-        // Optional: Ensure date is in ISO string or passed as string
-        createdAt: formData.createdAt || undefined,
-        image: formData.image || undefined,
-        id: initialData?.id,
-      };
+      try {
+        const payload = {
+          ...formData,
+          // Optional: Ensure date is in ISO string or passed as string
+          createdAt: formData.createdAt || undefined,
+          image: formData.image || undefined,
+          id: initialData?.id,
+        };
 
-      // Call the Server Action
-      const res = await saveArticle(payload);
+        // Call the Server Action
+        const res = await saveArticle(payload);
 
-      if (!res.success) {
-        throw new Error(res.message || "Something went wrong");
-      }
-
-      if (formData.sendNotification && formData.published) {
-        try {
-          const category = categories.find(c => c.id === formData.categoryIds[0]);
-          const url = `/${category?.name.toLowerCase() || "news"}/${formData.slug}`;
-          const result = await sendNotification(
-            formData.title,
-            url,
-            formData.description || undefined,
-            formData.image || undefined
-          );
-
-          if (result.success) {
-            toast.success("Article saved & Notification sent", {
-              id: toastId,
-              description: `Sent to ${result.count} devices.`,
-            });
-          } else {
-            toast.warning(`Article saved but notification failed: ${result.error}`, { id: toastId });
-          }
-        } catch (error) {
-          console.error(error);
-          toast.warning("Article saved but failed to send notification", { id: toastId });
+        if (!res.success) {
+          throw new Error(res.message || "Something went wrong");
         }
-      } else {
-        toast.success(
-          initialData
-            ? "Article updated successfully"
-            : "Article created successfully",
-          { id: toastId },
-        );
+
+        if (formData.sendNotification && formData.published) {
+          try {
+            const category = categories.find(c => c.id === formData.categoryIds[0]);
+            const url = `/${category?.slug || "news"}/${formData.slug}`;
+            const result = await sendNotification(
+              formData.title,
+              url,
+              initialData
+                ? "An article has been updated. Check out the latest news!"
+                : formData.description || "Check out our latest news article!",
+              formData.image || undefined,
+            );
+
+            if (result.success) {
+              toast.success("Article saved & Notification sent", {
+                id: toastId,
+                description: `Sent to ${result.count} devices.`,
+              });
+            } else {
+              toast.warning(
+                `Article saved but notification failed: ${result.error}`,
+                { id: toastId },
+              );
+            }
+          } catch (error) {
+            console.error(error);
+            toast.warning("Article saved but failed to send notification", {
+              id: toastId,
+            });
+          }
+        } else {
+          toast.success(
+            initialData
+              ? "Article updated successfully"
+              : "Article created successfully",
+            { id: toastId },
+          );
+        }
+
+        // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
+        // router.refresh();
+
+        if (!initialData) {
+          // Reset form on successful create
+          setFormData({
+            title: "",
+            slug: "",
+            description: "",
+            content: "",
+            image: "",
+            published: false,
+            createdAt: "",
+            categoryIds: [],
+            categorySlug: "",
+            tagIds: [],
+            sendNotification: true,
+          });
+        }
+
+        router.push("/admin/news/allArticle");
+      } catch (err: any) {
+        toast.error(err.message, { id: toastId });
+      } finally {
+        setLoading(false);
       }
-
-      // No need for router.refresh() if revalidatePath handles it, but keeps UI sync
-      // router.refresh();
-
-      if (!initialData) {
-        // Reset form on successful create
-        setFormData({
-          title: "",
-          slug: "",
-          description: "",
-          content: "",
-          image: "",
-          published: false,
-          createdAt: "",
-          categoryIds: [],
-          tagIds: [],
-          sendNotification: true,
-        });
-      }
-
-      router.push("/admin/news/allArticle");
-    } catch (err: any) {
-      toast.error(err.message, { id: toastId });
-    } finally {
-      setLoading(false);
-    }
-  }, [formData, initialData, router]);
+    },
+    [formData, initialData, router],
+  );
 
   return (
     <div className=" mx-auto p-4 md:p-8 bg-background ">
@@ -384,7 +402,6 @@ export default function ArticleForm({
             <div className="space-y-2 ">
               <Label htmlFor="title">Title</Label>
               <Input
-                
                 id="title"
                 name="title"
                 placeholder="Article Title"
@@ -460,29 +477,28 @@ export default function ArticleForm({
                   >
                     <CommandEmpty>No category found.</CommandEmpty>
                     <CommandGroup>
-                      {filteredCategories
-                        .map((category) => (
-                          <CommandItem
-                            key={category.id}
-                            value={category.name}
-                            onSelect={() => {
-                              handleCategoryChange(
-                                !formData.categoryIds.includes(category.id),
-                                category.id,
-                              );
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                formData.categoryIds.includes(category.id)
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {category.name}
-                          </CommandItem>
-                        ))}
+                      {filteredCategories.map((category) => (
+                        <CommandItem
+                          key={category.id}
+                          value={category.name}
+                          onSelect={() => {
+                            handleCategoryChange(
+                              !formData.categoryIds.includes(category.id),
+                              category.id,
+                            );
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.categoryIds.includes(category.id)
+                                ? "opacity-100"
+                                : "opacity-0",
+                            )}
+                          />
+                          {category.name}
+                        </CommandItem>
+                      ))}
                     </CommandGroup>
                   </CommandList>
                 </Command>
@@ -534,29 +550,28 @@ export default function ArticleForm({
                   >
                     <CommandEmpty>No tag found.</CommandEmpty>
                     <CommandGroup>
-                      {filteredTags
-                        .map((tag) => (
-                          <CommandItem
-                            key={tag.id}
-                            value={tag.name}
-                            onSelect={() => {
-                              handleTagChange(
-                                !formData.tagIds.includes(tag.id),
-                                tag.id,
-                              );
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                formData.tagIds.includes(tag.id)
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {tag.name}
-                          </CommandItem>
-                        ))}
+                      {filteredTags.map((tag) => (
+                        <CommandItem
+                          key={tag.id}
+                          value={tag.name}
+                          onSelect={() => {
+                            handleTagChange(
+                              !formData.tagIds.includes(tag.id),
+                              tag.id,
+                            );
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.tagIds.includes(tag.id)
+                                ? "opacity-100"
+                                : "opacity-0",
+                            )}
+                          />
+                          {tag.name}
+                        </CommandItem>
+                      ))}
                     </CommandGroup>
                   </CommandList>
                 </Command>
@@ -663,7 +678,11 @@ export default function ArticleForm({
                 setFormData((prev) => ({ ...prev, sendNotification: checked }))
               }
             />
-            <Label htmlFor="sendNotification">Send Push Notification to all devices</Label>
+            <Label htmlFor="sendNotification">
+              {initialData
+                ? "Send 'Updated News' Notification to all devices"
+                : "Send Push Notification to all devices"}
+            </Label>
           </div>
           <div className="pt-4 max-w-sm">
             <Label htmlFor="createdAt">Publish Date (Optional)</Label>

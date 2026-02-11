@@ -21,6 +21,7 @@ import { LucideIcon, SearchIcon, Newspaper } from "lucide-react";
 import { cn, stripHtml } from "@/lib/utils";
 
 export type CommandItem = {
+  categorySlug: any;
   id: string;
   title: string;
   slug: string;
@@ -66,6 +67,7 @@ export function SearchModal({ children }: SearchModalProps) {
             id: item.id,
             slug: item.slug,
             title: item.title,
+            categorySlug: item.categories?.[0]?.slug || "news",
             description:
               item.description || item.content?.substring(0, 50) + "...",
             category: item.categories?.[0]?.name || "News",
@@ -109,7 +111,7 @@ export function SearchModal({ children }: SearchModalProps) {
                     className="flex cursor-pointer  flex justify-between hover:bg-shade/10 items-center"
                     value={item.title}
                     onSelect={() => {
-                      window.location.href = `/news/${item.slug}`; // Or use router.push
+                      window.location.href = `/${item.categorySlug}/${item.slug}`; // Or use router.push
                       setOpen(false);
                     }}
                   >
@@ -129,7 +131,7 @@ export function SearchModal({ children }: SearchModalProps) {
                 );
               })}
             </CommandGroup>
-            <CommandEmpty className="flex md:min-h-[280px] min-h-[150px] flex-col items-center justify-center">
+            <CommandEmpty className="flex md:min-h-[280px] min-h-[150px]  flex-col items-center justify-center">
               <SearchIcon className="text-muted-foreground mb-2 size-6" />
               <p className="text-muted-foreground mb-1 text-xs">
                 {loading

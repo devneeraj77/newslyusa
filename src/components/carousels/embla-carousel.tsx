@@ -150,25 +150,29 @@ export default function EmblaCarouselAutoplay({
           </div>
 
           {/* Progress Bar */}
-          <div
-            className={cn(
-              "flex-1 max-w-[150px] mx-8 h-[2px] bg-muted-foreground/10 rounded-full overflow-hidden transition-opacity duration-300",
-              isPlaying ? "opacity-100" : "opacity-0",
-            )}
-          >
+          {slides.length >= 5 && (
             <div
-              ref={progressBarRef}
-              className="h-full bg-primary"
-              style={{ width: "0%" }}
-            />
-          </div>
-          <Button
-            variant="ghost"
-            className="rounded-full rounded-full bg-transparent  aactive:focus:bg-shade  bg-accent text-accent-foreground hover:bg-shade active:bg-shade active:text-accent-foreground px-8"
-            onClick={toggleAutoplay}
-          >
-            {isPlaying ? "Stop" : "Play"}
-          </Button>
+              className={cn(
+                "flex-1 max-w-[150px] mx-8 h-[2px] bg-muted-foreground/10 rounded-full overflow-hidden transition-opacity duration-300",
+                isPlaying ? "opacity-100" : "opacity-0",
+              )}
+            >
+              <div
+                ref={progressBarRef}
+                className="h-full bg-primary"
+                style={{ width: "0%" }}
+              />
+            </div>
+          )}
+          {slides.length >= 5 && (
+            <Button
+              variant="ghost"
+              className="rounded-full rounded-full bg-transparent  aactive:focus:bg-shade  bg-accent text-accent-foreground hover:bg-shade active:bg-shade active:text-accent-foreground px-8"
+              onClick={toggleAutoplay}
+            >
+              {isPlaying ? "Stop" : "Play"}
+            </Button>
+          )}
         </div>
       </Carousel>
     </div>

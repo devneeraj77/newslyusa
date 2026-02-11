@@ -23,6 +23,7 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
             select: {
               id: true,
               name: true,
+              slug: true, // This maps to categorySlug in the interface
             },
           },
           tags: {
@@ -44,7 +45,12 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
           image: rawArticle.image,
           published: rawArticle.published,
           createdAt: rawArticle.createdAt.toISOString(),
-          categories: rawArticle.categories,
+          categorySlug: rawArticle.categories[0]?.slug || "news",
+          categories: rawArticle.categories.map(c => ({
+            id: c.id,
+            name: c.name,
+            slug: c.slug
+          })),
           tags: rawArticle.tags,
         };
       }
@@ -54,6 +60,7 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
       select: {
         id: true,
         name: true,
+        slug: true, // This will be mapped in the component or used as is
       },
       orderBy: {
         name: "asc",
@@ -74,7 +81,11 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
       <div className="">
         <ArticleForm
           initialData={article}
-          categories={categories}
+          categories={categories.map(c => ({
+            id: c.id,
+            name: c.name,
+            slug: c.slug
+          }))}
           tags={tags}
         />
       </div>

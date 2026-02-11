@@ -8,8 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import DotGrid from "@/components/DotGrid";
 import { Footer } from "@/components/footer";
 
-const geistSans = Inter({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter-sans",
   subsets: ["latin"],
 });
 
@@ -61,7 +61,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body
         suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${lora.variable} antialiased smooth-scroll bg-background text-foreground min-h-screen bg-primary-foreground`}
+            className={`${inter.variable} ${lora.variable} antialiased smooth-scroll bg-background text-foreground min-h-screen bg-primary-foreground`}
       >
         <SessionProvider>
           <ThemeProvider

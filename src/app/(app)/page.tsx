@@ -1,72 +1,71 @@
 import React from "react";
 import HomeClient from "@/components/home-client";
 import { formatTimeAgo } from "@/lib/utils";
+import db from "@/lib/prisma";
 
-const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_URL) return process.env.NEXT_PUBLIC_URL;
-  return `http://localhost:${process.env.PORT || 3000}`;
-};
-
-async function fetchNews(params: string) {
-  try {
-    const res = await fetch(`${getBaseUrl()}/api/news?${params}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return [];
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching news:", error);
-    return [];
-  }
-}
-
-async function fetchCategoryNews(category: string) {
-  try {
-    const res = await fetch(
-      `${getBaseUrl()}/api/news/category?slug=${category}`,
-      {
-        next: { revalidate: 60 },
-      }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.map((post: any) => ({
-      id: post.id,
-      title: post.title,
-      image: post.image || "https://placehold.co/600x400/00000/ffffff/png",
-      category: post.categories?.[0]?.name || category,
-      timestamp: formatTimeAgo(post.createdAt),
-      slug: post.slug,
-      categorySlug: post.categories?.[0]?.slug || category.toLowerCase(),
-    }));
-  } catch (error) {
-    console.error(`Error fetching ${category} news:`, error);
-    return [];
-  }
-}
+export const revalidate = 60;
 
 export default async function Home() {
   const [
     highlightsData,
     headlinesData,
     editorsPickData,
-    healthData,
-    sportsData,
+    healthRawData,
+    sportsRawData,
   ] = await Promise.all([
-    fetchNews("limit=6"),
-    fetchNews("period=today"),
-    fetchNews("isEditorsPick=true&limit=10"),
-    fetchCategoryNews("health"),
-    fetchCategoryNews("sports"),
+    // highlights: limit=6
+    db.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" },
+      take: 6,
+      include: { categories: true, tags: true },
+    }),
+    // headlines: period=today
+    (async () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return db.post.findMany({
+        where: { published: true, createdAt: { gte: today } },
+        orderBy: { createdAt: "desc" },
+        include: { categories: true, tags: true },
+      });
+    })(),
+    // editorsPick: isEditorsPick=true&limit=10
+    db.post.findMany({
+      where: { published: true, isEditorsPick: true },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      include: { categories: true, tags: true },
+    }),
+    // health news
+    (async () => {
+      const category = await db.category.findUnique({ where: { slug: "health" } });
+      if (!category) return [];
+      return db.post.findMany({
+        where: { published: true, categoryIds: { has: category.id } },
+        orderBy: { createdAt: "desc" },
+        include: { categories: true },
+      });
+    })(),
+    // sports news
+    (async () => {
+      const category = await db.category.findUnique({ where: { slug: "sports" } });
+      if (!category) return [];
+      return db.post.findMany({
+        where: { published: true, categoryIds: { has: category.id } },
+        orderBy: { createdAt: "desc" },
+        include: { categories: true },
+      });
+    })(),
   ]);
 
   const highlights = highlightsData.map((post: any) => ({
     id: post.id,
     title: post.title,
     image: post.image || "https://placehold.co/600x400/00000/ffffff/png",
-    category: post.categories.length > 0 ? post.categories[0].name : "General",
+    category: post.categories.length > 0 ? post.categories[0].name : "news",
     categorySlug:
-      post.categories.length > 0 ? post.categories[0].slug : "general",
+      post.categories.length > 0 ? post.categories[0].slug : "news",
     timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -75,7 +74,7 @@ export default async function Home() {
     content: post.content,
     categories: post.categories,
     tags: post.tags,
-    createdAt: post.createdAt,
+    createdAt: post.createdAt.toISOString(),
   }));
 
   const headlines = headlinesData.map((item: any) => ({
@@ -90,10 +89,9 @@ export default async function Home() {
   const editorsPick = editorsPickData.map((post: any) => ({
     id: post.id,
     title: post.title,
-    image: post.image,
-    category: post.categories.length > 0 ? post.categories[0].name : "General",
-    categorySlug:
-      post.categories.length > 0 ? post.categories[0].slug : "general",
+    image: post.image || "https://placehold.co/600x400/00000/ffffff/png",
+    category: post.categories.length > 0 ? post.categories[0].name : "news",
+    categorySlug: post.categories[0]?.slug || "news",
     timestamp: new Date(post.createdAt).toLocaleDateString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -102,8 +100,24 @@ export default async function Home() {
     content: post.content,
     categories: post.categories,
     tags: post.tags,
-    createdAt: post.createdAt,
+    createdAt: post.createdAt.toISOString(),
   }));
+
+  // Helper to map category news
+  const mapCategoryNews = (posts: any[], categoryName: string, categorySlug: string) => {
+    return posts.map((post) => ({
+      id: post.id,
+      title: post.title,
+      image: post.image || "https://placehold.co/600x400/00000/ffffff/png",
+      category: post.categories?.[0]?.name || categoryName,
+      timestamp: formatTimeAgo(post.createdAt),
+      slug: post.slug,
+      categorySlug: post.categories?.[0]?.slug || categorySlug,
+    }));
+  };
+
+  const healthData = mapCategoryNews(healthRawData, "Health", "health");
+  const sportsData = mapCategoryNews(sportsRawData, "Sports", "sports");
 
   // Calculate initial featured post
   const now = new Date();

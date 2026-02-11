@@ -2,7 +2,12 @@ import db from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { formatDateForArticle, formatDateForGrid, formatDateForSidebar, stripHtml } from "@/lib/utils";
+import {
+  formatDateForArticle,
+  formatDateForGrid,
+  formatDateForSidebar,
+  stripHtml,
+} from "@/lib/utils";
 import CategoryArticlesPagination from "@/components/category-articles-pagination";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -250,23 +255,24 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <h1 className="text-4xl  font-bold font-sans mb-8 capitalize">
         {categoryData.name} News
       </h1>
-      <Breadcrumb className="mb-6">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage className="capitalize">
-              {categoryData.name}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+
       <section className="min-h-screen flex flex-col lg:flex-row gap-8">
         {/* Main Content Area */}
-        <div className="flex-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex-1 ">
+          <Breadcrumb className=" pt-1 border-dashed border-muted pb-3 mb-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="capitalize">
+                  {categoryData.name}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="grid grid-cols-1 pt-2 md:grid-cols-2 gap-8">
             {/* 1. Main Featured Article (Latest Post) */}
             <div className="flex flex-col  border-dashed  border-b md:border-b-0 pb-4">
               <Link href={`/${category}/${mainPost.slug}`} className="group">
@@ -277,7 +283,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       "https://placehold.co/600x400/00000/ffffff/png"
                     }
                     alt={mainPost.title}
-                    fill
+                    width={800}
+                    height={400}
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -294,9 +301,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   <span className="text-primary/70">
                     {mainPost.categories[0]?.name || categoryData.name}
                   </span>
-                  <Dot/>
+                  <Dot />
                   <span className="text-primary/70 font-normal">
-                     {formatDateForArticle(mainPost.createdAt)}
+                    {formatDateForArticle(mainPost.createdAt)}
                   </span>
                 </div>
               </Link>
@@ -319,7 +326,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       alt={post.title}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
-                      unoptimized={!post.image}
+                      // priority
                       className="object-cover"
                     />
                   </div>
@@ -340,74 +347,74 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           </div>
           <section>
             <div className=" py-8 my-10">
-            {lastMonthPosts.length > 0 ? (
-              <>
-                <div className="flex gap-1">
-                  <TextShimmer as="h3" className="text-xl font-bold mb-6">
-                  Trending Last Month
-                </TextShimmer>
-                <IconTrendingUp size={24}/>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {lastMonthPosts.map((post) => (
-                    <Link
-                      key={post.id}
-                      href={`/${category}/${post.slug}`}
-                      className="group flex flex-col gap-2"
-                    >
-                      <div className="relative aspect-video w-full overflow-hidden ">
-                        <Image
-                          src={
-                            post.image ||
-                            "https://placehold.co/600x400/00000/ffffff/png"
-                          }
-                          alt={post.title}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                          <span className="text-primary">
-                            {post.categories[0]?.name}
-                          </span>
-                          <Dot size={14} />
-                          <span>{formatDateForSidebar(post.createdAt)}</span>
+              {lastMonthPosts.length > 0 ? (
+                <>
+                  <div className="flex gap-1">
+                    <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                      Trending Last Month
+                    </TextShimmer>
+                    <IconTrendingUp size={24} />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {lastMonthPosts.map((post) => (
+                      <Link
+                        key={post.id}
+                        href={`/${category}/${post.slug}`}
+                        className="group flex flex-col gap-2"
+                      >
+                        <div className="relative aspect-video w-full overflow-hidden ">
+                          <Image
+                            src={
+                              post.image ||
+                              "https://placehold.co/600x400/00000/ffffff/png"
+                            }
+                            alt={post.title}
+                            loading="lazy"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
                         </div>
-                        <h4 className="font-semibold font-mono text-lg leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
-                          {post.title}
-                        </h4>
-                      </div>
-                    </Link>
-                  ))}
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                            <span className="text-primary">
+                              {post.categories[0]?.name}
+                            </span>
+                            <Dot size={14} />
+                            <span>{formatDateForSidebar(post.createdAt)}</span>
+                          </div>
+                          <h4 className="font-semibold font-mono text-lg leading-tight group-hover:underline decoration-2 decoration-shade underline-offset-2  line-clamp-2">
+                            {post.title}
+                          </h4>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="py-10 text-center">
+                  <TextShimmer as="h3" className="text-xl font-bold mb-6">
+                    No trending last month
+                  </TextShimmer>
+                  <p className="text-muted-foreground">
+                    Check back later for more updates!
+                  </p>
                 </div>
-              </>
-            ) : (
-              <div className="py-10 text-center">
-                <TextShimmer as="h3" className="text-xl font-bold mb-6">
-                  No trending last month
-                </TextShimmer>
-                <p className="text-muted-foreground">
-                  Check back later for more updates!
-                </p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           </section>
         </div>
 
         <aside className="w-full xl:min-h-250 lg:w-64 shrink-0">
-          <div className="sticky top-4 space-y-6">
+          <div className="sticky top-2 space-y-6">
             {/* Header */}
             <div className="p-1 border-b border-dashed border-muted">
               <p className="text-[10px] flex items-center text-left text-muted-foreground mb-1 uppercase tracking-widest font-bold">
-                Top Stories <IconTrendingUp  />
+                Top Stories <IconTrendingUp />
               </p>
             </div>
 
             {/* Stories List */}
-            <div className="flex flex-col gap-5 mt-4">
+            <div className="flex flex-col gap-5 ">
               {topStories.map((story, index) => (
                 <Link
                   key={story.id}
@@ -416,7 +423,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 >
                   <div className="flex gap-3">
                     {/* Rank Number - Using your Plum color for the digit */}
-                    <span className="text-2xl font-black text-muted/80 group-hover:text-primary transition-colors">
+                    <span className="text-2xl font-black text-muted group-hover:text-primary transition-colors">
                       0{index + 1}
                     </span>
                     <div className="space-y-1">
@@ -424,7 +431,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                         {story.title}
                       </h4>
                       <p className="text-[10px] text-muted-foreground italic">
-                          {formatDateForSidebar(story.createdAt)}
+                        {formatDateForSidebar(story.createdAt)}
                       </p>
                     </div>
                   </div>

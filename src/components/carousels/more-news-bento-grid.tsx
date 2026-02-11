@@ -89,71 +89,7 @@ const FALLBACK_NEWS_DATA: NewsItem[] = [
     categories: [{ id: "cat4", name: "Business" }],
     createdAt: new Date().toISOString(),
     categorySlug: "business",
-  },
-  {
-    id: "5",
-    title: "Two Palestine Action hunger strikers end protest after 73 days",
-    image:
-      "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1471",
-    category: "UK",
-    timestamp: "6 hrs ago",
-    slug: "hunger-strike-ends",
-    content:
-      "The BBC understands that one of the protesters was taken to hospital in poor condition.",
-    description:
-      "The BBC understands that one of the protesters was taken to hospital in poor condition.",
-    categories: [{ id: "cat5", name: "UK" }],
-    createdAt: new Date().toISOString(),
-    categorySlug: "uk",
-  },
-  {
-    id: "6",
-    title: "Zelensky declares energy emergency as biting cold persists",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1470",
-    category: "Europe",
-    timestamp: "4 hrs ago",
-    slug: "zelensky-energy-emergency",
-    content:
-      "The move comes as US President Donald Trump said Ukraine is 'less ready'.",
-    description:
-      "The move comes as US President Donald Trump said Ukraine is 'less ready'.",
-    categories: [{ id: "cat6", name: "Europe" }],
-    createdAt: new Date().toISOString(),
-    categorySlug: "europe",
-  },
-  {
-    id: "7",
-    title: "Italian influencer Chiara Ferragni cleared of cake fraud",
-    image:
-      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1374",
-    category: "Europe",
-    timestamp: "15 hrs ago",
-    slug: "chiara-ferragni-cleared",
-    content:
-      "Chiara Ferragni had been accused of misleading consumers in her promotion of Christmas cakes.",
-    description:
-      "Chiara Ferragni had been accused of misleading consumers in her promotion of Christmas cakes.",
-    categories: [{ id: "cat7", name: "Europe" }],
-    createdAt: new Date().toISOString(),
-    categorySlug: "europe",
-  },
-  {
-    id: "8",
-    title: "SpaceX Starship reaches orbit for the first time",
-    image:
-      "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?q=80&w=1470",
-    category: "Tech",
-    timestamp: "1 hr ago",
-    slug: "spacex-starship-orbit",
-    content:
-      "The massive rocket achieved orbital velocity in a major milestone for the company.",
-    description:
-      "The massive rocket achieved orbital velocity in a major milestone for the company.",
-    categories: [{ id: "cat8", name: "Tech" }],
-    createdAt: new Date().toISOString(),
-    categorySlug: "tech",
-  },
+  }
 ];
 
 const stripHtml = (html: string) => {
@@ -425,6 +361,34 @@ const NewsGrid = () => {
           <hr className="w-full border-dashed  " />
 
           {/* Third item text only */}
+          <Link
+            href={`/${newsData[3].categorySlug || "news"}/${newsData[3].slug}`}
+            className="group block"
+          >
+            <div className="relative lg:hidden block aspect-video mb-3 overflow-hidden ">
+              <Image
+                src={
+                  newsData[4].image ||
+                  "https://placehold.co/600x400/00000/ffffff/png"
+                }
+                alt={newsData[4].title}
+                width={400}
+                height={225}
+                loading="lazy"
+                sizes="100vw"
+                unoptimized={!newsData[4].image}
+                className=" object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <h3 className="text-lg font-mono text-primary font-bold leading-snug group-hover:underline underline-offset-4 decoration-2 decoration-shade group-hover:decoration-2 transition-colors mb-2">
+              {newsData[4].title}
+            </h3> 
+            <div className="flex items-center text-xs text-popover-foreground uppercase font-medium">
+              <span>{newsData[4].timestamp}</span>
+              <Dot className="text-primary" size={24} />
+              <span>{newsData[4].category}</span>
+            </div>
+          </Link>
           <Link
             href={`/${newsData[3].categorySlug || "news"}/${newsData[3].slug}`}
             className="group block"

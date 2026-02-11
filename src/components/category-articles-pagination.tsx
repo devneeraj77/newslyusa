@@ -87,7 +87,7 @@ export default async function CategoryArticlesPagination({
                   post.image || "https://placehold.co/600x400/F5F3F6/B9A2B2/png"
                 }
                 alt={post.title}
-                fill
+                loading="lazy"
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />

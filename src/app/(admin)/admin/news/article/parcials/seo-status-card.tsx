@@ -26,6 +26,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IconSeo } from "@tabler/icons-react";
 
 const STOP_WORDS = new Set([
   "a",
@@ -479,9 +480,9 @@ export function SeoStatusCard({ data }: SeoStatusCardProps) {
   return (
     <Card className="h-full border-none shadow-none">
       <CardHeader className="pb-3">
-        <CardTitle className="flex justify-between items-center ">
+        <CardTitle className="flex justify-between items-center">
           <h3 className="font-mono text-secondary-foreground py-1 rounded-md text-2xl font-bold">
-            SEO Status
+            <IconSeo className="inline flex items-center " size={44} /> Status
           </h3>
           <span
             className={cn(

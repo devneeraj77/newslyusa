@@ -50,16 +50,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, category } = await params;
 
   const categoryData = await getCategory(category);
+  const isDefaultCategory = category.toLowerCase() === "news";
 
-  if (!categoryData) {
+  if (!categoryData && !isDefaultCategory) {
     return {
       title: "Category Not Found",
     };
   }
 
   const post = await getPost(slug);
+  
+  const isCategoryMatch = post && (
+    (categoryData && post.categoryIds.includes(categoryData.id)) ||
+    (isDefaultCategory && post.categoryIds.length === 0)
+  );
 
-  if (!post || !post.categoryIds.includes(categoryData.id)) {
+  if (!post || !isCategoryMatch) {
     return {
       title: "Article Not Found",
       description: "The article you are looking for does not exist.",
@@ -112,8 +118,9 @@ export default async function NewsPage({ params }: Props) {
   const { slug, category } = await params;
 
   const categoryData = await getCategory(category);
+  const isDefaultCategory = category.toLowerCase() === "news";
 
-  if (!categoryData) {
+  if (!categoryData && !isDefaultCategory) {
     return (
       <div className="container mx-auto flex justify-center items-center flex-col min-h-150 py-12 text-center">
         <h1 className="text-2xl font-bold">Category Not Found</h1>
@@ -127,7 +134,12 @@ export default async function NewsPage({ params }: Props) {
   // Safely attempt to fetch the post
   const post = await getPost(slug);
 
-  if (!post || !post.categoryIds.includes(categoryData.id)) {
+  const isCategoryMatch = post && (
+    (categoryData && post.categoryIds.includes(categoryData.id)) ||
+    (isDefaultCategory && post.categoryIds.length === 0)
+  );
+
+  if (!post || !isCategoryMatch) {
     return (
       <div className="container mx-auto flex justify-center items-center px-10 flex-col min-h-150 py-12 text-center">
         <h1 className="text-2xl font-bold">Article Not Found</h1>
@@ -155,7 +167,7 @@ export default async function NewsPage({ params }: Props) {
                     <BreadcrumbItem className="text-primary font-semibold">
                       <BreadcrumbLink href={`/${category}`}>
                         {post.categories.find((c) => c.slug === category)
-                          ?.name || category}
+                          ?.name || categoryData?.name || "News"}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -208,7 +220,8 @@ export default async function NewsPage({ params }: Props) {
                   }
                   alt={post.title}
                   fill
-                  priority
+                  
+                  loading="lazy"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 75vw, 850px"
                   className="object-cover"
                 />

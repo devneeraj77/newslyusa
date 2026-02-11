@@ -17,21 +17,21 @@ export function ModeToggle() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="rounded-none " >
+      <DropdownMenuTrigger asChild className="rounded-none bg" >
         <Button variant="outline" size="icon" className="rounded-none size-9">
           <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="rounded-none  z-[100]">
-        <DropdownMenuItem onClick={() => setTheme("light")} className="hover:bg-primary hover:text-secondary-foreground rounded-none">
+      <DropdownMenuContent align="end" className="rounded-none bg-background shadow-none z-[100]">
+        <DropdownMenuItem onClick={() => setTheme("light")} className="bg-background hover:bg-muted rounded-none">
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className="hover:bg-primary hover:text-secondary-foreground rounded-none">
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="bg-background rounded-none">
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")} className="hover:bg-primary hover:text-secondary-foreground rounded-none">
+        <DropdownMenuItem onClick={() => setTheme("system")} className="bg-background  rounded-none">
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

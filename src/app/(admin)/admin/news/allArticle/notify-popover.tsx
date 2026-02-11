@@ -15,6 +15,7 @@ interface NotifyPopoverProps {
   articleId: string;
   articleTitle: string;
   slug: string;
+  categorySlug: string;
   articleImage?: string | null;
 }
 
@@ -22,6 +23,7 @@ export default function NotifyPopover({
   articleId,
   articleTitle,
   slug,
+  categorySlug,
   articleImage,
 }: NotifyPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +35,7 @@ export default function NotifyPopover({
     try {
       // Use the actual server action
       // Assuming article detail page is at /news/[slug]
-      const url = `/news/${slug}`;
+      const url = `/${categorySlug}/${slug}`;
       
       const result = await sendNotification(
         articleTitle,

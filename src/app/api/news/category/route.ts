@@ -9,7 +9,10 @@ export async function GET(request: NextRequest) {
     if (slug) {
       // If a slug is provided, filter posts by category slug
       const category = await db.category.findUnique({
-        where: { slug: slug },
+        where: { 
+          
+          slug: slug 
+        },
       });
 
       if (!category) {
@@ -52,6 +55,9 @@ export async function GET(request: NextRequest) {
       const categories = await db.category.findMany({
         include: {
           posts: {
+            where: {
+              published: true,
+            },
             select: {
               id: true,
             },

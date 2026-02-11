@@ -66,7 +66,7 @@ export function NewsletterSubscribe() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="h-11 rounded-none w-full bg-background pr-28 text-sm shadow-sm transition-all focus-visible:ring-1 focus-visible:ring-primary"
+          className="h-11 rounded-none w-full bg-background pr-28 text-sm transition-all focus-visible:ring-1 focus-visible:ring-primary"
         />
         <Button
           type="submit"

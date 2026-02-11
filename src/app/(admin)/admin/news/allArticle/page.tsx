@@ -214,6 +214,7 @@ async function ArticlesTable({
                         articleId={post.id}
                         articleTitle={post.title}
                         slug={post.slug}
+                        categorySlug={post.categories[0]?.slug || "news"}
                         articleImage={post.image}
                       />
                     </div>

@@ -59,7 +59,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
+        "sticky top-0 z-50 w-full border-b border-border/50 bg-background/95  transition-all duration-300",
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
@@ -81,10 +81,10 @@ export function Header() {
               key={link.label}
               href={link.href}
               className={cn(
-                "transition-colors hover:text-primary",
+                "transition-colors hover:text-popover-foreground",
                 pathname.startsWith(link.href) 
-                  ? "text-foreground font-semibold" 
-                  : "text-muted-foreground"
+                  ? "text-foreground underline leading-6 underline-offset-6" 
+                  : "text-primary"
               )}
             >
               {link.label}
@@ -97,7 +97,7 @@ export function Header() {
           <SearchModal>
               <Button
                 variant="outline"
-                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-4 text-sm text-muted-foreground hover:text-primary focus:text-primary focus:ring-1 focus:ring-primary focus:ring-offset-1 focus:ring-offset-background transition-colors"
+                className="relative rounded-none h-9 w-9 p-0 xl:h-9 xl:w-60 xl:justify-start xl:px-4 text-sm text-primary bg-transparent hover:bg-foreground hover:text-background focus:ring-1 active:text-back focus:ring-primary focus:ring-offset-1 focus:ring-offset-background transition-colors"
               >
                 <Search className="h-4 w-4 xl:mr-2" />
                 <span className="hidden xl:inline-flex">Search news...</span>
@@ -185,7 +185,7 @@ export function Header() {
                                     onClick={() => setOpen(false)}
                                     className={cn(
                                         "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
-                                        pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
+                                        pathname.startsWith(link.href) ? "text-secondary" : "text-muted-foreground"
                                     )}
                                 >
                                     <link.icon className="h-4 w-4" />
