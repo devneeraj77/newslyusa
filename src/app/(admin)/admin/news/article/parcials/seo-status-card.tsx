@@ -481,8 +481,8 @@ export function SeoStatusCard({ data }: SeoStatusCardProps) {
     <Card className="h-full border-none shadow-none">
       <CardHeader className="pb-3">
         <CardTitle className="flex justify-between items-center">
-          <h3 className="font-mono text-secondary-foreground py-1 rounded-md text-2xl font-bold">
-            <IconSeo className="inline flex items-center " size={44} /> Status
+          <h3 className="font-mono text-foreground font-sans py-1 rounded-md text-2xl  font-bold">
+            SEO Status
           </h3>
           <span
             className={cn(

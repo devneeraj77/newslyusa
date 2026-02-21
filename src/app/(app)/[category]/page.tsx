@@ -8,8 +8,7 @@ import {
   formatDateForSidebar,
   stripHtml,
 } from "@/lib/utils";
-import CategoryArticlesPagination from "@/components/category-articles-pagination";
-import { Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dot } from "lucide-react";
 import {
@@ -24,19 +23,9 @@ import { TextShimmer } from "@/components/ui/text-shimmer";
 import { IconTrendingUp } from "@tabler/icons-react";
 import { Metadata } from "next";
 
-function formatTimeAgo(dateString: string | Date) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-
-  if (diffInHours < 24) {
-    return `${Math.max(0, diffInHours)}h ago`;
-  }
-
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}d ago`;
-}
+const CategoryArticlesPagination = lazy(() =>
+  import("@/components/category-articles-pagination")
+);
 
 function CategoryPaginationSkeleton() {
   return (

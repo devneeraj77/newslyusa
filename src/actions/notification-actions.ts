@@ -2,16 +2,17 @@
 
 import webpush from "web-push";
 import prisma from "@/lib/prisma";
+import { env } from "process";
 
 const vapidKeys = {
-  publicKey: "BJNEUXdlndoDNWUS6crwQPgO4OhQ80jyPC8F9p5tp-rE4VAwrZhCjY_Abvte1SphZo5NfgLMsVzyKgBIHZVBbsI",
-  privateKey: "IaReo__3hPJPntp99quXBYnTsPr1Y9cMVxg1VZwwPnM",
+  publicKey: env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  privateKey: env.VAPID_PRIVATE_KEY,
 };
 
 webpush.setVapidDetails(
   "mailto:example@yourdomain.org",
-  vapidKeys.publicKey,
-  vapidKeys.privateKey
+  vapidKeys.publicKey!,
+  vapidKeys.privateKey!
 );
 
 export async function subscribeUser(sub: PushSubscription, userId?: string) {
