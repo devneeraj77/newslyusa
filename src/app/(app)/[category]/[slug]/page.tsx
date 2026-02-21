@@ -220,8 +220,8 @@ export default async function NewsPage({ params }: Props) {
                   }
                   alt={post.title}
                   fill
-                  
-                  loading="lazy"
+                  priority
+                  fetchPriority="high"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 75vw, 850px"
                   className="object-cover"
                 />

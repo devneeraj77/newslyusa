@@ -275,7 +275,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     width={800}
                     height={400}
                     priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
+                    fetchPriority="high"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -314,7 +315,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       }
                       alt={post.title}
                       fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 300px"
                       // priority
                       className="object-cover"
                     />
@@ -359,7 +360,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                             }
                             alt={post.title}
                             loading="lazy"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>

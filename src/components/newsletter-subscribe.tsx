@@ -77,7 +77,7 @@ export function NewsletterSubscribe() {
           {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : "Subscribe"}
         </Button>
       </form>
-      <p className="text-[10px] text-muted-foreground/60 px-1">
+      <p className="text-xs text-muted-foreground px-1">
         By subscribing, you agree to our Terms of Service and Privacy Policy.
       </p>
     </div>

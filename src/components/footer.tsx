@@ -12,7 +12,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-muted/20 border-t pt-16 pb-8 mt-10">
+    <footer className="bg-muted border-t pt-16 pb-8 mt-10">
       {/* Top Section: Logo + Links */}
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex flex-col lg:flex-row justify-between gap-10 mb-12">
@@ -27,7 +27,7 @@ export function Footer() {
                 NewslyUSA
               </span>
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-foreground/80 text-sm leading-relaxed">
               NewslyUSA: Fresh Perspectives, Bold Headlines, and the Pulse of a
               Nation. We Decode the American Narrative to Keep You Informed,
               Inspired, and Connected to Every State’s Story.
@@ -48,7 +48,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground tracking-wide">
               Platform
             </h3>
-            <ul className="flex flex-col gap-2.5 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2.5 text-sm text-foreground/80">
               <li>
                 <a
                   href="about"
@@ -89,7 +89,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground tracking-wide">
               Resources
             </h3>
-            <ul className="flex flex-col gap-2.5 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2.5 text-sm text-foreground/80">
               <li>
                 <a
                   href="#"
@@ -132,7 +132,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground tracking-wide">
               Legals
             </h3>
-            <ul className="flex flex-col gap-2.5 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2.5 text-sm text-foreground/80">
               <li>
                 <a
                   href="#"
@@ -172,7 +172,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground tracking-wide">
               Categories
             </h3>
-            <ul className="flex flex-col gap-2.5 text-sm text-muted-foreground">
+            <ul className="flex flex-col gap-2.5 text-sm text-foreground/80">
               <li>
                 <a
                   href="/us"
@@ -236,7 +236,7 @@ export function Footer() {
       <Separator className="my-8" />
       
       <div className="mb-8 text-center">
-        <p className="text-xs text-muted-foreground italic max-w-4xl mx-auto leading-relaxed">
+        <p className="text-xs text-foreground/70 italic max-w-4xl mx-auto leading-relaxed">
           <span className="font-semibold text-foreground not-italic">Disclaimer:</span> We strive to provide you with accurate and clear news
         content on our website. While we work diligently to ensure the quality
         and relevance of our information, we kindly acknowledge that we cannot
@@ -248,25 +248,25 @@ export function Footer() {
       </div>
       {/* Bottom Section */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-muted-foreground text-xs">
+        <p className="text-foreground/70 text-xs">
           © {currentYear}, All Rights Reserved by NewslyUSA
         </p>
 
         {/* Optional: Social Icons (if you still want them included) */}
         <div className="flex gap-4">
-          <a href="#" className="text-muted-foreground hover:text-[#1da1f2] transition-colors">
+          <a href="#" className="text-foreground/70 hover:text-[#1da1f2] transition-colors">
             <Twitter className="size-5" />
             <span className="sr-only">Twitter</span>
           </a>
-          <a href="#" className="text-muted-foreground hover:text-[#1877f2] transition-colors">
+          <a href="#" className="text-foreground/70 hover:text-[#1877f2] transition-colors">
             <Facebook className="size-5" />
             <span className="sr-only">Facebook</span>
           </a>
-          <a href="#" className="text-muted-foreground hover:text-[#dd2a7b] transition-colors">
+          <a href="#" className="text-foreground/70 hover:text-[#dd2a7b] transition-colors">
             <Instagram className="size-5" />
             <span className="sr-only">Instagram</span>
           </a>
-          <a href="#" className="text-muted-foreground hover:text-[#0077b5] transition-colors">
+          <a href="#" className="text-foreground/70 hover:text-[#0077b5] transition-colors">
             <Linkedin className="size-5" />
             <span className="sr-only">LinkedIn</span>
           </a>
