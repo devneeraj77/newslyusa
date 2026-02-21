@@ -45,27 +45,21 @@ export default function HomeClient({
   initialSportsNews,
   initialFeaturedPost,
 }: HomeClientProps) {
-  const [highlightNews] = useState<NewsItem[]>(initialHighlights);
   const [featuredPost, setFeaturedPost] = useState<NewsItem | null>(
     initialFeaturedPost
   );
 
-  const [editorsPickNews] = useState<NewsItem[]>(initialEditorsPick);
-  const [healthNews] = useState<any[]>(initialHealthNews);
-  const [sportsNews] = useState<any[]>(initialSportsNews);
-  const [headlines] = useState<NewsHeadlineItem[]>(initialHeadlines);
-
   useEffect(() => {
-    if (highlightNews.length === 0) return;
+    if (initialHighlights.length === 0) return;
 
     const updateFeatured = () => {
       const now = new Date();
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-      const weekPosts = highlightNews.filter(
+      const weekPosts = initialHighlights.filter(
         (post) => new Date(post.createdAt) >= oneWeekAgo
       );
-      const pool = weekPosts.length > 0 ? weekPosts : highlightNews;
+      const pool = weekPosts.length > 0 ? weekPosts : initialHighlights;
 
       if (pool.length > 0) {
         const hour = now.getHours();
@@ -75,9 +69,9 @@ export default function HomeClient({
 
     const interval = setInterval(updateFeatured, 60 * 1000);
     return () => clearInterval(interval);
-  }, [highlightNews]);
+  }, [initialHighlights]);
 
-  const filteredHeadlines = headlines.filter((h) => h.id !== featuredPost?.id);
+  const filteredHeadlines = initialHeadlines.filter((h) => h.id !== featuredPost?.id);
 
   return (
     <main className="items-center justify-center  m-2 ">
@@ -211,7 +205,7 @@ export default function HomeClient({
             </div>
 
             <div className="flex flex-col pr-2 gap-1  overflow-y-auto">
-              {highlightNews
+              {initialHighlights
                 .filter((news) => news.id !== featuredPost?.id)
                 .map((news) => (
                   <NewsHighlightCard key={news.id} news={news} />
@@ -230,7 +224,7 @@ export default function HomeClient({
         <div className=" flex flex-col gap-4 lg:flex-row mx-auto flex-col items-center justify-between    sm:items-start">
           <div className="w-full">
             <EmblaCarouselAutoplay
-              slides={editorsPickNews.map((news, i) => (
+              slides={initialEditorsPick.map((news, i) => (
                 <Link
                   key={news.id}
                   href={`/${news.categorySlug}/${news.slug}`}
@@ -285,14 +279,14 @@ export default function HomeClient({
             <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
               Health News
             </p>
-            <EmblaTwoRow slides={healthNews} options={OPTIONS} />
+            <EmblaTwoRow slides={initialHealthNews} options={OPTIONS} />
           </div>
           <div className="md:basis-1/2  ">
             <p className="pl-3 py-1 md:tex-xl lg:text-xl m-2 block border-l-2 border-primary/70 w-fit bg-linear-to-r/decreasing from-muted-foreground/10  to-transperant">
               Sports News
             </p>
 
-            <EmblaTwoRow slides={sportsNews} options={OPTIONS} />
+            <EmblaTwoRow slides={initialSportsNews} options={OPTIONS} />
           </div>
         </div>
       </section>

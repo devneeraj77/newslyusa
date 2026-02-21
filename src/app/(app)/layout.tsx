@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Inter, Lora, Montserrat } from "next/font/google";
+import {  Inter, Lora } from "next/font/google";
 import "../globals.css";
 // import "@/styles/_variables.scss";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header-with-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import DotGrid from "@/components/DotGrid";
 import { Footer } from "@/components/footer";
 
 const inter = Inter({
@@ -16,11 +15,6 @@ const inter = Inter({
 const lora = Lora({
   variable: "--font-lora-mono",
   subsets: ["latin"],
-});
-const montserrat = Montserrat({
-  variable: "--font-mon-sans",
-  subsets: ["latin"],
-  weight: "400",
 });
 
 import { Toaster } from "@/components/ui/sonner";
